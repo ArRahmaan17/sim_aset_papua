@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\Perolehan\PerolehanController;
+use App\Imports\MasterImport;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['authenticated'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
+    // DangerLine
+    Route::get('/import-master', function () {
+        return (new MasterImport)->sheets(asset('master.xlsx'));
+    })->name('home');
+    // end DangerLine
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
     Route::name('master.')->group(function () {
         Route::get('/master/asal-usul', [MasterController::class, 'masterAsalUsul'])->name('asal-usul');

@@ -288,8 +288,15 @@
             });
             $('#container-detail-asset').append(`<li
                 class="list-group-item d-flex justify-content-between align-items-center">
-                ${window.tempAsset.urai}
-                <span class="badge bg-primary">5</span>
+                <div class='col-8'>
+                    ${window.tempAsset.urai}
+                </div>
+                <div class='col-4 d-flex justify-content-between align-items-center'>
+                    <span class="badge bg-primary icon-name" style='font-size:1rem;'>${data.jumlah}</span>
+                    <span class="badge bg-danger"><i class='bx bx-trash bx-xs'></i></span>
+                    <span class="badge bg-info"><i class='bx bx-show bx-xs'></i></span>
+                    <span class="badge bg-success"><i class='bx bx-pencil bx-xs' ></i></span>
+                </div>
             </li>`)
         }
 
