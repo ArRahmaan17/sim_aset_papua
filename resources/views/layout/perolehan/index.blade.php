@@ -1,0 +1,552 @@
+@extends('template.parent')
+@push('css')
+    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/fh-3.4.0/dt-1.13.10/r-2.5.0/datatables.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datepicker3.min.css') }}">
+@endpush
+@section('content')
+    <div class="row">
+        <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
+            <div class="card">
+                <div class="row row-bordered g-0 flex-column-reverse flex-sm-row">
+                    <div id="container-form-perolehan" class="col-md-8">
+                        <h3 class="card-header m-0 me-2 pb-3">Perolehan</h3>
+                        <div class="col-xl">
+                            <div class="card mb-4 shadow-none">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">Tambah Perolehan</h5>
+                                    <small class="text-muted float-end">input untuk penambahan aset</small>
+                                </div>
+                                <div class="card-body">
+                                    <div class="col container-alert-ba">
+                                    </div>
+                                    <form id="ba-form">
+                                        <div class="mb-3">
+                                            <label class="form-label align-middle" for="kodebap">No BAP
+                                                Terima <i
+                                                    class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="kodebapicon" class="input-group-text"><i
+                                                        class='bx bx-info-circle'></i></span>
+                                                <input type="text" class="form-control formated" id="kodebap"
+                                                    name="kodebap" aria-label="John Doe" aria-describedby="kodebapicon" />
+                                            </div>
+                                            <div class="form-text text-info">*setelah selesai input akan terjadi
+                                                pemformatan
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label align-middle" for="tanggalbap">Tanggal
+                                                BAP Terima <i
+                                                    class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="tanggalbapicon" class="input-group-text"><i
+                                                        class='bx bx-calendar-event'></i></span>
+                                                <input type="text" id="tanggalbap" name="tanggalbap"
+                                                    class="form-control datetime-picker" aria-label="ACME Inc."
+                                                    aria-describedby="tanggalbapicon" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-fullname">No BAP</label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="basic-icon-default-fullname2" class="input-group-text"><i
+                                                        class='bx bx-info-circle'></i></span>
+                                                <input type="text" class="form-control formated"
+                                                    id="basic-icon-default-fullname" aria-label="John Doe"
+                                                    aria-describedby="basic-icon-default-fullname2" />
+                                            </div>
+                                            <div class="form-text text-info">*setelah selesai input akan terjadi
+                                                pemformatan
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-company">Tanggal BAP</label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="basic-icon-default-company2" class="input-group-text"><i
+                                                        class='bx bx-calendar-event'></i></span>
+                                                <input type="text" id="basic-icon-default-company"
+                                                    class="form-control datetime-picker" aria-label="ACME Inc."
+                                                    aria-describedby="basic-icon-default-company2" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-message">Keterangan</label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="basic-icon-default-message2" class="input-group-text"><i
+                                                        class='bx bx-detail'></i></span>
+                                                <textarea id="basic-icon-default-message" rows="4" class="form-control"
+                                                    aria-label="Hi, Do you have a moment to talk Joe?" aria-describedby="basic-icon-default-message2"
+                                                    style="resize: none;"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-fullname">No Kontrak</label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="basic-icon-default-fullname2" class="input-group-text"><i
+                                                        class='bx bx-info-circle'></i></span>
+                                                <input type="text" class="form-control" id="basic-icon-default-fullname"
+                                                    aria-label="John Doe" aria-describedby="basic-icon-default-fullname2" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-company">Tanggal
+                                                Kontrak</label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="basic-icon-default-company2" class="input-group-text"><i
+                                                        class='bx bx-calendar-event'></i></span>
+                                                <input type="text" id="basic-icon-default-company"
+                                                    class="form-control datetime-picker" aria-label="ACME Inc."
+                                                    aria-describedby="basic-icon-default-company2" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-company">Nilai
+                                                Kontrak</label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="basic-icon-default-company2" class="input-group-text"><i
+                                                        class='bx bx-dollar-circle'></i></span>
+                                                <input type="text" id="basic-icon-default-company"
+                                                    class="form-control money-mask" aria-label="ACME Inc."
+                                                    aria-describedby="basic-icon-default-company2" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-company">No
+                                                Kwitansi</label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="basic-icon-default-company2" class="input-group-text"><i
+                                                        class='bx bx-info-circle'></i></span>
+                                                <input type="text" id="basic-icon-default-company"
+                                                    class="form-control " aria-label="ACME Inc."
+                                                    aria-describedby="basic-icon-default-company2" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="basic-icon-default-company">Tanggal
+                                                Kwitansi</label>
+                                            <div class="input-group input-group-merge">
+                                                <span id="basic-icon-default-company2" class="input-group-text"><i
+                                                        class='bx bx-calendar-event'></i></span>
+                                                <input type="text" id="basic-icon-default-company"
+                                                    class="form-control datetime-picker" aria-label="ACME Inc."
+                                                    aria-describedby="basic-icon-default-company2" />
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <h3>Detail Aset</h3>
+                                            <ul id="container-detail-asset" class="list-group">
+                                            </ul>
+                                        </div>
+                                        <button type="button" id="add-detail-asset" class="btn btn-success mb-3"><span
+                                                class='tf-icons bx bx-layer-plus'></span>
+                                            Tambah Detail Aset</button>
+                                        <button id="save-ba" type="button" class="btn btn-warning mb-3 disabled"><span
+                                                class='tf-icons bx bx-save'></span>
+                                            Simpan Perolehan Aset</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="container-list-perolehan" class="col-md-4 text-center p-0">
+                        <div id="content-list-perolehan">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col text-start">
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
+                                                id="growthReportId" data-bs-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                2022
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-start"
+                                                aria-labelledby="growthReportId">
+                                                <a class="dropdown-item" href="javascript:void(0);">2021</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">2020</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">2019</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-1">
+                                        <button type="button" class="btn-close float-end"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="growthChart"></div>
+                            <div class="text-center fw-semibold pt-3 mb-2">62% Company Growth</div>
+                            <div class="d-flex px-xxl-4 px-lg-2 p-4 gap-xxl-3 gap-lg-1 gap-3 justify-content-between">
+                                <div class="d-flex">
+                                    <div class="me-2">
+                                        <span class="badge bg-label-primary p-2"><i
+                                                class="bx bx-dollar text-primary"></i></span>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <small>2022</small>
+                                        <h6 class="mb-0">$32.5k</h6>
+                                    </div>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="me-2">
+                                        <span class="badge bg-label-info p-2"><i
+                                                class="bx bx-wallet text-info"></i></span>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <small>2021</small>
+                                        <h6 class="mb-0">$41.2k</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="show-list-perolehan" title="Show List Perolehan"
+                            class="btn btn-primary border-0 sm-my-2 d-none h-100 w-100"><i
+                                class='bx bx-show bx-md bx-tada-hover'></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <template id="form-kib">
+        @include('components.kib-form')
+    </template>
+    <div class="modal fade" id="modalMasterBarang" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalMasterBarangTitle">Master Barang</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="table-master-barang" class="table table-bordered data-table">
+                            <thead>
+                                <tr>
+                                    <th>kode</th>
+                                    <th>Barang</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($dataMaster as $master)
+                                    <tr data-master="{{ json_encode($master) }}">
+                                        <td>
+                                            {{ splitKodeGolongan($master->kodegolongan) . '.' . stringPad($master->kodebidang) . '.' . stringPad($master->kodekelompok) . '.' . stringPad($master->kodesub) . '.' . stringPad($master->kodesubsub, 3) }}
+                                        </td>
+                                        <td>{{ $master->urai }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td rowspan="2">Data Kosong</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalDetailAsset" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalDetailAssetTitle">Tambah Detail Aset</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary align-middle" data-bs-dismiss="modal">
+                        <i class='tf-icons bx bx-save mb-1'></i> Close And Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@push('js')
+    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/fh-3.4.0/dt-1.13.10/r-2.5.0/datatables.min.js"></script>
+    <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap-datepicker.id.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.inputmask.js') }}"></script>
+    <script src="{{ asset('assets/js/select2.min.js') }}"></script>
+    <script>
+        window.bastatus = false;
+        window.tempAsset = null;
+        window.countDetailAsset = 0;
+        window.detailAsset = [];
+
+        function generateListDetailAsset(data) {
+            window.detailAsset.push({
+                ...data,
+                ...window.tempAsset
+            });
+            $('#container-detail-asset').append(`<li
+                class="list-group-item d-flex justify-content-between align-items-center">
+                ${window.tempAsset.urai}
+                <span class="badge bg-primary">5</span>
+            </li>`)
+        }
+
+        function onClickMasterBarang() {
+            $('#table-master-barang').find('tr').click(function() {
+                renderFormDetailAsset($(this).data('master'));
+                $("#modalMasterBarang").modal('hide');
+            });
+        }
+
+        function initialDataTable() {
+            $('#table-master-barang').on('draw.dt', function() {
+                onClickMasterBarang()
+            });
+        }
+
+        function setMaskMoney() {
+            $('.money-mask').attr('maxlength', '22').inputmask('numeric', {
+                radixPoint: ",",
+                allowMinus: false,
+                regex: "[0-9]*",
+                groupSeparator: ".",
+                rightAlign: false,
+                digits: 2,
+                min: 0,
+                alias: 'numeric'
+            });
+        }
+
+        function hideListPerolehan() {
+            $("#content-list-perolehan").switchClass('d-block', 'd-none', 50)
+            $("#container-list-perolehan").switchClass('col-md-4', 'col-md-1', 100);
+            $("#container-form-perolehan").switchClass('col-md-8', 'col-md-11', 100);
+            $("#show-list-perolehan").removeClass('d-none')
+        }
+
+        function showListPerolehan() {
+            $("#container-list-perolehan").switchClass('col-md-1', 'col-md-4', 100);
+            $("#container-form-perolehan").switchClass('col-md-11', 'col-md-8', 100);
+            $("#content-list-perolehan").switchClass('d-none', 'd-block', 150)
+            $("#show-list-perolehan").addClass('d-none')
+        }
+
+        function showHideAsalUsul(element) {
+            if (element.value != "") {
+                $("#kategorikodeasalusul").find(`option[data-attr=${element.value}]`).attr('disabled', false);
+                $("#kategorikodeasalusul").find(`:not(option[data-attr=${element.value}])`).attr('disabled', true);
+            }
+        }
+
+        function getMasterData() {
+            $.ajax({
+                type: "GET",
+                url: `{{ route('master.asal-usul') }}`,
+                dataType: "json",
+                success: function(response) {
+                    $('[name=select-asal-usul-barang-perolehan-aset]').html(response.html_kategori).trigger(
+                        'change');
+                    $("#kategorikodeasalusul").html(response.html_asal_usul);
+                }
+            });
+            $('[name=select-asal-usul-barang-perolehan-aset]').change(function() {
+                showHideAsalUsul(this);
+            })
+        }
+
+        function numberFormat(nilai, prefix = 'Rp. ') {
+            return $.fn.dataTable.render.number('.', ',', 2, prefix).display(nilai);
+        }
+
+        function currencyToNumberFormat(str) {
+            let result = "";
+            //  result format if your string is valid
+            //  example valid string Rp 12.123.123.123,31
+            //  the result 1212312312331
+            result = str.split(" ");
+            result = result[1].split(".").join("").split(",").join("");
+            return result;
+        }
+
+        function renderFormDetailAsset(master) {
+            window.tempAsset = master;
+            $('#modalDetailAsset').find('.modal-title').html(`Tambah Detail Aset ${master.urai}`);
+            $('#modalDetailAsset').modal('show')
+            const container = document.querySelector("#modalDetailAsset .modal-body");
+            const template = document.querySelector("#form-kib");
+            const cloneTemplate = template.content.cloneNode(true);
+            container.innerHTML = "";
+            switch (master.kodegolongan) {
+                case 131:
+                    container.appendChild(cloneTemplate.querySelector("#form-kib-a"))
+                    break;
+                case 132:
+                    container.appendChild(cloneTemplate.querySelector("#form-kib-b"))
+                    break;
+                case 133:
+                    container.appendChild(cloneTemplate.querySelector("#form-kib-c"))
+                    break;
+                case 134:
+                    container.appendChild(cloneTemplate.querySelector("#form-kib-d"))
+                    break;
+                case 135:
+                    container.appendChild(cloneTemplate.querySelector("#form-kib-e"))
+                    break;
+                case 136:
+                    container.appendChild(cloneTemplate.querySelector("#form-kib-f"))
+                    break;
+                default:
+                    break;
+            }
+            setMaskMoney();
+            $('.select2modal').select2({
+                dropdownParent: $("#modalDetailAsset")
+            });
+            getMasterData()
+        }
+
+        function validateElement(
+            form,
+            type = 'ba',
+            contextElement = 'label',
+            contextClass = '.bxs-star',
+            validateElementParent = '.input-group',
+            validateElement = 'input',
+            addOnElement = 'span',
+        ) {
+            var error = [];
+            if (type == 'ba') {
+                var elementValidate = $($(`#${form} ${contextElement}:has(${contextClass})`).siblings(
+                    `${validateElementParent}`)).find(`${validateElement}`);
+            } else {
+                var elementValidate = $(`#${form} ${contextElement}:has(${contextClass})`).siblings(
+                    `${validateElement}`);
+            }
+            elementValidate.map((index, element) => {
+                if ($(element).val() == "" || $(element).val() == null) {
+                    $(element).addClass('is-invalid');
+                    if (type == 'ba') {
+                        $(element).siblings(`${addOnElement}`).addClass('border-1 border-danger')
+                    }
+                    error.push({
+                        name: $(element).attr('name'),
+                        message: `${$(element).labels()[0].innerText.trim()} Tidak Boleh Kosong`,
+                    });
+                }
+            });
+            return error;
+        }
+
+        $(function() {
+            $('.datetime-picker').datepicker({
+                format: "dd MM yyyy",
+                todayBtn: "linked",
+                clearBtn: true,
+                language: "id",
+                autoclose: true,
+                orientation: "bottom auto",
+                toggleActive: true
+            });
+            $('button.btn-close.float-end').click(function() {
+                hideListPerolehan()
+            });
+            $('#show-list-perolehan').click(function() {
+                showListPerolehan();
+            });
+            $('.formated').change(function() {
+                $(this).val(`BA/{{ env('APP_YEAR') }}/${this.value}/organisasi`)
+            })
+
+            setMaskMoney();
+            $('.data-table').DataTable();
+            initialDataTable();
+            onClickMasterBarang();
+            $('#add-detail-asset').click(function() {
+                var order = window.countDetailAsset + 1;
+                $('.input-group').find('input').removeClass('is-invalid')
+                $('.input-group').find('span').removeClass('border-1 border-danger')
+                var errors = validateElement('ba-form');
+                if (errors.length == 0) {
+                    window.bastatus = true;
+                }
+                if (window.bastatus) {
+                    $("#modalMasterBarang").modal('show');
+                } else {
+                    $(window).scrollTop(0)
+                    setTimeout(() => {
+                        var html = '';
+                        errors.map((error, index) => {
+                            html +=
+                                `<a class="list-group-item border-0">${error.message}</a>`;
+                        });
+                        $('.container-alert-ba').html(`<div class="alert alert-danger alert-ba">
+                                <div class="row justify-content-start align-items-center">
+                                    <div class="col-1">
+                                        <i class='bx bxs-error-alt bx-lg'></i>
+                                    </div>
+                                    <div class="col-11 fw-bold">
+                                        <span>Mandatori Error</span>
+                                    </div>
+                                </div>
+                                <div class="p-2">
+                                    <div class="list-group list-group-flush">
+                                        ${html}
+                                    </div>
+                                </div>
+                            </div>`);
+                        $(`*[name=${errors[0].name}]`).focus();
+                    }, 500)
+                    setTimeout(() => {
+                        $('.alert-ba').toggle("fade", 1000);
+                    }, 1500);
+                }
+            });
+            $('#modalDetailAsset').on('hidden.bs.modal', function(e) {
+                var errors = null;
+                e.prevenDefault
+                errors = validateElement("modalDetailAsset", 'detail-asset', 'label', '.bxs-star', '',
+                    '.form-control, .select2modal, div > radio', '');
+                var html = '';
+                errors.map((error, index) => {
+                    html +=
+                        `<a class="list-group-item border-0">${error.message}</a>`;
+                });
+                if (errors.length !== 0) {
+                    $('#modalDetailAsset .modal-body').prepend(`<div class="alert alert-danger alert-da">
+                                <div class="row justify-content-start align-items-center">
+                                    <div class="col-1">
+                                        <i class='bx bxs-error-alt bx-lg'></i>
+                                    </div>
+                                    <div class="col-11 fw-bold">
+                                        <span>Mandatori Error</span>
+                                    </div>
+                                </div>
+                                <div class="p-2">
+                                    <div class="list-group list-group-flush">
+                                        ${html}
+                                    </div>
+                                </div>
+                            </div>`);
+                    $(this).modal('show');
+                    $(this).on('shown.bs.modal', function(e) {
+                        e.prevenDefault
+                        $(`*[name=${errors[0].name}]`).focus();
+                        $('.alert-da').toggle("fade", 2000);
+                        setTimeout(() => {
+                            $('.alert-da').remove();
+                        }, 3000)
+                    })
+                } else {
+                    let data = serializeObject($(`#${$(this)[0].id} .modal-body`).find('form'));
+                    data.iddetail = window.countDetailAsset;
+                    data.jumlah = data.jumlah ?? 1
+                    generateListDetailAsset(data);
+                    $('.alert-da').remove();
+                    $('#save-ba').removeClass('disabled');
+                }
+            });
+        });
+    </script>
+@endpush
