@@ -418,6 +418,152 @@
         </div>
     </form>
 
+    <form id="form-kib-d" class="m-2">
+        <div class="mb-3">
+            <label class="form-label" for="deskripsibarang">Nama (asli) Barang <i
+                    class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
+            <input id="deskripsibarang" name="deskripsibarang" type="text" class="form-control">
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label class="form-label" for="nilaibarang">Nilai Satuan <i
+                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></i>
+                    </label>
+                    <input id="nilaibarang" name="nilaibarang" type="text" maxlength="22"
+                        class="form-control money-mask">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label class="form-label" for="kodekondisi">Kondisi <i
+                        class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
+                <div class="mb-3">
+                    <select id="kodekondisi" name="kodekondisi" class="select2modal" style="width: 100%;">
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label class="form-label" for="jumlah">Jumlah <i
+                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
+                    <input id="jumlah" name="jumlah" type="text" class="form-control money-mask">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label class="form-label" for="tahunperolehan">Tahun Perolehan <i
+                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
+                    <input id="tahunperolehan" value="{{ env('TAHUN_APLIKASI') }}" name="tahunperolehan"
+                        type="text" readonly class="form-control yearpickernew">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label class="form-label control-label" for="kodeasalusul">Asal Usul
+                        <i class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
+                    <select class="select2modal" name="select-asal-usul-barang-perolehan-aset" id="kodeasalusul"
+                        style="width: 100%">
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label class="form-label control-label" for="kategorikodeasalusul">Kategori Asal Usul
+                        <i class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
+                    <select class="select2modal" name="kodeasalusul" id="kategorikodeasalusul" style="width: 100%">
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-0">
+                    <label class="form-label" for="keterangan">Keterangan <i
+                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
+                    <textarea class="form-control" id="keterangan" name="keterangan" rows="4"></textarea>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-0">
+                    <label class="form-label" for="alamat">Alamat </label>
+                    <textarea class="form-control" id="alamat" name="alamat" rows="4"></textarea>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label class="form-label" for="kodegolonganbarang">Golongan Barang</label>
+                    <div class="mb-3">
+                        <select class="select2modal" name="kodegolonganbarang" id="kodegolonganbarang"
+                            style="width: 100%">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label class="form-label col-2" for="kodesatuan">Satuan</label>
+                <div class="mb-3">
+                    <select class="select2modal" id="kodesatuan" name="kodesatuan" style="width: 100%;">
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label class="form-label" for="kodestatustanah">Status Tanah</label>
+                <div class="mb-3">
+                    <select class="select2modal" id="kodestatustanah" name="kodestatustanah" style="width: 100%;">
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label class="form-label col-2" for="koderuang">Ruangan</label>
+                <div class="mb-3">
+                    <select class="select2modal" id="koderuang" name="koderuang" style="width: 100%;">
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label class="form-label col-2" for="kodehak">Hak</label>
+                <div class="mb-3">
+                    <select class="select2modal" name="kodehak" id="kodehak" style="width: 100%">
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label class="form-label" for="konstruksi">Konstruksi</label>
+                    <input id="konstruksi" name="konstruksi" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label class="form-label" for="panjang">Panjang</label>
+                    <input id="panjang" name="panjang" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label class="form-label" for="lebar">Lebar</label>
+                    <input id="lebar" name="lebar" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label class="form-label" for="luas">Luas (m2)</label>
+                    <input id="luas" name="luas" type="text" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="kodekibtanah">Kode Lokasi / Pemilik Tanah</label>
+            <div class="input-group">
+                <input id="kodekibtanah" name="kodekibtanah" type="text" class="form-control" readonly>
+                <span id="search-kodekibtanah" class="input-group-text" onclick="Helper.searchLocationCode()"><i
+                        class='bx bx-search-alt-2'></i></span>
+            </div>
+        </div>
+    </form>
+
     <form id="form-kib-e" class="m-2">
         <div class="mb-3">
             <label class="form-label" for="deskripsibarang">Nama (asli) Barang <i
