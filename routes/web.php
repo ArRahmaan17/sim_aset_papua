@@ -30,6 +30,7 @@ Route::middleware(['authenticated'])->group(function () {
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
     Route::name('master.')->group(function () {
         Route::get('/master/asal-usul', [MasterController::class, 'masterAsalUsul'])->name('asal-usul');
+        Route::get('/master/kondisi', [MasterController::class, 'masterKondisi'])->name('kondisi');
     });
 });
 Route::middleware(['un_authenticated'])->group(function () {

@@ -46,7 +46,7 @@ Briefly describe your project here. What problem does it solve? What technologie
 1. Start development server 
 
     ```bash
-        php artisan serve
+    php artisan serve
     ```
     visit <a href="localhost:8080">localhost:8080</a> in your browser
 

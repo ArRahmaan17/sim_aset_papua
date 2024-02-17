@@ -14,4 +14,10 @@ class MasterController extends Controller
             'html_asal_usul' => dataToOption(DB::table('masterasalusul')->select(['kategori as attribute', 'kodeasalusul as id', 'asalusul as name'])->orderByRaw('kategori, asalusul ASC')->get(), true)
         ]);
     }
+    public function masterKondisi()
+    {
+        return response()->json([
+            'html_kondisi' => dataToOption(DB::table('masterkondisi')->select(DB::raw('kodekondisi as id, kondisi as name'))->orderBy('kodekondisi')->get()),
+        ]);
+    }
 }
