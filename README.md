@@ -12,11 +12,11 @@ Briefly describe your project here. What problem does it solve? What technologie
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Configuration](#configuration)
+<!-- - [Configuration](#configuration)
 - [Features](#features)
 - [Contributing](#contributing)
 - [License](#license)
-- [Acknowledgements](#acknowledgements)
+- [Acknowledgements](#acknowledgements) -->
 
 ## Installation
 

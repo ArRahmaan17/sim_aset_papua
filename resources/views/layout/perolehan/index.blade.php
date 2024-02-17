@@ -280,14 +280,42 @@
         window.tempAsset = null;
         window.countDetailAsset = 0;
         window.detailAsset = [];
+        window.iddetail = null;
+
+        function udpdateListData(data) {
+            $("#container-detail-asset").find('li').map((index, element) => {
+                if ($(element).data('id') == window.iddetail) {
+                    $(element).data('master', {
+                        ...window.tempAsset,
+                        ...data,
+                    });
+                }
+            })
+        }
+
+        function dataToValueElement(data) {
+            $('#modalDetailAsset form').find('input, select, textarea').map((index, element) => {
+                let name = $(element).attr('name');
+                if (data.hasOwnProperty(name)) {
+                    let value = data[name];
+                    $(`[name=${name}]`).val(value).trigger("change")
+                }
+            })
+        }
+
+        function editDetailAsset(element) {
+            var data = $($(element).parent()).parent().data('master');
+            console.log(data.iddetail);
+            window.iddetail = data.iddetail
+            renderFormDetailAsset(data, 'edit');
+            setTimeout(() => {
+                dataToValueElement(data);
+            }, 500);
+        }
 
         function generateListDetailAsset(data) {
-            window.detailAsset.push({
-                ...data,
-                ...window.tempAsset
-            });
             $('#container-detail-asset').append(`<li
-                class="list-group-item d-flex justify-content-between align-items-center">
+                class="list-group-item d-flex justify-content-between align-items-center" data-id='${data.iddetail}' data-master='${JSON.stringify({...data,...window.tempAsset})}'>
                 <div class='col-8'>
                     ${window.tempAsset.urai}
                 </div>
@@ -295,7 +323,7 @@
                     <span class="badge bg-primary icon-name" style='font-size:1rem;'>${data.jumlah}</span>
                     <span class="badge bg-danger"><i class='bx bx-trash bx-xs'></i></span>
                     <span class="badge bg-info"><i class='bx bx-show bx-xs'></i></span>
-                    <span class="badge bg-success"><i class='bx bx-pencil bx-xs' ></i></span>
+                    <span class="badge bg-success" onclick="editDetailAsset(this)"><i class='bx bx-pencil bx-xs'></i></span>
                 </div>
             </li>`)
         }
@@ -377,9 +405,13 @@
             return result;
         }
 
-        function renderFormDetailAsset(master) {
+        function renderFormDetailAsset(master, state = 'add') {
             window.tempAsset = master;
-            $('#modalDetailAsset').find('.modal-title').html(`Tambah Detail Aset ${master.urai}`);
+            if (state == 'add') {
+                $('#modalDetailAsset').find('.modal-title').html(`Tambah Detail Aset ${master.urai}`);
+            } else {
+                $('#modalDetailAsset').find('.modal-title').html(`Edit Detail Aset ${master.urai}`);
+            }
             $('#modalDetailAsset').modal('show')
             const container = document.querySelector("#modalDetailAsset .modal-body");
             const template = document.querySelector("#form-kib");
@@ -471,7 +503,7 @@
             initialDataTable();
             onClickMasterBarang();
             $('#add-detail-asset').click(function() {
-                var order = window.countDetailAsset + 1;
+                var order = window.countDetailAsset += 1;
                 $('.input-group').find('input').removeClass('is-invalid')
                 $('.input-group').find('span').removeClass('border-1 border-danger')
                 var errors = validateElement('ba-form');
@@ -547,11 +579,18 @@
                     })
                 } else {
                     let data = serializeObject($(`#${$(this)[0].id} .modal-body`).find('form'));
-                    data.iddetail = window.countDetailAsset;
                     data.jumlah = data.jumlah ?? 1
-                    generateListDetailAsset(data);
+                    console.log(window.iddetail)
+                    if (window.iddetail == null) {
+                        data.iddetail = window.countDetailAsset;
+                        generateListDetailAsset(data);
+                    } else {
+                        data.iddetail = window.iddetail;
+                        udpdateListData(data)
+                    }
                     $('.alert-da').remove();
                     $('#save-ba').removeClass('disabled');
+                    window.iddetail = null
                 }
             });
         });
