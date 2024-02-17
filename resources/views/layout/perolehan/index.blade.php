@@ -435,7 +435,22 @@
                     container.appendChild(cloneTemplate.querySelector("#form-kib-d"))
                     break;
                 case 135:
-                    container.appendChild(cloneTemplate.querySelector("#form-kib-e"))
+                    container.appendChild(cloneTemplate.querySelector("#form-kib-e"));
+                    detailform = container.querySelector("#container-detail-form")
+                    switch (parseInt(`${master.kodekelompok}${master.kodesub}`)) {
+                        case 17:
+                            detailform.appendChild(cloneTemplate.querySelector("#detail-form-kib-e-17"))
+                            break;
+                        case 18:
+                            detailform.appendChild(cloneTemplate.querySelector("#detail-form-kib-e-18"))
+                            break;
+                        case 19:
+                            detailform.appendChild(cloneTemplate.querySelector("#detail-form-kib-e-19"))
+                            break;
+
+                        default:
+                            break;
+                    }
                     break;
                 case 136:
                     container.appendChild(cloneTemplate.querySelector("#form-kib-f"))

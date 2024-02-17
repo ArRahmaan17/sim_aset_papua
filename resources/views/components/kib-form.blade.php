@@ -567,16 +567,14 @@
     <form id="form-kib-e" class="m-2">
         <div class="mb-3">
             <label class="form-label" for="deskripsibarang">Nama (asli) Barang <i
-                    class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i>
-                class="uil uil-star text-danger"></i></label>
+                    class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
             <input id="deskripsibarang" name="deskripsibarang" type="text" class="form-control">
         </div>
         <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label class="form-label" for="nilaibarang">Nilai Satuan <i
-                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i>
-                        class="uil uil-star text-danger"></i></label>
+                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
                     <input id="nilaibarang" name="nilaibarang" type="text" maxlength="22"
                         class="form-control money-mask">
                 </div>
@@ -599,7 +597,7 @@
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label class="form-label" for="tahunperolehan">Tahun Perolehan <i
-                            class="uil uil-star text-danger"></i></label>
+                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
                     <input id="tahunperolehan" name="tahunperolehan" type="text"
                         class="form-control yearpickernew" value="{{ env('TAHUN_APLIKASI') }}">
                 </div>
@@ -609,7 +607,7 @@
             <div class="col-lg-12">
                 <div class="mb-0">
                     <label class="form-label" for="keterangan">Keterangan <i
-                            class="uil uil-star text-danger"></i></label>
+                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
                     <textarea class="form-control" id="keterangan" name="keterangan" rows="4" style="resize: none;"></textarea>
                 </div>
             </div>
@@ -621,6 +619,8 @@
                     <select class="select2modal" id="kodesatuan" name="kodesatuan" style="width: 100%;">
                     </select>
                 </div>
+            </div>
+            <div class="col-lg-6">
                 <div class="mb-3">
                     <label class="form-label col-2" for="koderuang">Ruangan</label>
                     <select class="select2modal" id="koderuang" name="koderuang" style="width: 100%;">
@@ -636,7 +636,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-6">
                 <div class="mb-3">
                     <label class="form-label control-label" for="kategorikodeasalusul">Kategori Asal Usul
                         <i class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
@@ -658,9 +658,9 @@
         </div>
     </form>
     <div id="detail-form-kib-e-17" class="col-12">
-        <hr>
-        <h6>BUKU / PERPUSTAKAAN</h6>
-        <hr>
+        <div class="divider">
+            <div class="divider-text">BUKU / PERPUSTAKAAN</div>
+        </div>
         <div class="row">
             <div class="col-lg-6">
                 <div class="mb-0">
@@ -690,9 +690,9 @@
     </div>
 
     <div id="detail-form-kib-e-18" class="col-12">
-        <hr>
-        <h6>Barang Bercorak Kesenian / Budaya</h6>
-        <hr>
+        <div class="divider">
+            <div class="divider-text">Barang Bercorak Kesenian / Budaya</div>
+        </div>
         <div class="row">
             <div class="col-lg-6">
                 <div class="mb-0">
@@ -707,13 +707,12 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <div id="detail-form-kib-e-19" class="col-12">
-        <hr>
-        <h6>Hewan Ternak dan Tumbuhan</h6>
-        <hr>
+        <div class="divider">
+            <div class="divider-text">Hewan Ternak dan Tumbuhan</div>
+        </div>
         <div class="row">
             <div class="col-lg-6">
                 <div class="mb-0">

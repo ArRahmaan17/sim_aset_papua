@@ -22,10 +22,10 @@ use Maatwebsite\Excel\Facades\Excel;
 Route::middleware(['authenticated'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     // DangerLine
-    Route::get('/import-master', function () {
-        Excel::import(new MasterImport, public_path('master.xlsx'));
-        return response()->json(['status' => 'done', 'message' => 'Master imported']);
-    })->name('home');
+    // Route::get('/import-master', function () {
+    //     Excel::import(new MasterImport, public_path('master.xlsx'));
+    //     return response()->json(['status' => 'done', 'message' => 'Master imported']);
+    // })->name('import-master');
     // end DangerLine
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
     Route::name('master.')->group(function () {
