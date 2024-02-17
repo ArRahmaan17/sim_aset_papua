@@ -29,7 +29,7 @@
                                                 <span id="kodebapicon" class="input-group-text"><i
                                                         class='bx bx-info-circle'></i></span>
                                                 <input type="text" class="form-control formated" id="kodebap"
-                                                    name="kodebap" aria-label="John Doe" aria-describedby="kodebapicon" />
+                                                    name="kodebap" aria-describedby="kodebapicon" />
                                             </div>
                                             <div class="form-text text-info">*setelah selesai input akan terjadi
                                                 pemformatan
@@ -48,89 +48,85 @@
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="basic-icon-default-fullname">No BAP</label>
+                                            <label class="form-label" for="nobaterima">No BAP</label>
                                             <div class="input-group input-group-merge">
-                                                <span id="basic-icon-default-fullname2" class="input-group-text"><i
+                                                <span id="nobaterimaicon" class="input-group-text"><i
                                                         class='bx bx-info-circle'></i></span>
-                                                <input type="text" class="form-control formated"
-                                                    id="basic-icon-default-fullname" aria-label="John Doe"
-                                                    aria-describedby="basic-icon-default-fullname2" />
+                                                <input type="text" class="form-control formated" id="nobaterima"
+                                                    name="nobaterima" aria-describedby="nobaterimaicon" />
                                             </div>
                                             <div class="form-text text-info">*setelah selesai input akan terjadi
                                                 pemformatan
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="basic-icon-default-company">Tanggal BAP</label>
+                                            <label class="form-label" for="tanggalbaterima">Tanggal BAP</label>
                                             <div class="input-group input-group-merge">
-                                                <span id="basic-icon-default-company2" class="input-group-text"><i
+                                                <span id="tanggalbaterimaicon" class="input-group-text"><i
                                                         class='bx bx-calendar-event'></i></span>
-                                                <input type="text" id="basic-icon-default-company"
-                                                    class="form-control datetime-picker" aria-label="ACME Inc."
-                                                    aria-describedby="basic-icon-default-company2" />
+                                                <input type="text" id="tanggalbaterima"
+                                                    class="form-control datetime-picker" name="tanggalbaterima"
+                                                    aria-describedby="tanggalbaterimaicon" />
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="basic-icon-default-message">Keterangan</label>
+                                            <label class="form-label" for="keterangan">Keterangan</label>
                                             <div class="input-group input-group-merge">
-                                                <span id="basic-icon-default-message2" class="input-group-text"><i
+                                                <span id="keteranganicon" class="input-group-text"><i
                                                         class='bx bx-detail'></i></span>
-                                                <textarea id="basic-icon-default-message" rows="4" class="form-control"
-                                                    aria-label="Hi, Do you have a moment to talk Joe?" aria-describedby="basic-icon-default-message2"
+                                                <textarea id="keterangan" name="keterangan" rows="4" class="form-control" aria-describedby="keteranganicon"
                                                     style="resize: none;"></textarea>
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="basic-icon-default-fullname">No Kontrak</label>
+                                            <label class="form-label" for="nokontrak">No Kontrak</label>
                                             <div class="input-group input-group-merge">
-                                                <span id="basic-icon-default-fullname2" class="input-group-text"><i
+                                                <span id="nokontrakicon" class="input-group-text"><i
                                                         class='bx bx-info-circle'></i></span>
-                                                <input type="text" class="form-control" id="basic-icon-default-fullname"
-                                                    aria-label="John Doe" aria-describedby="basic-icon-default-fullname2" />
+                                                <input type="text" class="form-control" id="nokontrak" name="nokontrak"
+                                                    aria-label="John Doe" aria-describedby="nokontrakicon" />
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="basic-icon-default-company">Tanggal
+                                            <label class="form-label" for="tanggalkontrak">Tanggal
                                                 Kontrak</label>
                                             <div class="input-group input-group-merge">
-                                                <span id="basic-icon-default-company2" class="input-group-text"><i
+                                                <span id="tanggalkontrakicon" class="input-group-text"><i
                                                         class='bx bx-calendar-event'></i></span>
-                                                <input type="text" id="basic-icon-default-company"
-                                                    class="form-control datetime-picker" aria-label="ACME Inc."
-                                                    aria-describedby="basic-icon-default-company2" />
+                                                <input type="text" id="tanggalkontrak"
+                                                    class="form-control datetime-picker" name="tanggalkontrak"
+                                                    aria-label="ACME Inc." aria-describedby="tanggalkontrakicon" />
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="basic-icon-default-company">Nilai
+                                            <label class="form-label" for="nilaikontrak">Nilai
                                                 Kontrak</label>
                                             <div class="input-group input-group-merge">
-                                                <span id="basic-icon-default-company2" class="input-group-text"><i
+                                                <span id="nilaikontrakicon" class="input-group-text"><i
                                                         class='bx bx-dollar-circle'></i></span>
-                                                <input type="text" id="basic-icon-default-company"
-                                                    class="form-control money-mask" aria-label="ACME Inc."
-                                                    aria-describedby="basic-icon-default-company2" />
+                                                <input type="text" id="nilaikontrak" name="nilaikontrak"
+                                                    class="form-control money-mask" aria-describedby="nilaikontrakicon" />
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="basic-icon-default-company">No
+                                            <label class="form-label" for="nokwitansi">No
                                                 Kwitansi</label>
                                             <div class="input-group input-group-merge">
-                                                <span id="basic-icon-default-company2" class="input-group-text"><i
+                                                <span id="nokwitansiicon" class="input-group-text"><i
                                                         class='bx bx-info-circle'></i></span>
-                                                <input type="text" id="basic-icon-default-company"
-                                                    class="form-control " aria-label="ACME Inc."
-                                                    aria-describedby="basic-icon-default-company2" />
+                                                <input type="text" id="nokwitansi" class="form-control"
+                                                    name="nokwitansi" aria-describedby="nokwitansiicon" />
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="basic-icon-default-company">Tanggal
+                                            <label class="form-label" for="tanggalkwitansi">Tanggal
                                                 Kwitansi</label>
                                             <div class="input-group input-group-merge">
-                                                <span id="basic-icon-default-company2" class="input-group-text"><i
+                                                <span id="tanggalkwitansiicon" class="input-group-text"><i
                                                         class='bx bx-calendar-event'></i></span>
-                                                <input type="text" id="basic-icon-default-company"
-                                                    class="form-control datetime-picker" aria-label="ACME Inc."
-                                                    aria-describedby="basic-icon-default-company2" />
+                                                <input type="text" id="tanggalkwitansi" name="tanggalkwitansi"
+                                                    class="form-control datetime-picker"
+                                                    aria-describedby="tanggalkwitansiicon" />
                                             </div>
                                         </div>
                                         <div class="mb-3">
@@ -280,14 +276,41 @@
         window.tempAsset = null;
         window.countDetailAsset = 0;
         window.detailAsset = [];
+        window.iddetail = null;
+
+        function udpdateListData(data) {
+            $("#container-detail-asset").find('li').map((index, element) => {
+                if ($(element).data('id') == window.iddetail) {
+                    $(element).data('master', {
+                        ...window.tempAsset,
+                        ...data,
+                    });
+                }
+            })
+        }
+
+        function dataToValueElement(data) {
+            $('#modalDetailAsset form').find('input, select, textarea').map((index, element) => {
+                let name = $(element).attr('name');
+                if (data.hasOwnProperty(name)) {
+                    let value = data[name];
+                    $(`[name=${name}]`).val(value).trigger("change")
+                }
+            })
+        }
+
+        function editDetailAsset(element) {
+            var data = $($(element).parent()).parent().data('master');
+            window.iddetail = data.iddetail
+            renderFormDetailAsset(data, 'edit');
+            setTimeout(() => {
+                dataToValueElement(data);
+            }, 500);
+        }
 
         function generateListDetailAsset(data) {
-            window.detailAsset.push({
-                ...data,
-                ...window.tempAsset
-            });
             $('#container-detail-asset').append(`<li
-                class="list-group-item d-flex justify-content-between align-items-center">
+                class="list-group-item d-flex justify-content-between align-items-center" data-id='${data.iddetail}' data-master='${JSON.stringify({...data,...window.tempAsset})}'>
                 <div class='col-8'>
                     ${window.tempAsset.urai}
                 </div>
@@ -295,7 +318,7 @@
                     <span class="badge bg-primary icon-name" style='font-size:1rem;'>${data.jumlah}</span>
                     <span class="badge bg-danger"><i class='bx bx-trash bx-xs'></i></span>
                     <span class="badge bg-info"><i class='bx bx-show bx-xs'></i></span>
-                    <span class="badge bg-success"><i class='bx bx-pencil bx-xs' ></i></span>
+                    <span class="badge bg-success" onclick="editDetailAsset(this)"><i class='bx bx-pencil bx-xs'></i></span>
                 </div>
             </li>`)
         }
@@ -360,7 +383,16 @@
             });
             $('[name=select-asal-usul-barang-perolehan-aset]').change(function() {
                 showHideAsalUsul(this);
-            })
+            });
+            $.ajax({
+                type: "GET",
+                url: `{{ route('master.kondisi') }}`,
+                dataType: "json",
+                success: function(response) {
+                    $('[name=kodekondisi]').html(response.html_kondisi).trigger(
+                        'change');
+                }
+            });
         }
 
         function numberFormat(nilai, prefix = 'Rp. ') {
@@ -377,9 +409,13 @@
             return result;
         }
 
-        function renderFormDetailAsset(master) {
+        function renderFormDetailAsset(master, state = 'add') {
             window.tempAsset = master;
-            $('#modalDetailAsset').find('.modal-title').html(`Tambah Detail Aset ${master.urai}`);
+            if (state == 'add') {
+                $('#modalDetailAsset').find('.modal-title').html(`Tambah Detail Aset ${master.urai}`);
+            } else {
+                $('#modalDetailAsset').find('.modal-title').html(`Edit Detail Aset ${master.urai}`);
+            }
             $('#modalDetailAsset').modal('show')
             const container = document.querySelector("#modalDetailAsset .modal-body");
             const template = document.querySelector("#form-kib");
@@ -411,7 +447,19 @@
             $('.select2modal').select2({
                 dropdownParent: $("#modalDetailAsset")
             });
-            getMasterData()
+            getMasterData();
+            $('.yearpicker').datepicker({
+                format: "yyyy",
+                todayBtn: "linked",
+                clearBtn: true,
+                language: "id",
+                autoclose: true,
+                orientation: "bottom auto",
+                toggleActive: true,
+                startView: 2,
+                minViewMode: 2,
+                container: $('#modalDetailAsset')
+            });
         }
 
         function validateElement(
@@ -456,6 +504,17 @@
                 orientation: "bottom auto",
                 toggleActive: true
             });
+            $('.yearpicker').datepicker({
+                format: "yyyy",
+                todayBtn: "linked",
+                clearBtn: true,
+                language: "id",
+                autoclose: true,
+                orientation: "bottom auto",
+                toggleActive: true,
+                startView: 2,
+                minViewMode: 2
+            });
             $('button.btn-close.float-end').click(function() {
                 hideListPerolehan()
             });
@@ -465,13 +524,12 @@
             $('.formated').change(function() {
                 $(this).val(`BA/{{ env('APP_YEAR') }}/${this.value}/organisasi`)
             })
-
             setMaskMoney();
             $('.data-table').DataTable();
             initialDataTable();
             onClickMasterBarang();
             $('#add-detail-asset').click(function() {
-                var order = window.countDetailAsset + 1;
+                var order = window.countDetailAsset += 1;
                 $('.input-group').find('input').removeClass('is-invalid')
                 $('.input-group').find('span').removeClass('border-1 border-danger')
                 var errors = validateElement('ba-form');
@@ -510,6 +568,15 @@
                     }, 1500);
                 }
             });
+            $('#save-ba').click(function() {
+                let data = serializeObject($('#ba-form'));
+                let detailData = [];
+                $('#container-detail-asset').find('li').map((index, element) => {
+                    detailData.push($(element).data('master'))
+                });
+                data.detailAsset = detailData
+                console.log(data);
+            });
             $('#modalDetailAsset').on('hidden.bs.modal', function(e) {
                 var errors = null;
                 e.prevenDefault
@@ -547,11 +614,17 @@
                     })
                 } else {
                     let data = serializeObject($(`#${$(this)[0].id} .modal-body`).find('form'));
-                    data.iddetail = window.countDetailAsset;
                     data.jumlah = data.jumlah ?? 1
-                    generateListDetailAsset(data);
+                    if (window.iddetail == null) {
+                        data.iddetail = window.countDetailAsset;
+                        generateListDetailAsset(data);
+                    } else {
+                        data.iddetail = window.iddetail;
+                        udpdateListData(data)
+                    }
                     $('.alert-da').remove();
                     $('#save-ba').removeClass('disabled');
+                    window.iddetail = null
                 }
             });
         });

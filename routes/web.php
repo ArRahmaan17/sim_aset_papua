@@ -6,6 +6,7 @@ use App\Http\Controllers\MasterController;
 use App\Http\Controllers\Perolehan\PerolehanController;
 use App\Imports\MasterImport;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,12 +23,14 @@ Route::middleware(['authenticated'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     // DangerLine
     Route::get('/import-master', function () {
-        return (new MasterImport)->sheets(asset('master.xlsx'));
+        Excel::import(new MasterImport, public_path('master.xlsx'));
+        return response()->json(['status' => 'done', 'message' => 'Master imported']);
     })->name('home');
     // end DangerLine
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
     Route::name('master.')->group(function () {
         Route::get('/master/asal-usul', [MasterController::class, 'masterAsalUsul'])->name('asal-usul');
+        Route::get('/master/kondisi', [MasterController::class, 'masterKondisi'])->name('kondisi');
     });
 });
 Route::middleware(['un_authenticated'])->group(function () {
