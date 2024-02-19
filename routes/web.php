@@ -31,6 +31,11 @@ Route::middleware(['authenticated'])->group(function () {
     Route::name('master.')->group(function () {
         Route::get('/master/asal-usul', [MasterController::class, 'masterAsalUsul'])->name('asal-usul');
         Route::get('/master/kondisi', [MasterController::class, 'masterKondisi'])->name('kondisi');
+        Route::get('/master/satuan', [MasterController::class, 'masterSatuan'])->name('satuan');
+        Route::get('/master/status-tanah', [MasterController::class, 'masterStatusTanah'])->name('status-tanah');
+        Route::get('/master/golongan-barang', [MasterController::class, 'masterGolonganBarang'])->name('golongan-barang');
+        Route::get('/master/warna', [MasterController::class, 'masterWarna'])->name('warna');
+        Route::get('/master/hak', [MasterController::class, 'masterHak'])->name('hak');
     });
 });
 Route::middleware(['un_authenticated'])->group(function () {

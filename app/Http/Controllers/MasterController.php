@@ -20,4 +20,34 @@ class MasterController extends Controller
             'html_kondisi' => dataToOption(DB::table('masterkondisi')->select(DB::raw('kodekondisi as id, kondisi as name'))->orderBy('kodekondisi')->get()),
         ]);
     }
+    public function masterSatuan()
+    {
+        return response()->json([
+            'html_satuan' => dataToOption(DB::table('mastersatuan')->select(DB::raw('kodesatuan as id, satuan as name'))->orderBy('kodesatuan')->get()),
+        ]);
+    }
+    public function masterStatusTanah()
+    {
+        return response()->json([
+            'html_status_tanah' => dataToOption(DB::table('masterstatustanah')->select(DB::raw('kodestatustanah as id, statustanah as name'))->orderBy('kodestatustanah')->get()),
+        ]);
+    }
+    public function masterGolonganBarang()
+    {
+        return response()->json([
+            'html_golongan_barang' => dataToOption(DB::table('mastergolonganbarang')->select(DB::raw('kodegolonganbarang as id, golonganbarang as name'))->orderBy('kodegolonganbarang')->get()),
+        ]);
+    }
+    public function masterWarna()
+    {
+        return response()->json([
+            'html_warna' => dataToOption(DB::table('masterwarna')->select(DB::raw('kodewarna as id, warna as name'))->orderBy('kodewarna')->get()),
+        ]);
+    }
+    public function masterHak()
+    {
+        return response()->json([
+            'html_hak' => dataToOption(DB::table('masterhak')->select(DB::raw('kodehak as id, hak as name'))->orderBy('kodehak')->get()),
+        ]);
+    }
 }

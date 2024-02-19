@@ -103,6 +103,14 @@
                     </select>
                 </div>
             </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label for="qrcode_foto" class="form-label">Foto Asset</label>
+                    <input class="form-control" type="file" id="qrcode_foto" name='qrcode_foto[]'
+                        accept="image/*" multiple="">
+                </div>
+            </div>
+            <div id="container-image-preview" class="row justify-content-start"></div>
         </div>
     </form>
 
@@ -258,6 +266,14 @@
                     <input id="ukuran" name="ukuran" type="text" class="form-control">
                 </div>
             </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label for="qrcode_foto" class="form-label">Foto Asset</label>
+                    <input class="form-control" type="file" id="qrcode_foto" name='qrcode_foto[]'
+                        accept="image/*" multiple="">
+                </div>
+            </div>
+            <div id="container-image-preview" class="col-lg-12"></div>
         </div>
     </form>
 
@@ -350,7 +366,7 @@
                     <div class="input-group">
                         <input type="text" id="tglimb" name="tglimb"
                             class="form-control datetimepickermodal">
-                        <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                        <span class="input-group-text"><i class='bx bx-calendar-event'></i></span>
                     </div>
                 </div>
             </div>
@@ -407,6 +423,14 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label for="qrcode_foto" class="form-label">Foto Asset</label>
+                    <input class="form-control" type="file" id="qrcode_foto" name='qrcode_foto[]'
+                        accept="image/*" multiple="">
+                </div>
+            </div>
+            <div id="container-image-preview" class="col-lg-12"></div>
         </div>
         <div class="mb-3">
             <label class="form-label" for="kodekibtanah">Kode Lokasi / Pemilik Tanah</label>
@@ -553,6 +577,14 @@
                     <input id="luas" name="luas" type="text" class="form-control">
                 </div>
             </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label for="qrcode_foto" class="form-label">Foto Asset</label>
+                    <input class="form-control" type="file" id="qrcode_foto" name='qrcode_foto[]'
+                        accept="image/*" multiple="">
+                </div>
+            </div>
+            <div id="container-image-preview" class="col-lg-12"></div>
         </div>
         <div class="mb-3">
             <label class="form-label" for="kodekibtanah">Kode Lokasi / Pemilik Tanah</label>
@@ -652,6 +684,14 @@
                     </select>
                 </div>
             </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label for="qrcode_foto" class="form-label">Foto Asset</label>
+                    <input class="form-control" type="file" id="qrcode_foto" name='qrcode_foto[]'
+                        accept="image/*" multiple="">
+                </div>
+            </div>
+            <div id="container-image-preview" class="col-lg-12"></div>
         </div>
         <div class="col-12">
             <div id="container-detail-form"></div>
@@ -804,7 +844,7 @@
                     <div class="input-group">
                         <input type="text" id="tgldok" name="tgldok"
                             class="form-control datetimepickermodal">
-                        <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                        <span class="input-group-text"><i class='bx bx-calendar-event'></i></span>
                     </div>
                 </div>
             </div>
@@ -814,7 +854,7 @@
                     <div class="input-group">
                         <input type="text" id="tglmulai" name="tglmulai"
                             class="form-control datetimepickermodal">
-                        <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                        <span class="input-group-text"><i class='bx bx-calendar-event'></i></span>
                     </div>
                 </div>
             </div>

@@ -277,6 +277,7 @@
         window.countDetailAsset = 0;
         window.detailAsset = [];
         window.iddetail = null;
+        window.foto = null;
 
         function udpdateListData(data) {
             $("#container-detail-asset").find('li').map((index, element) => {
@@ -393,6 +394,50 @@
                         'change');
                 }
             });
+            $.ajax({
+                type: "GET",
+                url: `{{ route('master.satuan') }}`,
+                dataType: "json",
+                success: function(response) {
+                    $('[name=kodesatuan]').html(response.html_satuan).trigger(
+                        'change');
+                }
+            });
+            $.ajax({
+                type: "GET",
+                url: `{{ route('master.status-tanah') }}`,
+                dataType: "json",
+                success: function(response) {
+                    $('[name=kodestatustanah]').html(response.html_status_tanah).trigger(
+                        'change');
+                }
+            });
+            $.ajax({
+                type: "GET",
+                url: `{{ route('master.golongan-barang') }}`,
+                dataType: "json",
+                success: function(response) {
+                    $('[name=kodegolonganbarang]').html(response.html_golongan_barang).trigger(
+                        'change');
+                }
+            });
+            $.ajax({
+                type: "GET",
+                url: `{{ route('master.warna') }}`,
+                dataType: "json",
+                success: function(response) {
+                    $('[name=kodewarna]').html(response.html_warna).trigger(
+                        'change');
+                }
+            });
+            $.ajax({
+                type: "GET",
+                url: `{{ route('master.hak') }}`,
+                dataType: "json",
+                success: function(response) {
+                    $('[name=kodehak]').html(response.html_hak).trigger('change');
+                }
+            });
         }
 
         function numberFormat(nilai, prefix = 'Rp. ') {
@@ -416,7 +461,7 @@
             } else {
                 $('#modalDetailAsset').find('.modal-title').html(`Edit Detail Aset ${master.urai}`);
             }
-            $('#modalDetailAsset').modal('show')
+            $('#modalDetailAsset').modal('show');
             const container = document.querySelector("#modalDetailAsset .modal-body");
             const template = document.querySelector("#form-kib");
             const cloneTemplate = template.content.cloneNode(true);
@@ -459,9 +504,6 @@
                     break;
             }
             setMaskMoney();
-            $('.select2modal').select2({
-                dropdownParent: $("#modalDetailAsset")
-            });
             getMasterData();
             $('.yearpicker').datepicker({
                 format: "yyyy",
@@ -475,6 +517,23 @@
                 minViewMode: 2,
                 container: $('#modalDetailAsset')
             });
+            $('.select2modal').select2({
+                dropdownParent: $("#modalDetailAsset"),
+                closeOnSelect: false
+            });
+            $('.datetimepickermodal').datepicker({
+                format: "dd MM yyyy",
+                todayBtn: "linked",
+                clearBtn: true,
+                language: "id",
+                autoclose: true,
+                orientation: "top auto",
+                toggleActive: true,
+                container: '#modalDetailAsset'
+            });
+            $("#qrcode_foto").change(function() {
+                window.foto = handleFileFoto();
+            })
         }
 
         function validateElement(
@@ -507,6 +566,43 @@
                 }
             });
             return error;
+        }
+
+        function savePerolehan() {
+            let data = serializeObject($('#ba-form'));
+            let detailData = [];
+            $('#container-detail-asset').find('li').map((index, element) => {
+                detailData.push($(element).data('master'))
+            });
+            data.detailAsset = detailData
+            console.log(data);
+        }
+
+        function handleFileFoto() {
+            var imageArray = []
+            var fileInput = document.getElementById('qrcode_foto');
+            var imageContainer = document.getElementById('container-image-preview');
+            $(imageContainer).html('');
+            for (var i = 0; i < fileInput.files.length; i++) {
+                var file = fileInput.files[i];
+
+                if (file.type.startsWith('image/')) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        var img =
+                            `<img src='${e.target.result}' style='height:150px; width:auto;' class='img-thumbnail col'>`;
+                        imageArray.push(e.target.result);
+                        if (fileInput.files.length > 1) {
+                            $(imageContainer).append(img);
+                        } else {
+                            $(imageContainer).html(img);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+            return imageArray
         }
 
         $(function() {
@@ -584,13 +680,7 @@
                 }
             });
             $('#save-ba').click(function() {
-                let data = serializeObject($('#ba-form'));
-                let detailData = [];
-                $('#container-detail-asset').find('li').map((index, element) => {
-                    detailData.push($(element).data('master'))
-                });
-                data.detailAsset = detailData
-                console.log(data);
+                savePerolehan()
             });
             $('#modalDetailAsset').on('hidden.bs.modal', function(e) {
                 var errors = null;
@@ -629,7 +719,8 @@
                     })
                 } else {
                     let data = serializeObject($(`#${$(this)[0].id} .modal-body`).find('form'));
-                    data.jumlah = data.jumlah ?? 1
+                    data.jumlah = data.jumlah ?? 1;
+                    data.qrcode_foto = window.foto;
                     if (window.iddetail == null) {
                         data.iddetail = window.countDetailAsset;
                         generateListDetailAsset(data);
