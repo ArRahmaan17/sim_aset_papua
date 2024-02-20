@@ -28,6 +28,7 @@ Route::middleware(['authenticated'])->group(function () {
     // })->name('import-master');
     // end DangerLine
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
+    Route::post('/perolehan/store', [PerolehanController::class, 'store'])->name('perolehan.store');
     Route::name('master.')->group(function () {
         Route::get('/master/asal-usul', [MasterController::class, 'masterAsalUsul'])->name('asal-usul');
         Route::get('/master/kondisi', [MasterController::class, 'masterKondisi'])->name('kondisi');

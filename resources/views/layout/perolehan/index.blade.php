@@ -574,8 +574,17 @@
             $('#container-detail-asset').find('li').map((index, element) => {
                 detailData.push($(element).data('master'))
             });
-            data.detailAsset = detailData
-            console.log(data);
+            data.detail = detailData;
+            data._token = `{{ csrf_token() }}`;
+            $.ajax({
+                type: "POST",
+                url: "{{ route('perolehan.store') }}",
+                data: data,
+                dataType: "json",
+                success: function(response) {
+
+                }
+            });
         }
 
         function handleFileFoto() {
