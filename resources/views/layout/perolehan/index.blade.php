@@ -326,7 +326,6 @@
 
         function onClickMasterBarang() {
             $('#table-master-barang tbody').find('tr').click(function() {
-                console.log($(this).data('master'))
                 renderFormDetailAsset($(this).data('master'));
                 $("#modalMasterBarang").modal('hide');
             });
@@ -456,7 +455,6 @@
         }
 
         function renderFormDetailAsset(master, state = 'add') {
-            console.log(master)
             window.tempAsset = master;
             if (state == 'add') {
                 $('#modalDetailAsset').find('.modal-title').html(`Tambah Detail Aset ${master.urai}`);
@@ -469,19 +467,19 @@
             const cloneTemplate = template.content.cloneNode(true);
             container.innerHTML = "";
             switch (master.kodegolongan) {
-                case 131:
+                case '131':
                     container.appendChild(cloneTemplate.querySelector("#form-kib-a"))
                     break;
-                case 132:
+                case '132':
                     container.appendChild(cloneTemplate.querySelector("#form-kib-b"))
                     break;
-                case 133:
+                case '133':
                     container.appendChild(cloneTemplate.querySelector("#form-kib-c"))
                     break;
-                case 134:
+                case '134':
                     container.appendChild(cloneTemplate.querySelector("#form-kib-d"))
                     break;
-                case 135:
+                case '135':
                     container.appendChild(cloneTemplate.querySelector("#form-kib-e"));
                     detailform = container.querySelector("#container-detail-form")
                     switch (parseInt(`${master.kodekelompok}${master.kodesub}`)) {
@@ -499,7 +497,7 @@
                             break;
                     }
                     break;
-                case 136:
+                case '136':
                     container.appendChild(cloneTemplate.querySelector("#form-kib-f"))
                     break;
                 default:
