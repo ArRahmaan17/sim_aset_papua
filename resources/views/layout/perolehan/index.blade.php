@@ -582,7 +582,35 @@
                 data: data,
                 dataType: "json",
                 success: function(response) {
-
+                    $('#ba-form')[0].reset();
+                    $('#container-detail-asset').html('');
+                    $('#save-ba').addClass('disabled');
+                    $(window).scrollTop(0);
+                    $('.datetime-picker').datepicker('clearDates');
+                    setTimeout(() => {
+                        $('.container-alert-ba').html(`<div class="alert alert-success alert-ba">
+                                <div class="row justify-content-start align-items-center">
+                                    <div class="col-1">
+                                        <i class='bx bxs-check-circle bx-lg' ></i>
+                                    </div>
+                                    <div class="col-11 fw-bold">
+                                        <span>Success</span>
+                                    </div>
+                                </div>
+                                <div class="p-2">
+                                    ${response.message}
+                                </div>
+                            </div>`);
+                    }, 500)
+                    setTimeout(() => {
+                        $('.alert-ba').toggle("fade", 1000);
+                    }, 1500);
+                    window.bastatus = false;
+                    window.tempAsset = null;
+                    window.countDetailAsset = 0;
+                    window.detailAsset = [];
+                    window.iddetail = null;
+                    window.foto = null;
                 }
             });
         }
@@ -641,8 +669,17 @@
             $('#show-list-perolehan').click(function() {
                 showListPerolehan();
             });
-            $('.formated').change(function() {
-                $(this).val(`BA/{{ env('APP_YEAR') }}/${this.value}/organisasi`)
+            $('.formated').blur(function() {
+                if (this.value == "") {
+                    $(this).focus();
+                    return
+                }
+                $(this).val(`BA/{{ env('APP_YEAR') }}/${this.value}/{{ kodeOrganisasi() }}`)
+            });
+            $('.formated').focus(function() {
+                value = (this.value).split(`BA/{{ env('APP_YEAR') }}/`).join('').split(
+                    `/{{ kodeOrganisasi() }}`).join('');
+                $(this).val(value)
             })
             setMaskMoney();
             $('.data-table').DataTable();

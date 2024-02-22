@@ -480,7 +480,8 @@
                             <div class="nav-item d-flex align-items-center">
                                 <i class="bx bx-search fs-4 lh-0"></i>
                                 <input type="text" class="form-control border-0 shadow-none"
-                                    placeholder="Search..." aria-label="Search..." />
+                                    placeholder="{{ session('organisasi')->organisasi ?? 'Search...' }}"
+                                    aria-label="{{ session('organisasi')->organisasi ?? 'Search...' }}" />
                             </div>
                         </div>
                         <!-- /Search -->

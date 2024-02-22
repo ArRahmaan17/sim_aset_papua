@@ -19,7 +19,7 @@ use Maatwebsite\Excel\Facades\Excel;
 |
 */
 
-Route::middleware(['authenticated'])->group(function () {
+Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     // DangerLine
     // Route::get('/import-master', function () {
@@ -27,9 +27,7 @@ Route::middleware(['authenticated'])->group(function () {
     //     return response()->json(['status' => 'done', 'message' => 'Master imported']);
     // })->name('import-master');
     // end DangerLine
-    Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
-    Route::post('/perolehan/store', [PerolehanController::class, 'store'])->name('perolehan.store');
-    Route::name('master.')->group(function () {
+    Route::middleware(['authenticated'])->name('master.')->group(function () {
         Route::get('/master/asal-usul', [MasterController::class, 'masterAsalUsul'])->name('asal-usul');
         Route::get('/master/kondisi', [MasterController::class, 'masterKondisi'])->name('kondisi');
         Route::get('/master/satuan', [MasterController::class, 'masterSatuan'])->name('satuan');
@@ -38,6 +36,12 @@ Route::middleware(['authenticated'])->group(function () {
         Route::get('/master/warna', [MasterController::class, 'masterWarna'])->name('warna');
         Route::get('/master/hak', [MasterController::class, 'masterHak'])->name('hak');
     });
+    Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
+    Route::post('/perolehan/store', [PerolehanController::class, 'store'])->name('perolehan.store');
+});
+Route::middleware(['authenticated'])->group(function () {
+    Route::post('/set-organisasi', [AuthController::class, 'setOrganisasi'])->name('set-organisasi');
+    Route::get('/master/organisasi-child', [MasterController::class, 'masterOrganisasiChild'])->name('master.organisasi-child');
 });
 Route::middleware(['un_authenticated'])->group(function () {
     Route::get('/auth/login', [AuthController::class, 'index'])->name('login');

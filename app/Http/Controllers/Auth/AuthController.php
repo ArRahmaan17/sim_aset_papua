@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\MasterController;
 use App\Models\User;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -33,5 +35,11 @@ class AuthController extends Controller
             ->route('login')
             ->with("error", "Your provide <i><b>username</b></i> dons't exists in our application")
             ->withInput();
+    }
+    public function setOrganisasi(Request $request)
+    {
+        $organisasi = (new MasterController)->masterOrganisasi($request);
+        $request->session()->put('organisasi', $organisasi);
+        return response()->json(['status' => true, 'redirect' => route('home')], $organisasi ? 200 : 400);
     }
 }

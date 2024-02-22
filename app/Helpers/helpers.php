@@ -179,3 +179,37 @@ if (!function_exists('convertNumericDateToAlphabetical')) {
         }
     }
 }
+function kodeOrganisasi()
+{
+    $copi = clone (session('organisasi'));
+    unset($copi->organisasi, $copi->tahunorganisasi, $copi->wajibsusut);
+    return implode('.', array_values((array)$copi));
+}
+function buildTree(array $elements)
+{
+    $array = [
+        'kodeurusan',
+        'kodesuburusan',
+        'kodesubsuburusan',
+        'kodeorganisasi',
+        'kodesuborganisasi',
+        'kodeunit',
+        'kodesubunit',
+        'kodesubsubunit'
+    ];
+    $branch = array();
+    foreach ($elements as $element) {
+        $element = (array)$element;
+        $kosong = array_search(0, $element);
+        dd($kosong);
+
+        $children = buildTree($elements);
+        if ($children) {
+            $element['children'] = $children;
+        }
+
+        $branch[] = $element;
+    }
+
+    return $branch;
+}

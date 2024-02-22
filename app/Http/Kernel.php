@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\Authenticated;
+use App\Http\Middleware\haveOrganisasi;
 use App\Http\Middleware\UnAuthenticated;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -68,5 +69,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'un_authenticated' => UnAuthenticated::class,
         'authenticated' => Authenticated::class,
+        'have-organisasi' => haveOrganisasi::class,
     ];
 }

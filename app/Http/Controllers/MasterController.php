@@ -7,6 +7,63 @@ use Illuminate\Support\Facades\DB;
 
 class MasterController extends Controller
 {
+    public function masterOrganisasi(Request $request)
+    {
+        $array = [
+            'kodeurusan',
+            'kodesuburusan',
+            'kodesubsuburusan',
+            'kodeorganisasi',
+            'kodesuborganisasi',
+            'kodeunit',
+            'kodesubunit',
+            'kodesubsubunit'
+        ];
+        $where = [];
+        foreach (explode('.', $request->organisasi) as $index => $kode) {
+            $where[] = ['' . $array[$index], $kode];
+        };
+        $organisasi = DB::table('masterorganisasi')->where($where)->orderBy('kodeurusan')->first();
+        return $organisasi;
+    }
+    public function masterOrganisasiChild(Request $request)
+    {
+        $array = [
+            'kodeurusan',
+            'kodesuburusan',
+            'kodesubsuburusan',
+            'kodeorganisasi',
+            'kodesuborganisasi',
+            'kodeunit',
+            'kodesubunit',
+            'kodesubsubunit'
+        ];
+        $counter = 0;
+        $where = [];
+        foreach (explode('.', $request->value) as $index => $kode) {
+            if ($kode != 0) {
+                $where[] = ['' . $array[$index], $kode];
+            } else {
+                if ($index != 2) {
+                    if ($counter == 0) {
+                        $where[] = ['' . $array[$index], '<>', $kode];
+                        $counter++;
+                    }
+                } else {
+                    if ($counter == 0) {
+                        $where[] = ['' . $array[$index], '<>', $kode];
+                        $counter++;
+                    } else if ($counter == 1) {
+                        $where[] = ['' . $array[$index],  $kode];
+                        $counter++;
+                    }
+                }
+            }
+        };
+        return response()->json([
+            'html_organisasi_child' => dataToOption(DB::table('masterorganisasi')->select(DB::raw('CONCAT(kodeurusan, ".", LPAD(kodesuburusan, 2, "0"), ".", kodesubsuburusan, ".", LPAD(kodeorganisasi, 2, "0"), ".", kodesuborganisasi, ".", LPAD(kodeunit, 2, "0"), ".", LPAD(kodesubunit, 2, "0"),".", LPAD(kodesubsubunit,2, "0")) as id, concat(CONCAT(kodeurusan, ".", LPAD(kodesuburusan, 2, "0"), ".", kodesubsuburusan, ".", LPAD(kodeorganisasi, 2, "0"), ".", kodesuborganisasi, ".", LPAD(kodeunit, 2, "0"), ".", LPAD(kodesubunit, 2, "0"),".", LPAD(kodesubsubunit,2, "0")),"|",organisasi) as name'))->where($where)->orderBy('kodeurusan')->get()),
+        ]);
+    }
     public function masterAsalUsul()
     {
         return response()->json([
