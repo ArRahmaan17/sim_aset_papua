@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Perolehan;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bap;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,15 +24,16 @@ class PerolehanController extends Controller
         $bap['tanggalkontrak'] = isset($request->tanggalkontrak) ? convertAlphabeticalToNumberDate($request->tanggalkontrak) : null;
         $bap['tanggalbaterima'] = isset($request->tanggalbapterima) ? convertAlphabeticalToNumberDate($request->tanggalbaterima) : null;
         $bap['tanggalkuitansi'] = isset($request->tanggalkuitansi) ? convertAlphabeticalToNumberDate($request->tanggalkuitansi) : null;
-
-        $bap['kodeurusan'] = $must['kodeurusan'] = 1;
-        $bap['kodesuburusan'] = $must['kodesuburusan'] = 0;
-        $bap['kodeorganisasi'] = $must['kodeorganisasi'] = 0;
-        $bap['kodesuborganisasi'] = $must['kodesuborganisasi'] = 0;
-        $bap['kodeunit'] = $must['kodeunit'] = 0;
-        $bap['kodesubunit'] = $must['kodesubunit'] = 0;
-        $bap['kodesubsubunit'] = $must['kodesubsubunit'] = 0;
-        $bap['tahunorganisasi'] = $must['tahunorganisasi'] = 2024;
+        $copied = clone (session('organisasi'));
+        $bap['kodeurusan'] = $must['kodeurusan'] = $copied->kodeurusan;
+        $bap['kodesuburusan'] = $must['kodesuburusan'] = $copied->kodesuburusan;
+        $bap['kodesubsuburusan'] = $must['kodesubsuburusan'] = $copied->kodesubsuburusan;
+        $bap['kodeorganisasi'] = $must['kodeorganisasi'] = $copied->kodeorganisasi;
+        $bap['kodesuborganisasi'] = $must['kodesuborganisasi'] = $copied->kodesuborganisasi;
+        $bap['kodeunit'] = $must['kodeunit'] = $copied->kodeunit;
+        $bap['kodesubunit'] = $must['kodesubunit'] = $copied->kodesubunit;
+        $bap['kodesubsubunit'] = $must['kodesubsubunit'] = $copied->kodesubsubunit;
+        $bap['tahunorganisasi'] = $must['tahunorganisasi'] = $copied->tahunorganisasi;
         $kodebap = DB::table('bap')->insertGetId($bap, 'kodebap');
         foreach ($kibs['detail'] as $index => $kib) {
             $jumlah = $kib['jumlah'];
@@ -96,5 +98,16 @@ class PerolehanController extends Controller
             }
         }
         return response()->json(['message' => 'berhasil menambahkan perolehan']);
+    }
+    public function getAllOrganizationBaps(Request $request)
+    {
+        if (count(Bap::getAllOrganizationBaps()) == 0) {
+            $response = ['message' => 'Data Bap tidak di temukan'];
+            $status = 404;
+        } else {
+            $response = ['message' => 'Data Bap Di temukan'];
+            $status = 200;
+        }
+        return response()->json($response, $status);
     }
 }
