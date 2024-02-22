@@ -325,7 +325,8 @@
         }
 
         function onClickMasterBarang() {
-            $('#table-master-barang').find('tr').click(function() {
+            $('#table-master-barang tbody').find('tr').click(function() {
+                console.log($(this).data('master'))
                 renderFormDetailAsset($(this).data('master'));
                 $("#modalMasterBarang").modal('hide');
             });
@@ -455,6 +456,7 @@
         }
 
         function renderFormDetailAsset(master, state = 'add') {
+            console.log(master)
             window.tempAsset = master;
             if (state == 'add') {
                 $('#modalDetailAsset').find('.modal-title').html(`Tambah Detail Aset ${master.urai}`);
