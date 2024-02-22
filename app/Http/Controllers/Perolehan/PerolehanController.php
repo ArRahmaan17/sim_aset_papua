@@ -20,6 +20,9 @@ class PerolehanController extends Controller
         $kibs = $request->only('detail');
         $bap['kodejenistransaksi'] = 101;
         $bap['tanggalbap'] = convertAlphabeticalToNumberDate($request->tanggalbap);
+        $bap['tanggalkontrak'] = isset($request->tanggalkontrak) ? convertAlphabeticalToNumberDate($request->tanggalkontrak) : null;
+        $bap['tanggalbaterima'] = isset($request->tanggalbapterima) ? convertAlphabeticalToNumberDate($request->tanggalbaterima) : null;
+        $bap['tanggalkuitansi'] = isset($request->tanggalkuitansi) ? convertAlphabeticalToNumberDate($request->tanggalkuitansi) : null;
 
         $bap['kodeurusan'] = $must['kodeurusan'] = 1;
         $bap['kodesuburusan'] = $must['kodesuburusan'] = 0;

@@ -109,24 +109,24 @@
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="nokwitansi">No
+                                            <label class="form-label" for="nokuitansi">No
                                                 Kwitansi</label>
                                             <div class="input-group input-group-merge">
-                                                <span id="nokwitansiicon" class="input-group-text"><i
+                                                <span id="nokuitansiicon" class="input-group-text"><i
                                                         class='bx bx-info-circle'></i></span>
-                                                <input type="text" id="nokwitansi" class="form-control"
-                                                    name="nokwitansi" aria-describedby="nokwitansiicon" />
+                                                <input type="text" id="nokuitansi" class="form-control"
+                                                    name="nokuitansi" aria-describedby="nokuitansiicon" />
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="tanggalkwitansi">Tanggal
+                                            <label class="form-label" for="tanggalkuitansi">Tanggal
                                                 Kwitansi</label>
                                             <div class="input-group input-group-merge">
-                                                <span id="tanggalkwitansiicon" class="input-group-text"><i
+                                                <span id="tanggalkuitansiicon" class="input-group-text"><i
                                                         class='bx bx-calendar-event'></i></span>
-                                                <input type="text" id="tanggalkwitansi" name="tanggalkwitansi"
+                                                <input type="text" id="tanggalkuitansi" name="tanggalkuitansi"
                                                     class="form-control datetime-picker"
-                                                    aria-describedby="tanggalkwitansiicon" />
+                                                    aria-describedby="tanggalkuitansiicon" />
                                             </div>
                                         </div>
                                         <div class="mb-3">
@@ -466,7 +466,7 @@
             const template = document.querySelector("#form-kib");
             const cloneTemplate = template.content.cloneNode(true);
             container.innerHTML = "";
-            switch (master.kodegolongan) {
+            switch (master.kodegolongan.toString()) {
                 case '131':
                     container.appendChild(cloneTemplate.querySelector("#form-kib-a"))
                     break;
