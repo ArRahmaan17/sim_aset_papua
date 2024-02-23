@@ -185,6 +185,10 @@ function kodeOrganisasi()
     unset($copi->organisasi, $copi->tahunorganisasi, $copi->wajibsusut);
     return implode('.', array_values((array)$copi));
 }
+function getOrganisasi()
+{
+    return session('organisasi')->organisasi;
+}
 function buildTree(array $elements)
 {
     $array = [

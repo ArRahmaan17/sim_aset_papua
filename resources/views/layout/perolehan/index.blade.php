@@ -1,6 +1,7 @@
 @extends('template.parent')
 @push('css')
     <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/fh-3.4.0/dt-1.13.10/r-2.5.0/datatables.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('assets/css/iziToast.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datepicker3.min.css') }}">
 @endpush
@@ -9,13 +10,17 @@
         <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
             <div class="card">
                 <div class="row row-bordered g-0 flex-column-reverse flex-sm-row">
-                    <div id="container-form-perolehan" class="col-md-8">
+                    <div id="container-form-perolehan" class="col-md-12">
                         <h3 class="card-header m-0 me-2 pb-3">Perolehan</h3>
                         <div class="col-xl">
                             <div class="card mb-4 shadow-none">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h5 class="mb-0">Tambah Perolehan</h5>
+                                    <h5 class="mb-0">Form Perolehan</h5>
                                     <small class="text-muted float-end">input untuk penambahan aset</small>
+                                </div>
+                                <div class="card-header d-flex justify-content-end align-items-center">
+                                    <button class="btn btn-warning" id="search-bap"><i class='bx bxs-search mb-1'></i> Cari
+                                        Bap</button>
                                 </div>
                                 <div class="card-body">
                                     <div class="col container-alert-ba">
@@ -83,8 +88,9 @@
                                             <div class="input-group input-group-merge">
                                                 <span id="nokontrakicon" class="input-group-text"><i
                                                         class='bx bx-info-circle'></i></span>
-                                                <input type="text" class="form-control" id="nokontrak" name="nokontrak"
-                                                    aria-label="John Doe" aria-describedby="nokontrakicon" />
+                                                <input type="text" class="form-control" id="nokontrak"
+                                                    name="nokontrak" aria-label="John Doe"
+                                                    aria-describedby="nokontrakicon" />
                                             </div>
                                         </div>
                                         <div class="mb-3">
@@ -145,51 +151,6 @@
                             </div>
                         </div>
                     </div>
-                    <div id="container-list-perolehan" class="col-md-4 text-center p-0">
-                        <div id="content-list-perolehan">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col text-start">
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
-                                                id="growthReportId" data-bs-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false">
-                                                2022
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-start"
-                                                aria-labelledby="growthReportId">
-                                                <a class="dropdown-item" href="javascript:void(0);">2021</a>
-                                                <a class="dropdown-item" href="javascript:void(0);">2020</a>
-                                                <a class="dropdown-item" href="javascript:void(0);">2019</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-1">
-                                        <button type="button" class="btn-close float-end"></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="table-responsive p-1">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>BAP</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>BAP</td>
-                                            <td>Action</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <button type="button" id="show-list-perolehan" title="Show List Perolehan"
-                            class="btn btn-primary border-0 sm-my-2 d-none h-100 w-100"><i
-                                class='bx bx-show bx-md bx-tada-hover'></i></button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -197,7 +158,8 @@
     <template id="form-kib">
         @include('components.kib-form')
     </template>
-    <div class="modal fade" id="modalMasterBarang" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalMasterBarang" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -238,7 +200,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalDetailAsset" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalDetailAsset" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -255,6 +218,52 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalListBap" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalDetailAssetTitle">Modal List Bap <i>{{ getOrganisasi() }}</i></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive p-1">
+                        <table id="list-perolehan" class="table table-hover data-table">
+                            <thead>
+                                <tr>
+                                    <th>BAP</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($dataBap as $bap)
+                                    <tr data-bap="{{ json_encode($bap) }}">
+                                        <td>{{ $bap->kodebap }}</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <button type="button" class="btn btn-outline-success btn-sm"><i
+                                                        class='bx bxs-pencil'></i>Gunakan</button>
+                                                <button type="button" class="btn btn-outline-info btn-sm"><i
+                                                        class='bx bxs-show'></i>Lihat</button>
+                                                <button type="button" class="btn btn-outline-danger btn-sm"><i
+                                                        class='bx bxs-trash'></i>Hapus</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td rowspan="2">Data Bap Tidak Di temukan</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('js')
     <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/fh-3.4.0/dt-1.13.10/r-2.5.0/datatables.min.js"></script>
@@ -263,6 +272,7 @@
     <script src="{{ asset('assets/js/bootstrap-datepicker.id.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.inputmask.js') }}"></script>
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
     <script>
         window.bastatus = false;
         window.tempAsset = null;
@@ -270,6 +280,33 @@
         window.detailAsset = [];
         window.iddetail = null;
         window.foto = null;
+
+        function getListbap() {
+            $.ajax({
+                type: "GET",
+                url: "{{ route('perolehan.bap') }}",
+                dataType: "json",
+                success: function(response) {
+                    var html = '';
+                    response.data.forEach(bap => {
+                        html +=
+                            `<tr><td>${bap.kodebap}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-outline-success btn-sm"><i
+                                                class='bx bxs-pencil'></i>Gunakan</button>
+                                        <button type="button" class="btn btn-outline-info btn-sm"><i
+                                                class='bx bxs-show'></i>Lihat</button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm"><i
+                                                class='bx bxs-trash'></i>Hapus</button>
+                                    </div>
+                                </td>
+                            </tr>`;
+                    });
+                    $('#list-perolehan tbody').html(html);
+                }
+            });
+        }
 
         function udpdateListData(data) {
             $("#container-detail-asset").find('li').map((index, element) => {
@@ -309,11 +346,46 @@
                 </div>
                 <div class='col-4 d-flex justify-content-between align-items-center'>
                     <span class="badge bg-primary icon-name" style='font-size:1rem;'>${data.jumlah}</span>
-                    <span class="badge bg-danger"><i class='bx bx-trash bx-xs'></i></span>
+                    <span class="badge bg-danger" onclick="deleteDetailAsset(${data.iddetail})"><i class='bx bx-trash bx-xs'></i></span>
                     <span class="badge bg-info"><i class='bx bx-show bx-xs'></i></span>
                     <span class="badge bg-success" onclick="editDetailAsset(this)"><i class='bx bx-pencil bx-xs'></i></span>
                 </div>
             </li>`)
+        }
+
+        function deleteDetailAsset(id) {
+            iziToast.question({
+                timeout: 20000,
+                close: false,
+                overlay: true,
+                displayMode: 'once',
+                id: 'question',
+                zindex: 9999,
+                title: 'Warning',
+                message: 'Apakah anda yakin akan menghapus detail aset ini?',
+                position: 'center',
+                buttons: [
+                    ['<button><b>YES</b></button>', function(instance, toast) {
+                        instance.hide({
+                            transitionOut: 'fadeOut'
+                        }, toast, 'button');
+                        $("#container-detail-asset").find('li').map((index, element) => {
+                            if ($(element).data('id') == id) {
+                                $(element).remove()
+                            }
+                        });
+                        ($("#container-detail-asset").find('li').length == 0) ? $("#save-ba").addClass(
+                            'disabled'): '';
+                    }, true],
+                    ['<button>NO</button>', function(instance, toast) {
+
+                        instance.hide({
+                            transitionOut: 'fadeOut'
+                        }, toast, 'button');
+
+                    }],
+                ],
+            });
         }
 
         function onClickMasterBarang() {
@@ -327,6 +399,7 @@
             $('#table-master-barang').on('draw.dt', function() {
                 onClickMasterBarang()
             });
+            $('#list-perolehan').on('draw.dt', function() {});
         }
 
         function setMaskMoney() {
@@ -603,6 +676,7 @@
                     window.detailAsset = [];
                     window.iddetail = null;
                     window.foto = null;
+                    getListbap();
                 }
             });
         }
@@ -657,6 +731,9 @@
             });
             $('button.btn-close.float-end').click(function() {
                 hideListPerolehan()
+            });
+            $('#search-bap').click(function() {
+                $("#modalListBap").modal('show')
             });
             $('#show-list-perolehan').click(function() {
                 showListPerolehan();

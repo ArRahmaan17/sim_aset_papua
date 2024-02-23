@@ -13,7 +13,8 @@ class PerolehanController extends Controller
     public function index()
     {
         $dataMaster = DB::table('masterbarang')->where('kodesubsub', '<>', 0)->get();
-        return view('layout.perolehan.index', compact('dataMaster'));
+        $dataBap = Bap::getAllOrganizationBaps();
+        return view('layout.perolehan.index', compact('dataMaster', 'dataBap'));
     }
     public function store(Request $request)
     {
@@ -99,13 +100,15 @@ class PerolehanController extends Controller
         }
         return response()->json(['message' => 'berhasil menambahkan perolehan']);
     }
+
     public function getAllOrganizationBaps(Request $request)
     {
-        if (count(Bap::getAllOrganizationBaps()) == 0) {
-            $response = ['message' => 'Data Bap tidak di temukan'];
+        $data = Bap::getAllOrganizationBaps();
+        if (count($data) == 0) {
+            $response = ['message' => 'Data Bap tidak di temukan', 'data' => $data];
             $status = 404;
         } else {
-            $response = ['message' => 'Data Bap Di temukan'];
+            $response = ['message' => 'Data Bap Di temukan', 'data' => $data];
             $status = 200;
         }
         return response()->json($response, $status);
