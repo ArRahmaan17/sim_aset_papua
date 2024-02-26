@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\DB;
 
+function getRole()
+{
+    return DB::table('role')->where('idrole', session('user')->idrole)->first()->role;
+}
 function splitKodeGolongan($kodegolongan)
 {
     return implode('.', str_split($kodegolongan));
@@ -189,30 +193,19 @@ function getOrganisasi()
 {
     return session('organisasi')->organisasi;
 }
-function buildTree(array $elements)
+function buildTree(array &$elements, $idParent = 0)
 {
-    $array = [
-        'kodeurusan',
-        'kodesuburusan',
-        'kodesubsuburusan',
-        'kodeorganisasi',
-        'kodesuborganisasi',
-        'kodeunit',
-        'kodesubunit',
-        'kodesubsubunit'
-    ];
     $branch = array();
     foreach ($elements as $element) {
         $element = (array)$element;
-        $kosong = array_search(0, $element);
-        dd($kosong);
-
-        $children = buildTree($elements);
-        if ($children) {
-            $element['children'] = $children;
+        if ($element['parent'] == $idParent) {
+            $children = buildTree($elements, $element['id']);
+            if ($children) {
+                $element['children'] = $children;
+            }
+            unset($element['parent']);
+            $branch[] = $element;
         }
-
-        $branch[] = $element;
     }
 
     return $branch;

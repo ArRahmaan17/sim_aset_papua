@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MasterController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\Perolehan\PerolehanController;
 use App\Imports\MasterImport;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,10 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
         Route::get('/master/golongan-barang', [MasterController::class, 'masterGolonganBarang'])->name('golongan-barang');
         Route::get('/master/warna', [MasterController::class, 'masterWarna'])->name('warna');
         Route::get('/master/hak', [MasterController::class, 'masterHak'])->name('hak');
+        Route::get('/master/menu', [MenuController::class, 'index'])->name('menu');
+        Route::post('/master/update-parent-menu', [MenuController::class, 'updateParent'])->name('update-parent-menu');
+        Route::get('/master/list-menu', [MenuController::class, 'all'])->name('list-menu');
+        Route::post('/master/menu/store', [MenuController::class, 'store'])->name('menu.store');
     });
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
     Route::post('/perolehan/store', [PerolehanController::class, 'store'])->name('perolehan.store');

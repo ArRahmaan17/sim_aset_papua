@@ -7,6 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>{{ env('APP_NAME') }}</title>
     <style>
         *::-webkit-scrollbar {
             width: 1px;
@@ -33,7 +34,6 @@
             /* Change the color as desired */
         }
     </style>
-    <title>{{ env('APP_TITLE') }}</title>
 
     <meta name="description" content="" />
 
@@ -149,6 +149,12 @@
                             {{-- <i class='menu-icon tf-icons bx bx-cart-add'></i> --}}
                             <i class='menu-icon tf-icons bx bx-add-to-queue'></i>
                             <div data-i18n="Analytics">Perolehan</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('master.menu') }}" class="menu-link">
+                            <i class='menu-icon tf-icons bx bx-menu'></i>
+                            <div data-i18n="Analytics">Menu</div>
                         </a>
                     </li>
 
@@ -508,8 +514,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <span class="fw-semibold d-block">John Doe</span>
-                                                    <small class="text-muted">Admin</small>
+                                                    <span
+                                                        class="fw-semibold d-block">{{ session('user')->username }}</span>
+                                                    <small class="text-muted">{{ getRole() }}</small>
                                                 </div>
                                             </div>
                                         </a>
@@ -645,6 +652,20 @@
                 }
             });
             return o;
+        }
+
+        function buildTree(elements, parentId = 0) {
+            var branch = [];
+            elements.forEach(element => {
+                if (element['parent'] == parentId) {
+                    var children = buildTree(elements, element['id']);
+                    if (children.length > 0) {
+                        element['children'] = children;
+                    }
+                    branch.push(element);
+                }
+            });
+            return branch
         }
     </script>
     @stack('js')
