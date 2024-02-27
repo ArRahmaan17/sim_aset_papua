@@ -55,7 +55,7 @@ class MenuController extends Controller
     {
         $menu = $request->except('role', '_token');
         $menu['updated_at'] = $menu['created_at'] = now('Asia/Jakarta');
-        $roles = $request->only('role') ?? [];
+        $roles = isset($request->only('role')) ? $request->only('role') : ['role' => []];
         $idmenu = DB::table('menu')->insertGetId($menu, 'idmenu');
         $data_role = [];
         foreach ($roles['role'] as $index => $role) {
