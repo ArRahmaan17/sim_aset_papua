@@ -58,14 +58,22 @@ class MenuController extends Controller
         $roles = ($request->only('role') !== null) ? $request->only('role') : ['role' => []];
         $idmenu = DB::table('menu')->insertGetId($menu, 'idmenu');
         $data_role = [];
-        foreach ($roles['role'] as $index => $role) {
-            $data_role[] = [
-                'idrole' => $role,
-                'idmenu' => $idmenu,
-                'created_at' => now('Asia/Jakarta'),
-                'updated_at' => now('Asia/Jakarta')
-            ];
+        if ($request->only('role') !== null) {
+            foreach ($roles['role'] as $index => $role) {
+                $data_role[] = [
+                    'idrole' => $role,
+                    'idmenu' => $idmenu,
+                    'created_at' => now('Asia/Jakarta'),
+                    'updated_at' => now('Asia/Jakarta')
+                ];
+            }
         }
+        $data_role[] = [
+            'idrole' => 1,
+            'idmenu' => $idmenu,
+            'created_at' => now('Asia/Jakarta'),
+            'updated_at' => now('Asia/Jakarta')
+        ];
         $insertStatus = DB::table('role_menu')->insert($data_role);
         if ($insertStatus) {
             $data = ['message' => 'menu berhasil di buat', 'data' => ['text' => $menu['nama'], 'id' => $idmenu, 'parent' => $menu['parents']]];
