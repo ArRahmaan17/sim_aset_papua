@@ -14,6 +14,16 @@
                         <div id="container-tree-menu" class="col-12">
                         </div>
                         <div id="form-container" class="col-6 d-none">
+                            <h5>Aksi Menu</h5>
+                            <div class="dome-inline-spacing mb-2">
+                                <button id="show-menu" type="button" class="btn btn-info">
+                                    <i class='bx bx-show-alt'></i>
+                                    lihat</button>
+                                <button id="delete-menu" type="button" class="btn btn-danger"><i
+                                        class='bx bxs-trash mb-1'></i>
+                                    hapus</button>
+                            </div>
+                            <h5 class="form-title-menu">Tambah Anak Menu</h5>
                             <form action="" id='form-menu'>
                                 <div class="mb-3">
                                     <label for="nama" class="form-label">Nama</label>
@@ -70,12 +80,12 @@
                                     <button id="save-menu" type="button" class="btn btn-success"><i
                                             class='bx bxs-save mb-1'></i>
                                         Simpan</button>
+                                    <button id="update-menu" type="button" class="btn btn-success d-none"><i
+                                            class='bx bxs-pencil mb-1'></i>
+                                        Edit</button>
                                     <button id="cancel-menu" type="button" class="btn btn-warning"><i
                                             class='bx bxs-x-square mb-1'></i>
                                         Batal</button>
-                                    <button id="delete-menu" type="button" class="btn btn-danger"><i
-                                            class='bx bxs-trash mb-1'></i>
-                                        hapus</button>
                                 </div>
                             </form>
                         </div>
@@ -194,6 +204,36 @@
                 });
             }
         }
+
+        function dataToValueElement(data) {
+            $('#form-menu').find('input, select').map((index, element) => {
+                let name = $(element).attr('name');
+                if (data.hasOwnProperty(`${name}`)) {
+                    let value = data[`${name}`];
+                    if (name == 'role[]') {
+                        value = JSON.parse(value);
+                        value.forEach(val => {
+                            if ($(element).val() == val) {
+                                $(element).attr('checked', true)
+                            }
+                        })
+                        // $('#form-menu').find(`[name='${name}']`).map((index, element) => {
+                        //     console.log($(element).val() == )
+                        // })
+                    } else {
+                        $(`[name=${name}]`).val(value).trigger("change")
+                    }
+                }
+            })
+        }
+
+        function resetMenuForm() {
+            $('.form-title-menu').html('Tambah Anak Menu');
+            $("#form-menu")[0].reset();
+            $("#update-menu").addClass('d-none');
+            $("#save-menu").removeClass('d-none');
+            $("#form-menu").find(':not([value=1])').attr('checked', false)
+        }
         $(function() {
             var parentId = null;
             iniliatizeJstree();
@@ -211,8 +251,14 @@
                 if (data.node.children.length > 0) {
                     $("#delete-menu").addClass('disabled')
                 } else {
-                    $("#delete-menu").addClass('disabled')
+                    $("#delete-menu").removeClass('disabled')
                 }
+                if (parentId == 0) {
+                    $("#show-menu").addClass('disabled')
+                } else {
+                    $("#show-menu").removeClass('disabled')
+                }
+                resetMenuForm();
                 $("#container-tree-menu").switchClass('col-12', 'col-6', 500);
                 $("#form-container").switchClass('d-none', 'd-block', 500);
                 setTimeout(() => {
@@ -249,8 +295,28 @@
                     }
                 });
             });
+            $('#show-menu').click(function() {
+                id = $("#container-tree-menu").jstree(true)
+                    .get_selected()[0]
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('master.menu.show', 0) }}" + id,
+                    dataType: "json",
+                    success: function(response) {
+                        dataToValueElement(response.data);
+                        $("#save-menu").addClass('d-none');
+                        $("#update-menu").removeClass('d-none');
+                        $('.form-title-menu').html('Edit Menu')
+                    },
+                    error: function() {
+                        $("#container-tree-menu").jstree(true).deselect_node($(
+                                "#container-tree-menu").jstree(true)
+                            .get_selected());
+                    }
+                });
+            });
             $('#cancel-menu').click(function() {
-                $("#form-menu")[0].reset();
+                resetMenuForm();
                 $("#container-tree-menu").jstree(true).deselect_node($("#container-tree-menu").jstree(true)
                     .get_selected());
             })

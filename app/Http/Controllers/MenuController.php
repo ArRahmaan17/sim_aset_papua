@@ -55,7 +55,7 @@ class MenuController extends Controller
     {
         $menu = $request->except('role', '_token');
         $menu['updated_at'] = $menu['created_at'] = now('Asia/Jakarta');
-        $roles = $request->only('role') ?? [1];
+        $roles = $request->only('role') ?? [];
         $idmenu = DB::table('menu')->insertGetId($menu, 'idmenu');
         $data_role = [];
         foreach ($roles['role'] as $index => $role) {
@@ -82,7 +82,20 @@ class MenuController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $menu = DB::table('menu as m')
+            ->join('role_menu as rm', 'm.idmenu', '=', 'rm.idmenu')
+            ->selectRaw('m.*, JSON_ARRAYAGG(rm.idrole) as "role[]"')
+            ->where('m.idmenu', $id)
+            ->groupBy('idmenu')
+            ->first();
+        if ($menu) {
+            $data = ['message' => 'data menu berhasil di dapatkan', 'data' => $menu];
+            $status = 200;
+        } else {
+            $data = ['message' => 'data menu gagal di dapatkan', 'data' => []];
+            $status = 404;
+        }
+        return response()->json($data, $status);
     }
 
     /**

@@ -39,6 +39,7 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
         Route::get('/master/menu', [MenuController::class, 'index'])->name('menu');
         Route::post('/master/update-parent-menu', [MenuController::class, 'updateParent'])->name('update-parent-menu');
         Route::get('/master/list-menu', [MenuController::class, 'all'])->name('list-menu');
+        Route::get('/master/menu/show/{id}', [MenuController::class, 'show'])->name('menu.show');
         Route::post('/master/menu/store', [MenuController::class, 'store'])->name('menu.store');
     });
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');

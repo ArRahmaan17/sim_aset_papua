@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\DB;
 
+function getRoleId()
+{
+    return session('user')->idrole;
+}
 function getRole()
 {
     return DB::table('role')->where('idrole', session('user')->idrole)->first()->role;
@@ -209,4 +213,31 @@ function buildTree(array &$elements, $idParent = 0)
     }
 
     return $branch;
+}
+function buildMenu(array &$elements)
+{
+    $html = "";
+    foreach ($elements as $element) {
+        $element = (array)$element;
+        if (isset($element['children'])) {
+            $children = buildMenu($element['children']);
+            $html .= '<li class="menu-item">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons ' . $element['icons'] . '"></i>
+                            <div data-i18n="Layouts">' . $element['nama'] . '</div>
+                        </a>
+
+                        <ul class="menu-sub">' . $children . '</ul>
+                    </li>';
+        } else {
+            $html .= '<li class="menu-item">
+                    <a href="' . route($element['link']) . '" class="menu-link">
+                        <i class="menu-icon tf-icons ' . $element['icons'] . '"></i>
+                        <div data-i18n="Analytics">' . $element['nama'] . '</div>
+                    </a>
+                </li>';
+        }
+    }
+
+    return $html;
 }
