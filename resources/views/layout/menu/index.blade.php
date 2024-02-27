@@ -97,8 +97,8 @@
 @endsection
 @push('js')
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jstree.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jstree.min.js') }}"></script>
     <script>
         function iniliatizeJstree() {
             $.ajax({
@@ -253,7 +253,7 @@
                 } else {
                     $("#delete-menu").removeClass('disabled')
                 }
-                if (parentId == 0) {
+                if (parentId == 0 || parentId == '#') {
                     $("#show-menu").addClass('disabled')
                 } else {
                     $("#show-menu").removeClass('disabled')
@@ -284,7 +284,7 @@
                     },
                     dataType: "json",
                     success: function(response) {
-                        $("#form-menu")[0].reset();
+                        resetMenuForm();
                         $("#container-tree-menu").jstree(true)
                             .create_node(response.data.parent, {
                                 ...response.data
@@ -295,6 +295,9 @@
                     }
                 });
             });
+            $("#update-menu").click(function() {
+
+            })
             $('#show-menu').click(function() {
                 id = $("#container-tree-menu").jstree(true)
                     .get_selected()[0]

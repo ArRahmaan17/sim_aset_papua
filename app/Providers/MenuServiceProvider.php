@@ -22,18 +22,10 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function boot(Request $request): void
     {
-        // if (session('user')->idrole != 1) {
-        // $menu = DB::table('menu as m')
-        //     ->selectRaw('m.*, rm.idrole')
-        //     ->join('role_menu as rm', 'm.idmenu', '=', 'rm.idmenu')
-        //     ->where('rm.idrole', session('user')->idrole)
-        //     ->get();
-        // } else {
         $menu = DB::table('menu as m')
             ->select('idmenu as id', 'parents as parent', 'icons', 'nama', 'link')
             ->get()->toArray();
         $menu = buildTree($menu);
-        // }
         View::composer('*', function ($view) use ($menu) {
             $view->with(['menu' => $menu]);
         });
