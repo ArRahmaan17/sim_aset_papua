@@ -46,10 +46,10 @@ Route::middleware(['authenticated'])->group(function () {
 });
 Route::middleware(['un_authenticated'])->group(function () {
     // DangerLine
-    Route::get('/import-master', function () {
-        Excel::import(new MasterImport, public_path('master.xlsx'));
-        return response()->json(['status' => 'done', 'message' => 'Master imported']);
-    })->name('import-master');
+    // Route::get('/import-master', function () {
+    //     Excel::import(new MasterImport, public_path('master.xlsx'));
+    //     return response()->json(['status' => 'done', 'message' => 'Master imported']);
+    // })->name('import-master');
     // end DangerLine
     Route::get('/auth/login', [AuthController::class, 'index'])->name('login');
     Route::post('/auth/login', [AuthController::class, 'login'])->name('login-process');
