@@ -23,10 +23,10 @@ use Maatwebsite\Excel\Facades\Excel;
 Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     // DangerLine
-    // Route::get('/import-master', function () {
-    //     Excel::import(new MasterImport, public_path('master.xlsx'));
-    //     return response()->json(['status' => 'done', 'message' => 'Master imported']);
-    // })->name('import-master');
+    Route::get('/import-master', function () {
+        Excel::import(new MasterImport, public_path('master.xlsx'));
+        return response()->json(['status' => 'done', 'message' => 'Master imported']);
+    })->name('import-master');
     // end DangerLine
     Route::middleware(['authenticated'])->name('master.')->group(function () {
         Route::get('/master/asal-usul', [MasterController::class, 'masterAsalUsul'])->name('asal-usul');
