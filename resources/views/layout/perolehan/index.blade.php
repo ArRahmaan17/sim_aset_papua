@@ -252,7 +252,8 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="2">Data Bap Tidak Di temukan</td>
+                                        <td>Data Bap Tidak Di temukan</td>
+                                        <td>Data Bap Tidak Di temukan</td>
                                     </tr>
                                 @endforelse
                             </tbody>
