@@ -16,7 +16,7 @@ class MasterOrganisasi implements ToCollection
         foreach ($collection as $index => $row) {
             if ($index !== 0) {
                 $code = explode('.', $row[0]);
-                DB::insert('INSERT INTO masterorganisasi ', [
+                DB::insert('INSERT INTO masterorganisasi values(?,?,?,?,?,?,?,?,?,?,?)', [
                     $code[0],
                     isset($code[1]) ? $code[1] : 0,
                     isset($code[2]) ? $code[2] : 0,
