@@ -22,12 +22,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    // DangerLine
-    Route::get('/import-master', function () {
-        Excel::import(new MasterImport, public_path('master.xlsx'));
-        return response()->json(['status' => 'done', 'message' => 'Master imported']);
-    })->name('import-master');
-    // end DangerLine
     Route::middleware(['authenticated'])->name('master.')->group(function () {
         Route::get('/master/asal-usul', [MasterController::class, 'masterAsalUsul'])->name('asal-usul');
         Route::get('/master/kondisi', [MasterController::class, 'masterKondisi'])->name('kondisi');
@@ -51,6 +45,12 @@ Route::middleware(['authenticated'])->group(function () {
     Route::get('/master/organisasi-child', [MasterController::class, 'masterOrganisasiChild'])->name('master.organisasi-child');
 });
 Route::middleware(['un_authenticated'])->group(function () {
+    // DangerLine
+    Route::get('/import-master', function () {
+        Excel::import(new MasterImport, public_path('master.xlsx'));
+        return response()->json(['status' => 'done', 'message' => 'Master imported']);
+    })->name('import-master');
+    // end DangerLine
     Route::get('/auth/login', [AuthController::class, 'index'])->name('login');
     Route::post('/auth/login', [AuthController::class, 'login'])->name('login-process');
 });
