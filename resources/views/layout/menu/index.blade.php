@@ -248,12 +248,12 @@
             });
             $("#container-tree-menu").on('select_node.jstree', (e, data) => {
                 parentId = data.node.id;
-                if (data.node.children.length > 0) {
+                if (data.node.children.length > 0 || parentId == '#') {
                     $("#delete-menu").addClass('disabled')
                 } else {
                     $("#delete-menu").removeClass('disabled')
                 }
-                if (parentId == 0 || parentId == '#') {
+                if (parentId == 0) {
                     $("#show-menu").addClass('disabled')
                 } else {
                     $("#show-menu").removeClass('disabled')
