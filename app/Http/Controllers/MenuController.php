@@ -22,7 +22,6 @@ class MenuController extends Controller
     {
         $menu = DB::table('menu')->select(DB::raw(' idmenu as id, nama as text, parents as parent'))->get()->toArray();
         $treeMenu = buildTree($menu);
-        $treeMenu = [];
         if (count($treeMenu) == 0) {
             $response = ['message' => 'Data Menu Berhasil Di buat', 'data' => $treeMenu];
             $status = 404;
