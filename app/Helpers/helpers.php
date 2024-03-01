@@ -230,8 +230,8 @@ function buildMenu(array &$elements)
                         <ul class="menu-sub">' . $children . '</ul>
                     </li>';
         } else {
-            $html .= '<li class="menu-item">
-                    <a href="' . route($element['link']) . '" class="menu-link">
+            $html .= '<li class="menu-item ' . (app('request')->route()->named($element['link']) ? 'active' : '') . '">
+                    <a href="' . route($element['link']) . '" class="menu-link ">
                         <i class="menu-icon tf-icons ' . $element['icons'] . '"></i>
                         <div data-i18n="Analytics">' . $element['nama'] . '</div>
                     </a>

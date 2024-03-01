@@ -100,7 +100,19 @@ class PerolehanController extends Controller
         }
         return response()->json(['message' => 'berhasil menambahkan perolehan']);
     }
-
+    public function getDetailBap($kodebap)
+    {
+        $data = Bap::getDetailBap($kodebap);
+        $data['dataKib'] = collect(array_values($data['dataKib']))->flatten()->all();
+        if (count($data['dataKibTransaksi']) > 0 || count($data['dataKib']) > 0) {
+            $response = ['message' => 'Detail Bap berhasil ditemukan', 'data' => $data];
+            $status = 200;
+        } else {
+            $response = ['message' => 'Detail Bap gagal ditemukan', 'data' => $data];
+            $status = 404;
+        }
+        return response()->json($response, $status);
+    }
     public function getAllOrganizationBaps(Request $request)
     {
         $data = Bap::getAllOrganizationBaps();

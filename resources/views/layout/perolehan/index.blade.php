@@ -146,6 +146,14 @@
                                         <button id="save-ba" type="button" class="btn btn-warning mb-3 disabled"><span
                                                 class='tf-icons bx bx-save'></span>
                                             Simpan Perolehan Aset</button>
+                                        <button id="update-ba" type="button"
+                                            class="btn btn-warning mb-3 disabled d-none"><span
+                                                class='tf-icons bx bx-pen'></span>
+                                            Update Perolehan Aset</button>
+                                        <button id="cancel-ba" type="button"
+                                            class="btn btn-danger mb-3 disabled d-none"><span
+                                                class='tf-icons bx bx-x'></span>
+                                            Cancel Pengunaan Ba</button>
                                     </form>
                                 </div>
                             </div>
@@ -241,12 +249,9 @@
                                         <td>{{ $bap->kodebap }}</td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-outline-success btn-sm"><i
+                                                <button type="button" onclick="showBap(this)"
+                                                    class="btn btn-outline-success btn-sm"><i
                                                         class='bx bxs-pencil'></i>Gunakan</button>
-                                                <button type="button" class="btn btn-outline-info btn-sm"><i
-                                                        class='bx bxs-show'></i>Lihat</button>
-                                                <button type="button" class="btn btn-outline-danger btn-sm"><i
-                                                        class='bx bxs-trash'></i>Hapus</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -281,6 +286,67 @@
         window.detailAsset = [];
         window.iddetail = null;
         window.foto = null;
+        window.state = 'add'
+
+        function resetBa() {
+            $('#ba-form').find('input, textarea').removeAttr('disabled');
+            $('#ba-form')[0].reset();
+            $('#container-detail-asset').html('');
+            $('#save-ba').addClass('disabled').removeClass('d-none');
+            $('#update-ba').addClass('disabled d-none');
+            $('#cancel-ba').addClass('disabled d-none');
+            window.bastatus = false;
+            window.state = 'add';
+            window.tempAsset = null;
+            window.countDetailAsset = 0;
+            window.detailAsset = [];
+            window.iddetail = null;
+            window.foto = null;
+            $("#modalListBap").find(`button.btn-outline-success`)
+                .removeClass('disabled')
+                .html(`<i class='bx bxs-pencil'></i> Gunakan`);
+        }
+
+        function showBap(element) {
+            window.state = 'update';
+            $(element)
+                .parents('tbody')
+                .find(`button`)
+                .removeClass('disabled')
+                .html(`<i class='bx bxs-pencil'></i> Gunakan`);
+            $(element).addClass('disabled').html(`<i class='bx bx-x'></i> Digunakan`);
+            let data = $(element).parents('tr').data('bap');
+            $.ajax({
+                type: "get",
+                url: `{{ route('perolehan.bap.show') }}/${data.idbap}`,
+                dataType: "json",
+                success: function(response) {
+                    $('#container-detail-asset').html('');
+                    response.data.dataKib.forEach(kib => {
+                        window.tempAsset = kib;
+                        window.iddetail = kib.iddetail;
+                        generateListDetailAsset(kib);
+                    });
+                    $("#update-ba").removeClass('disabled d-none');
+                    $("#cancel-ba").removeClass('disabled d-none');
+                    $("#save-ba").addClass('disabled d-none');
+                }
+            });
+            $("#ba-form").find('input,textarea').map((_, element) => {
+                name = $(element).attr('name');
+                if (data.hasOwnProperty(name) && data[name] != null && data[name] != "") {
+                    if ($(element).hasClass('datetime-picker')) {
+                        $(element).datepicker('update', new Date(data[name]))
+                    } else {
+                        $(element).val(data[name]).trigger('change')
+                    }
+                }
+                setTimeout(() => {
+                    $(element).attr('disabled', true)
+                }, 150);
+            });
+            $("#modalListBap").modal('hide')
+        }
 
         function getListbap() {
             $.ajax({
@@ -291,15 +357,11 @@
                     var html = '';
                     response.data.forEach(bap => {
                         html +=
-                            `<tr><td>${bap.kodebap}</td>
+                            `<tr data-bap="${bap}"><td>${bap.kodebap}</td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-outline-success btn-sm"><i
+                                        <button type="button" onclick="showBap(this)" class="btn btn-outline-success btn-sm"><i
                                                 class='bx bxs-pencil'></i>Gunakan</button>
-                                        <button type="button" class="btn btn-outline-info btn-sm"><i
-                                                class='bx bxs-show'></i>Lihat</button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm"><i
-                                                class='bx bxs-trash'></i>Hapus</button>
                                     </div>
                                 </td>
                             </tr>`;
@@ -312,6 +374,7 @@
         function udpdateListData(data) {
             $("#container-detail-asset").find('li').map((index, element) => {
                 if ($(element).data('id') == window.iddetail) {
+                    $(element).find('.badge.bg-primary').html(data.jumlah)
                     $(element).data('master', {
                         ...window.tempAsset,
                         ...data,
@@ -325,6 +388,9 @@
                 let name = $(element).attr('name');
                 if (data.hasOwnProperty(name)) {
                     let value = data[name];
+                    if (typeof(value) == 'string' && value.split('.00').length > 1) {
+                        value = value.split('.00').join('');
+                    }
                     $(`[name=${name}]`).val(value).trigger("change")
                 }
             })
@@ -356,7 +422,7 @@
 
         function deleteDetailAsset(id) {
             iziToast.question({
-                timeout: 20000,
+                timeout: 5000,
                 close: false,
                 overlay: true,
                 displayMode: 'once',
@@ -795,8 +861,57 @@
                     }, 1500);
                 }
             });
+            $("#cancel-ba").click(function() {
+                iziToast.question({
+                    timeout: 5000,
+                    close: false,
+                    overlay: true,
+                    displayMode: 'once',
+                    id: 'ba-konfirmasi',
+                    zindex: 9999,
+                    title: 'Konfirmasi',
+                    message: 'Apakah anda yakin akan membatalkan bap ini?',
+                    position: 'center',
+                    buttons: [
+                        ['<button><b>YES</b></button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                            resetBa();
+                        }, true],
+                        ['<button>NO</button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                        }],
+                    ],
+                });
+            })
             $('#save-ba').click(function() {
-                savePerolehan()
+                iziToast.question({
+                    timeout: 5000,
+                    close: false,
+                    overlay: true,
+                    displayMode: 'once',
+                    id: 'ba-konfirmasi',
+                    zindex: 9999,
+                    title: 'Konfirmasi',
+                    message: 'Apakah anda yakin akan menambahkan bap dan list asset ini?',
+                    position: 'center',
+                    buttons: [
+                        ['<button><b>YES</b></button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                            savePerolehan()
+                        }, true],
+                        ['<button>NO</button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                        }],
+                    ],
+                });
             });
             $('#modalDetailAsset').on('hidden.bs.modal', function(e) {
                 var errors = null;
