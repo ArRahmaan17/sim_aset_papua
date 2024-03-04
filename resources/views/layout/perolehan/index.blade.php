@@ -325,6 +325,7 @@
                     response.data.dataKib.forEach(kib => {
                         window.tempAsset = kib;
                         window.iddetail = kib.iddetail;
+                        window.countDetailAsset = kib.iddetail;
                         generateListDetailAsset(kib);
                     });
                     $("#update-ba").removeClass('disabled d-none');
@@ -345,7 +346,7 @@
                     $(element).attr('disabled', true)
                 }, 150);
             });
-            $("#modalListBap").modal('hide')
+            $("#modalListBap").modal('hide');
         }
 
         function getListbap() {
@@ -357,7 +358,7 @@
                     var html = '';
                     response.data.forEach(bap => {
                         html +=
-                            `<tr data-bap="${bap}"><td>${bap.kodebap}</td>
+                            `<tr data-bap='${JSON.stringify(bap)}'><td>${bap.kodebap}</td>
                                 <td>
                                     <div class="btn-group" role="group">
                                         <button type="button" onclick="showBap(this)" class="btn btn-outline-success btn-sm"><i
@@ -371,7 +372,7 @@
             });
         }
 
-        function udpdateListData(data) {
+        function updateListData(data) {
             $("#container-detail-asset").find('li').map((index, element) => {
                 if ($(element).data('id') == window.iddetail) {
                     $(element).find('.badge.bg-primary').html(data.jumlah)
@@ -748,6 +749,55 @@
             });
         }
 
+        function updatePerolehan() {
+            $('#ba-form').find('input, textarea').removeAttr('disabled');
+            let data = serializeObject($('#ba-form'));
+            let detailData = [];
+            $('#container-detail-asset').find('li').map((index, element) => {
+                detailData.push($(element).data('master'))
+            });
+            data.detail = detailData;
+            data._token = `{{ csrf_token() }}`;
+            $.ajax({
+                type: "PUT",
+                url: "{{ route('perolehan.update') }}/" + data.kodebap,
+                data: data,
+                dataType: "json",
+                success: function(response) {
+                    $('#ba-form')[0].reset();
+                    $('#container-detail-asset').html('');
+                    $('#save-ba').addClass('disabled');
+                    $(window).scrollTop(0);
+                    $('.datetime-picker').datepicker('clearDates');
+                    setTimeout(() => {
+                        $('.container-alert-ba').html(`<div class="alert alert-success alert-ba">
+                                <div class="row justify-content-start align-items-center">
+                                    <div class="col-1">
+                                        <i class='bx bxs-check-circle bx-lg' ></i>
+                                    </div>
+                                    <div class="col-11 fw-bold">
+                                        <span>Success</span>
+                                    </div>
+                                </div>
+                                <div class="p-2">
+                                    ${response.message}
+                                </div>
+                            </div>`);
+                    }, 500)
+                    setTimeout(() => {
+                        $('.alert-ba').toggle("fade", 1000);
+                    }, 1500);
+                    window.bastatus = false;
+                    window.tempAsset = null;
+                    window.countDetailAsset = 0;
+                    window.detailAsset = [];
+                    window.iddetail = null;
+                    window.foto = null;
+                    getListbap();
+                }
+            });
+        }
+
         function handleFileFoto() {
             var imageArray = []
             var fileInput = document.getElementById('qrcode_foto');
@@ -810,11 +860,12 @@
                     $(this).focus();
                     return
                 }
-                $(this).val(`BA/{{ env('APP_YEAR') }}/${this.value}/{{ kodeOrganisasi() }}`)
+                $(this).val(`BA-{{ env('APP_YEAR') }}-${this.value}-{{ kodeOrganisasi() }}`)
             });
             $('.formated').focus(function() {
-                value = (this.value).split(`BA/{{ env('APP_YEAR') }}/`).join('').split(
-                    `/{{ kodeOrganisasi() }}`).join('');
+                value = (this.value).split(`BA-{{ env('APP_YEAR') }}-`)
+                    .join('')
+                    .split(`-{{ kodeOrganisasi() }}`).join('');
                 $(this).val(value)
             })
             setMaskMoney();
@@ -822,6 +873,7 @@
             initialDataTable();
             onClickMasterBarang();
             $('#add-detail-asset').click(function() {
+                window.iddetail = null;
                 var order = window.countDetailAsset += 1;
                 $('.input-group').find('input').removeClass('is-invalid')
                 $('.input-group').find('span').removeClass('border-1 border-danger')
@@ -903,7 +955,33 @@
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
-                            savePerolehan()
+                            savePerolehan();
+                        }, true],
+                        ['<button>NO</button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                        }],
+                    ],
+                });
+            });
+            $('#update-ba').click(function() {
+                iziToast.question({
+                    timeout: 5000,
+                    close: false,
+                    overlay: true,
+                    displayMode: 'once',
+                    id: 'update-konfirmasi',
+                    zindex: 9999,
+                    title: 'Konfirmasi',
+                    message: 'Apakah anda yakin akan merubah bap dan list asset ini?',
+                    position: 'center',
+                    buttons: [
+                        ['<button><b>YES</b></button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                            updatePerolehan();
                         }, true],
                         ['<button>NO</button>', function(instance, toast) {
                             instance.hide({
@@ -914,8 +992,8 @@
                 });
             });
             $('#modalDetailAsset').on('hidden.bs.modal', function(e) {
-                var errors = null;
                 e.prevenDefault
+                var errors = null;
                 errors = validateElement("modalDetailAsset", 'detail-asset', 'label', '.bxs-star', '',
                     '.form-control, .select2modal, div > radio', '');
                 var html = '';
@@ -957,7 +1035,7 @@
                         generateListDetailAsset(data);
                     } else {
                         data.iddetail = window.iddetail;
-                        udpdateListData(data)
+                        updateListData(data)
                     }
                     $('.alert-da').remove();
                     $('#save-ba').removeClass('disabled');
