@@ -89,6 +89,25 @@
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
     <script>
+        function renderDataToTable(data) {
+            html = '';
+            data.forEach((element, index) => {
+                html += `<tr>
+                            <td>${index++}</td>
+                            <td>${element.warna}</td>
+                            <td>
+                                <button class="btn btn-warning edit" data-id='${JSON.stringify(element)}'><i
+                                        class='bx bx-pencil mb-1'></i>
+                                    Update</button>
+                                <button class="btn btn-danger delete" data-id='${JSON.stringify(element)}'><i
+                                        class='bx bx-trash mb-1'></i>
+                                    Delete</button>
+                            </td>
+                        </tr>`;
+            });
+            return html;
+        }
+
         function updateMasterWarna() {
             data = serializeObject($('#form-warna'));
             $.ajax({
@@ -100,7 +119,9 @@
                 },
                 dataType: "json",
                 success: function(response) {
-
+                    $('.data-table').DataTable().destroy();
+                    $('.data-table').find('tbody').html(renderDataToTable(response.data))
+                    $('.data-table').DataTable();
                 }
             });
         }
@@ -150,7 +171,12 @@
                                     _token: `{{ csrf_token() }}`,
                                 },
                                 dataType: "json",
-                                success: function(response) {}
+                                success: function(response) {
+                                    $('.data-table').DataTable().destroy();
+                                    $('.data-table').find('tbody').html(
+                                        renderDataToTable(response.data))
+                                    $('.data-table').DataTable();
+                                }
                             });
                         }, true],
                         ['<button>NO</button>', function(instance, toast) {
@@ -182,7 +208,9 @@
                 },
                 dataType: "json",
                 success: function(response) {
-
+                    $('.data-table').DataTable().destroy();
+                    $('.data-table').find('tbody').html(renderDataToTable(response.data))
+                    $('.data-table').DataTable();
                 }
             });
         }

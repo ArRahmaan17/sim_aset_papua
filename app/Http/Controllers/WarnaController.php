@@ -84,7 +84,6 @@ class WarnaController extends Controller
             $status = 200;
             $message = ['message' => 'Master warna berhasil diubah', 'data' => $data];
         } catch (Exception $th) {
-            dd($th);
             $message = ['message' => 'Master warna gagal diubah'];
             if ($th->getCode() == 422) {
                 $message = ['message' => $th->getMessage()];
