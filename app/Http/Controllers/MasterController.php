@@ -23,7 +23,9 @@ class MasterController extends Controller
         foreach (explode('.', $request->organisasi) as $index => $kode) {
             $where[] = ['' . $array[$index], $kode];
         };
-        $organisasi = DB::table('masterorganisasi')->where($where)->orderBy('kodeurusan')->first();
+        $organisasi = DB::table('masterorganisasi')
+            ->where($where)
+            ->orderBy('kodeurusan')->first();
         return $organisasi;
     }
     public function masterOrganisasiChild(Request $request)

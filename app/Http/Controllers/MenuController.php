@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Event\Code\Throwable;
 
 class MenuController extends Controller
 {
@@ -107,19 +109,41 @@ class MenuController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            DB::table('menu')->where('idmenu', $id)->update($request->except('_token', 'role'));
+            DB::table('role_menu')->where('idmenu', $id)->delete();
+            $roles = ($request->has('role')) ? $request->only('role') : ['role' => []];
+            if ($request->has('role')) {
+                foreach ($roles['role'] as $index => $role) {
+                    $data_role[] = [
+                        'idrole' => $role,
+                        'idmenu' => $id,
+                        'created_at' => now('Asia/Jakarta'),
+                        'updated_at' => now('Asia/Jakarta')
+                    ];
+                }
+            }
+            $data_role[] = [
+                'idrole' => 1,
+                'idmenu' => $id,
+                'created_at' => now('Asia/Jakarta'),
+                'updated_at' => now('Asia/Jakarta')
+            ];
+            DB::table('role_menu')->insert($data_role);
+            $status = 200;
+            $message = ['message' => 'Data menu berhasil di ubah', 'data' => $request->except('_token', 'role')];
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $message = ['message' => 'Data menu gagal di ubah', 'data' => []];
+            $status = 422;
+        }
+        return response()->json($message, $status);
     }
 
     /**
@@ -127,6 +151,25 @@ class MenuController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $parent = DB::table('menu')->where('parents', $id)->count();
+            if ($parent != 0) {
+                throw new Exception("cant delete parent menu", 422);
+            }
+            DB::table('menu')->where('idmenu', $id)->delete();
+            DB::table('role_menu')->where('idmenu', $id)->delete();
+            DB::commit();
+            $status = 422;
+            $message = ['message' => 'berhasil menghapus menu'];
+        } catch (\Exception $th) {
+            DB::rollBack();
+            $message = ['message' => 'gagal menghapus menu'];
+            if ($th->getCode() == 422) {
+                $message = ['message' => $th->getMessage()];
+            }
+            $status = 422;
+        }
+        return response()->json($message, $status);
     }
 }

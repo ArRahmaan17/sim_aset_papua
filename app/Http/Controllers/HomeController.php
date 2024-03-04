@@ -22,6 +22,19 @@ class HomeController extends Controller
             'kodesubsubunit',
             'organisasi'
         )->where('kodesuburusan', 0)->get()->toArray();
-        return view('layout.home', compact('organisasi'));
+        if (session('organisasi')) {
+            $copied = clone session('organisasi');
+            unset($copied->wajibsusut, $copied->organisasi, $copied->tahunorganisasi);
+            $copied->tahunorganisasi = env('TAHUN_APLIKASI');
+            $countBaNow = DB::table('bap')
+                ->where((array)$copied)->groupByRAW('MONTH(tanggalbap)')->count();
+            $copied->tahunorganisasi = intval(env('TAHUN_APLIKASI')) - 1;
+            $countBaPast = DB::table('bap')
+                ->where((array)$copied)->groupByRAW('MONTH(tanggalbap)')->count();
+        } else {
+            $countBaNow = 0;
+            $countBaPast = 0;
+        }
+        return view('layout.home', compact('organisasi', 'countBaNow', 'countBaPast'));
     }
 }

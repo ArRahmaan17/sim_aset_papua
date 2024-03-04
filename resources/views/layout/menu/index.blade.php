@@ -1,5 +1,6 @@
 @extends('template.parent')
 @push('css')
+    <link rel="stylesheet" href="{{ asset('assets/css/iziToast.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/jstree.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}">
 @endpush
@@ -99,6 +100,7 @@
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/jstree.min.js') }}"></script>
+    <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
     <script>
         function iniliatizeJstree() {
             $.ajax({
@@ -234,6 +236,12 @@
             $("#save-menu").removeClass('d-none');
             $("#form-menu").find(':not([value=1])').attr('checked', false)
         }
+
+        function resetJstree() {
+            $("#container-tree-menu").jstree(true).deselect_node($(
+                    "#container-tree-menu").jstree(true)
+                .get_selected());
+        }
         $(function() {
             var parentId = null;
             iniliatizeJstree();
@@ -270,33 +278,155 @@
                 $("#form-container").switchClass('d-block', 'd-none', 50);
             })
             $('#save-menu').click(function() {
-                data = serializeObject($("#form-menu"));
-                data = {
-                    ...data,
-                    parents: parentId
-                };
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('master.menu.store') }}",
-                    data: {
-                        _token: `{{ csrf_token() }}`,
-                        ...data
-                    },
-                    dataType: "json",
-                    success: function(response) {
-                        resetMenuForm();
-                        $("#container-tree-menu").jstree(true)
-                            .create_node(response.data.parent, {
-                                ...response.data
+                iziToast.question({
+                    timeout: 5000,
+                    layout: 2,
+                    close: false,
+                    overlay: true,
+                    displayMode: 'once',
+                    id: 'question',
+                    zindex: 9999,
+                    title: 'Konfirmasi',
+                    message: 'Apakah anda yakin akan menyimpan menu ini?',
+                    position: 'center',
+                    icon: 'bx bx-question-mark',
+                    buttons: [
+                        ['<button><b>YES</b></button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                            data = serializeObject($("#form-menu"));
+                            data = {
+                                ...data,
+                                parents: parentId
+                            };
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ route('master.menu.store') }}",
+                                data: {
+                                    _token: `{{ csrf_token() }}`,
+                                    ...data
+                                },
+                                dataType: "json",
+                                success: function(response) {
+                                    resetMenuForm();
+                                    $("#container-tree-menu").jstree(true)
+                                        .create_node(response.data.parent, {
+                                            ...response.data
+                                        });
+                                    resetJstree()
+                                }
                             });
-                        $("#container-tree-menu").jstree(true).deselect_node($(
-                                "#container-tree-menu").jstree(true)
-                            .get_selected());
-                    }
+                        }, true],
+                        ['<button>NO</button>', function(instance, toast) {
+
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+
+                        }],
+                    ],
                 });
             });
             $("#update-menu").click(function() {
+                iziToast.question({
+                    timeout: 5000,
+                    layout: 2,
+                    close: false,
+                    overlay: true,
+                    displayMode: 'once',
+                    id: 'question',
+                    zindex: 9999,
+                    title: 'Konfirmasi',
+                    message: 'Apakah anda yakin akan mengubah menu ini?',
+                    position: 'center',
+                    buttons: [
+                        ['<button><b>YES</b></button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                            id = $("#container-tree-menu").jstree(true)
+                                .get_selected()[0]
+                            data = serializeObject($("#form-menu"));
+                            $.ajax({
+                                type: "PUT",
+                                url: "{{ route('master.menu.update') }}/" + id,
+                                data: {
+                                    _token: `{{ csrf_token() }}`,
+                                    ...data
+                                },
+                                dataType: "json",
+                                success: function(response) {
+                                    $("#container-tree-menu").jstree(true)
+                                        .rename_node($("#container-tree-menu")
+                                            .jstree(true).get_selected(),
+                                            response.data.nama);
+                                    resetJstree()
+                                },
+                                error: function() {
+                                    resetJstree()
+                                }
+                            });
+                        }, true],
+                        ['<button>NO</button>', function(instance, toast) {
 
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+
+                        }],
+                    ],
+                });
+            });
+            $("#delete-menu").click(function() {
+                iziToast.question({
+                    timeout: 5000,
+                    layout: 2,
+                    close: false,
+                    overlay: true,
+                    displayMode: 'once',
+                    id: 'question',
+                    zindex: 9999,
+                    title: 'Konfirmasi',
+                    message: 'Apakah anda yakin akan menghapus menu ini?',
+                    position: 'center',
+                    icon: 'bx bx-question-mark',
+                    buttons: [
+                        ['<button><b>YES</b></button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                            id = $("#container-tree-menu").jstree(true)
+                                .get_selected()[0]
+                            $.ajax({
+                                type: "DELETE",
+                                url: "{{ route('master.menu.delete') }}/" + id,
+                                data: {
+                                    _token: `{{ csrf_token() }}`
+                                },
+                                dataType: "json",
+                                success: function(response) {
+                                    $("#container-tree-menu").jstree(true)
+                                        .delete_node($(
+                                                "#container-tree-menu").jstree(
+                                                true)
+                                            .get_selected());
+                                    resetJstree()
+                                },
+                                error: function() {
+                                    resetJstree()
+                                }
+                            });
+                        }, true],
+                        ['<button>NO</button>', function(instance, toast) {
+
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+
+                        }],
+                    ],
+                });
             })
             $('#show-menu').click(function() {
                 id = $("#container-tree-menu").jstree(true)
@@ -312,16 +442,13 @@
                         $('.form-title-menu').html('Edit Menu')
                     },
                     error: function() {
-                        $("#container-tree-menu").jstree(true).deselect_node($(
-                                "#container-tree-menu").jstree(true)
-                            .get_selected());
+                        resetJstree()
                     }
                 });
             });
             $('#cancel-menu').click(function() {
                 resetMenuForm();
-                $("#container-tree-menu").jstree(true).deselect_node($("#container-tree-menu").jstree(true)
-                    .get_selected());
+                resetJstree()
             })
         });
     </script>

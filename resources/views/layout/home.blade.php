@@ -11,7 +11,7 @@
                 </div>
                 <div class="row row-bordered g-0">
                     <div class="col-md-8">
-                        <h5 class="card-header m-0 me-2 pb-3">Total Revenue</h5>
+                        <h5 class="card-header m-0 me-2 pb-3">Jumlah BA Organisasi {{ getOrganisasi() }}</h5>
                         <div id="totalRevenueChart" class="px-2"></div>
                     </div>
                     <div class="col-md-4">
@@ -21,12 +21,12 @@
                                     <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
                                         id="growthReportId" data-bs-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
-                                        2022
+                                        {{ env('TAHUN_APLIKASI') }}
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="growthReportId">
-                                        <a class="dropdown-item" href="javascript:void(0);">2021</a>
-                                        <a class="dropdown-item" href="javascript:void(0);">2020</a>
-                                        <a class="dropdown-item" href="javascript:void(0);">2019</a>
+                                        <a class="dropdown-item" href="javascript:void(0);">{{ env('TAHUN_APLIKASI') }}</a>
+                                        <a class="dropdown-item"
+                                            href="javascript:void(0);">{{ intval(env('TAHUN_APLIKASI')) - 1 }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -41,7 +41,7 @@
                                             class="bx bx-dollar text-primary"></i></span>
                                 </div>
                                 <div class="d-flex flex-column">
-                                    <small>2022</small>
+                                    <small>{{ env('TAHUN_APLIKASI') }}</small>
                                     <h6 class="mb-0">$32.5k</h6>
                                 </div>
                             </div>
@@ -50,7 +50,7 @@
                                     <span class="badge bg-label-info p-2"><i class="bx bx-wallet text-info"></i></span>
                                 </div>
                                 <div class="d-flex flex-column">
-                                    <small>2021</small>
+                                    <small>{{ intval(env('TAHUN_APLIKASI')) - 1 }}</small>
                                     <h6 class="mb-0">$41.2k</h6>
                                 </div>
                             </div>
@@ -142,6 +142,276 @@
 @push('js')
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
+    <script>
+        let cardColor, headingColor, axisColor, shadeColor, borderColor;
+
+        cardColor = config.colors.white;
+        headingColor = config.colors.headingColor;
+        axisColor = config.colors.axisColor;
+        borderColor = config.colors.borderColor;
+
+        // Total Revenue Report Chart - Bar Chart
+        // --------------------------------------------------------------------
+        const totalRevenueChartEl = document.querySelector('#totalRevenueChart'),
+            totalRevenueChartOptions = {
+                series: [{
+                        name: '{{ env('TAHUN_APLIKASI') }}',
+                        data: [parseInt(`{{ $countBaNow }}`)]
+                    },
+                    {
+                        name: '{{ intval(env('TAHUN_APLIKASI')) - 1 }}',
+                        data: [parseInt(`{{ $countBaPast }}`)]
+                    }
+                ],
+                chart: {
+                    height: 300,
+                    stacked: true,
+                    type: 'bar',
+                    toolbar: {
+                        show: false
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '33%',
+                        borderRadius: 12,
+                        startingShape: 'rounded',
+                        endingShape: 'rounded'
+                    }
+                },
+                colors: [config.colors.primary, config.colors.info],
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 6,
+                    lineCap: 'round',
+                    colors: [cardColor]
+                },
+                legend: {
+                    show: true,
+                    horizontalAlign: 'left',
+                    position: 'top',
+                    markers: {
+                        height: 8,
+                        width: 8,
+                        radius: 12,
+                        offsetX: -3
+                    },
+                    labels: {
+                        colors: axisColor
+                    },
+                    itemMargin: {
+                        horizontal: 10
+                    }
+                },
+                grid: {
+                    borderColor: borderColor,
+                    padding: {
+                        top: 0,
+                        bottom: -8,
+                        left: 20,
+                        right: 20
+                    }
+                },
+                xaxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    labels: {
+                        style: {
+                            fontSize: '13px',
+                            colors: axisColor
+                        }
+                    },
+                    axisTicks: {
+                        show: false
+                    },
+                    axisBorder: {
+                        show: false
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        style: {
+                            fontSize: '13px',
+                            colors: axisColor
+                        }
+                    }
+                },
+                responsive: [{
+                        breakpoint: 1700,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '32%'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 1580,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '35%'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 1440,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '42%'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 1300,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '48%'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 1200,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '40%'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 1040,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 11,
+                                    columnWidth: '48%'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 991,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '30%'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 840,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '35%'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '28%'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 640,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '32%'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 576,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '37%'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '45%'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 420,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '52%'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        breakpoint: 380,
+                        options: {
+                            plotOptions: {
+                                bar: {
+                                    borderRadius: 10,
+                                    columnWidth: '60%'
+                                }
+                            }
+                        }
+                    }
+                ],
+                states: {
+                    hover: {
+                        filter: {
+                            type: 'none'
+                        }
+                    },
+                    active: {
+                        filter: {
+                            type: 'none'
+                        }
+                    }
+                }
+            };
+        if (typeof totalRevenueChartEl !== undefined && totalRevenueChartEl !== null) {
+            const totalRevenueChart = new ApexCharts(totalRevenueChartEl, totalRevenueChartOptions);
+            totalRevenueChart.render();
+        }
+    </script>
     <script>
         function changeGetData(element, value) {
             $.ajax({

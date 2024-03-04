@@ -297,7 +297,6 @@ class PerolehanController extends Controller
             $message = ['message' => 'Berhasil melakukan perubahan'];
         } catch (\Throwable $th) {
             DB::rollBack();
-            dd($th);
             $status = 422;
             $message = ['message' => 'Gagal melakukan perubahan'];
         }
