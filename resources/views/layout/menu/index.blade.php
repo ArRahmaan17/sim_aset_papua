@@ -8,13 +8,12 @@
     <div class="row">
         <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
             <div class="card">
-                <div class="card-header"></div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 container-alert-invalid-process"></div>
-                        <div id="container-tree-menu" class="col-12">
+                        <div id="container-tree-menu" class="col-12 col-md-6">
                         </div>
-                        <div id="form-container" class="col-6 d-none">
+                        <div id="form-container" class="col-12 col-md-6 d-none">
                             <h5>Aksi Menu</h5>
                             <div class="dome-inline-spacing mb-2">
                                 <button id="show-menu" type="button" class="btn btn-info">
@@ -286,6 +285,7 @@
                     displayMode: 'once',
                     id: 'question',
                     zindex: 9999,
+                    color: 'green',
                     title: 'Konfirmasi',
                     message: 'Apakah anda yakin akan menyimpan menu ini?',
                     position: 'center',
@@ -335,6 +335,7 @@
                     close: false,
                     overlay: true,
                     displayMode: 'once',
+                    color: 'yellow',
                     id: 'question',
                     zindex: 9999,
                     title: 'Konfirmasi',
@@ -386,6 +387,7 @@
                     overlay: true,
                     displayMode: 'once',
                     id: 'question',
+                    color: 'red',
                     zindex: 9999,
                     title: 'Konfirmasi',
                     message: 'Apakah anda yakin akan menghapus menu ini?',
