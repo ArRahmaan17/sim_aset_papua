@@ -35,6 +35,7 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
         Route::post('/master/update-parent-menu', [MenuController::class, 'updateParent'])->name('update-parent-menu');
         Route::get('/master/list-menu', [MenuController::class, 'all'])->name('list-menu');
         Route::get('/master/menu/show/{id?}', [MenuController::class, 'show'])->name('menu.show');
+        Route::get('/master/menu/show/detail/{id?}', [MenuController::class, 'showDetail'])->name('menu.show-detail');
         Route::put('/master/menu/update/{id?}', [MenuController::class, 'update'])->name('menu.update');
         Route::delete('/master/menu/delete/{id?}', [MenuController::class, 'destroy'])->name('menu.delete');
         Route::post('/master/menu/store', [MenuController::class, 'store'])->name('menu.store');

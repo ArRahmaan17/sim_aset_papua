@@ -19,16 +19,41 @@ class MenuController extends Controller
         $roles = DB::table('role')->where('idrole', '<>', 1)->get();
         return view('layout.menu.index', compact('roles', 'routes'));
     }
-
+    public function showDetail($id)
+    {
+        $data = DB::table('menu')
+            ->select(DB::raw(' idmenu as id, nama as text, parents as parent'))
+            ->where('idmenu', $id)
+            ->orWhere('parents', $id)
+            ->get()->toArray();
+        if (count($data) == 0) {
+            $status = 404;
+            $message = ['message' => 'detail menu gagal di buat', 'data' => buildTree($data)];
+        } else {
+            $status = 200;
+            $message = ['message' => 'detail menu berhasil di buat', 'data' => buildTree($data)];
+        }
+        return response()->json($message, $status);
+    }
     public function all()
     {
-        $menu = DB::table('menu')->select(DB::raw(' idmenu as id, nama as text, parents as parent'))->get()->toArray();
-        $treeMenu = buildTree($menu);
-        if (count($treeMenu) == 0) {
-            $response = ['message' => 'Data Menu Berhasil Di buat', 'data' => $treeMenu];
+        $menuSideBar = DB::table('menu')
+            ->select(DB::raw(' idmenu as id, nama as text, parents as parent, letak'))
+            ->where('letak', 'sidebar')
+            ->get()
+            ->toArray();
+        $treeMenuSideBar = buildTree($menuSideBar);
+        $menuProfile = DB::table('menu')
+            ->select(DB::raw(' idmenu as id, nama as text, parents as parent, letak'))
+            ->where('letak', 'profile')
+            ->get()
+            ->toArray();
+        $treeMenuProfile = buildTree($menuProfile);
+        if (count($treeMenuSideBar) == 0 && count($treeMenuProfile) == 0) {
+            $response = ['message' => 'Data Menu Berhasil Di buat', 'data' => ['menu_sidebar' => $treeMenuSideBar, 'menu_profile' => $treeMenuProfile]];
             $status = 404;
         } else {
-            $response = ['message' => 'Data Menu Gagal Di buat', 'data' => $treeMenu];
+            $response = ['message' => 'Data Menu Gagal Di buat', 'data' => ['menu_sidebar' => $treeMenuSideBar, 'menu_profile' => $treeMenuProfile]];
             $status = 200;
         }
         return response()->json($response, $status);
@@ -115,6 +140,10 @@ class MenuController extends Controller
     {
         DB::beginTransaction();
         try {
+            $data = $request->except('_token', 'role');
+            if ($request->has('letak') && $request->letak == 'profile') {
+                $data['parents'] = 0;
+            }
             DB::table('menu')->where('idmenu', $id)->update($request->except('_token', 'role'));
             DB::table('role_menu')->where('idmenu', $id)->delete();
             $roles = ($request->has('role')) ? $request->only('role') : ['role' => []];
@@ -136,7 +165,7 @@ class MenuController extends Controller
             ];
             DB::table('role_menu')->insert($data_role);
             $status = 200;
-            $message = ['message' => 'Data menu berhasil di ubah', 'data' => $request->except('_token', 'role')];
+            $message = ['message' => 'Data menu berhasil di ubah', 'data' => array_merge($request->except('_token', 'role'), ['id' => $id])];
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();

@@ -11,7 +11,11 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 container-alert-invalid-process"></div>
-                        <div id="container-tree-menu" class="col-12 col-md-6">
+                        <div class="row col-12 col-md-6">
+                            <div id="container-tree-menu-sidebar" class="col-12">
+                            </div>
+                            <div id="container-tree-menu-profile" class="col-12">
+                            </div>
                         </div>
                         <div id="form-container" class="col-12 col-md-6 d-none">
                             <h5>Aksi Menu</h5>
@@ -61,6 +65,9 @@
                                         <option value="sidebar">sidebar</option>
                                         <option value="profile">profile</option>
                                     </select>
+                                    <div class="form-text">
+                                        Tidak di izinkan mengubah letak menu apabila memiliki anak menu
+                                    </div>
                                 </div>
                                 <label for="" class="form-label">Role Accessibility</label>
                                 <div class="form-check">
@@ -110,12 +117,26 @@
                 },
                 dataType: "json",
                 success: function(response) {
-                    $("#container-tree-menu").jstree({
+                    $("#container-tree-menu-sidebar").jstree({
                         'core': {
                             'data': [{
-                                id: '0',
-                                text: 'ROOT',
-                                children: response.data,
+                                id: '0-sidebar',
+                                text: 'SIDEBAR',
+                                children: response.data.menu_sidebar,
+                                state: {
+                                    opened: true,
+                                }
+                            }],
+                            "check_callback": true,
+                        },
+                        "plugins": ["dnd"]
+                    });
+                    $("#container-tree-menu-profile").jstree({
+                        'core': {
+                            'data': [{
+                                id: '0-profile',
+                                text: 'PROFILE',
+                                children: response.data.menu_profile,
                                 state: {
                                     opened: true,
                                 }
@@ -126,11 +147,24 @@
                     });
                 },
                 error: function() {
-                    $("#container-tree-menu").jstree({
+                    $("#container-tree-menu-sidebar").jstree({
                         'core': {
                             'data': [{
-                                id: '0',
-                                text: 'ROOT',
+                                id: '0-sidebar',
+                                text: 'SIDEBAR',
+                                state: {
+                                    opened: true,
+                                }
+                            }],
+                            "check_callback": true,
+                        },
+                        "plugins": ["dnd"]
+                    });
+                    $("#container-tree-menu-profile").jstree({
+                        'core': {
+                            'data': [{
+                                id: '0-profile',
+                                text: 'PROFILE',
                                 state: {
                                     opened: true,
                                 }
@@ -143,10 +177,27 @@
             });
         }
 
+        function getElementData(data) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('master.menu.show-detail') }}/" + data,
+                    dataType: "json",
+                    success: function(response) {
+                        resolve(response.data)
+                    },
+                    error: function(response) {
+                        reject(response.responseJSON.data)
+                    }
+                });
+            })
+        }
+
         function buildChildren(elements) {
             var branch = [];
             elements.forEach(element => {
-                element = $("#container-tree-menu").jstree(true).get_node(element);
+                element = getElementData(element);
+                console.log(element)
                 if (element['children'] != undefined) {
                     var children = buildChildren(element['children']);
                     if (children.length > 0) {
@@ -163,50 +214,84 @@
 
         function checkValidNodeDnd() {
             start = JSON.parse(localStorage.getItem('startdatajstree'))
-            end = JSON.parse(localStorage.getItem('enddatajstree'))
-            if (end.parent == "#") {
-                let children = buildChildren(end.children);
-                $("#container-tree-menu").jstree(true).delete_node(end)
-                $("#container-tree-menu").jstree(true).create_node(start.parent, {
-                    ...start.original,
-                    children: children
-                });
-                $('.container-alert-invalid-process').html(`<div class="alert alert-danger alert-invalid-process">
-                    <div class="row justify-content-start align-items-center">
-                        <div class="col-1">
-                            <i class='bx bxs-error-alt bx-lg'></i>
-                        </div>
-                        <div class="col-11 fw-bold">
-                            <span>Error</span>
-                        </div>
-                    </div>
-                    <div class="p-2">
-                        Proses Tidak dapat di proses
-                    </div>
-                </div>`);
-                setTimeout(() => {
-                    $('.alert-invalid-process').toggle("fade", 1000);
-                }, 1500);
-            } else {
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('master.update-parent-menu') }}",
-                    data: {
-                        _token: `{{ csrf_token() }}`,
-                        menu: {
-                            ...end.original,
-                            parents: end.parent
-                        }
-                    },
-                    dataType: "json",
-                    success: function(response) {
-
+            end = JSON.parse(localStorage.getItem('enddatajstree'));
+            getElementData(start.id).then((data) => {
+                if (end == false) {
+                    if (start.parent == '0-sidebar') {
+                        $("#container-tree-menu-sidebar").jstree(true).create_node(`${start.parent}`, ...data,
+                            'last');
+                        $("#container-tree-menu-profile").jstree(true).refresh()
+                    } else {
+                        $("#container-tree-menu-profile").jstree(true).create_node(`${start.parent}`, ...data,
+                            'last');
+                        $("#container-tree-menu-sidebar").jstree(true).refresh()
                     }
-                });
-            }
+                    $('.container-alert-invalid-process')
+                        .html(`<div class="alert alert-danger alert-invalid-process">
+                                <div class="row justify-content-start align-items-center">
+                                    <div class="col-1">
+                                        <i class='bx bxs-error-alt bx-lg'></i>
+                                    </div>
+                                    <div class="col-11 fw-bold">
+                                        <span>Error</span>
+                                    </div>
+                                </div>
+                                <div class="p-2">
+                                    Proses Tidak dapat di proses
+                                </div>
+                            </div>`);
+                    setTimeout(() => {
+                        $('.alert-invalid-process').toggle("fade", 2000);
+                    }, 1500);
+                } else {
+                    if (end.parent == "#") {
+                        if (start.parent == '0-sidebar') {
+                            $("#container-tree-menu-sidebar").jstree(true).create_node(`${start.parent}`, ...data,
+                                'last');
+                        } else {
+                            $("#container-tree-menu-profile").jstree(true).create_node(`${start.parent}`, ...data,
+                                'last');
+                        }
+                        $('.container-alert-invalid-process')
+                            .html(`<div class="alert alert-danger alert-invalid-process">
+                            <div class="row justify-content-start align-items-center">
+                                <div class="col-1">
+                                    <i class='bx bxs-error-alt bx-lg'></i>
+                                </div>
+                                <div class="col-11 fw-bold">
+                                    <span>Error</span>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                Proses Tidak dapat di proses
+                            </div>
+                        </div>`);
+                        setTimeout(() => {
+                            $('.alert-invalid-process').toggle("fade", 2000);
+                        }, 1500);
+                    } else {
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('master.update-parent-menu') }}",
+                            data: {
+                                _token: `{{ csrf_token() }}`,
+                                menu: {
+                                    ...end.original,
+                                    parents: end.parent.split('-')[0],
+                                    letak: end.parent.split('-')[1],
+                                }
+                            },
+                            dataType: "json",
+                            success: function(response) {
+
+                            }
+                        });
+                    }
+                }
+            })
         }
 
-        function dataToValueElement(data) {
+        function dataToValueElement(data, length) {
             $('#form-menu').find('input, select').map((index, element) => {
                 let name = $(element).attr('name');
                 if (data.hasOwnProperty(`${name}`)) {
@@ -218,17 +303,18 @@
                                 $(element).attr('checked', true)
                             }
                         })
-                        // $('#form-menu').find(`[name='${name}']`).map((index, element) => {
-                        //     console.log($(element).val() == )
-                        // })
                     } else {
                         $(`[name=${name}]`).val(value).trigger("change")
+                        if (length != 0 && name == 'letak') {
+                            $(`[name=${name}]`).attr('disabled', true)
+                        }
                     }
                 }
             })
         }
 
         function resetMenuForm() {
+            $("#form-menu").find('select[disabled]').removeAttr('disabled')
             $('.form-title-menu').html('Tambah Anak Menu');
             $("#form-menu")[0].reset();
             $("#update-menu").addClass('d-none');
@@ -237,23 +323,36 @@
         }
 
         function resetJstree() {
-            $("#container-tree-menu").jstree(true).deselect_node($(
-                    "#container-tree-menu").jstree(true)
+            $("#container-tree-menu-sidebar").jstree(true).deselect_node($(
+                    "#container-tree-menu-sidebar").jstree(true)
+                .get_selected());
+            $("#container-tree-menu-profile").jstree(true).deselect_node($(
+                    "#container-tree-menu-profile").jstree(true)
                 .get_selected());
         }
         $(function() {
             var parentId = null;
             iniliatizeJstree();
             $(document).on('dnd_start.vakata', function(e, data) {
-                localStorage.setItem('startdatajstree', JSON.stringify($("#container-tree-menu").jstree(
-                    true).get_node(data.data.nodes)));
+                var container = $("#container-tree-menu-sidebar").jstree(true).get_node(data.data
+                    .nodes);
+                if (container == false) {
+                    container = $("#container-tree-menu-profile").jstree(true).get_node(data.data
+                        .nodes);
+                }
+                localStorage.setItem('startdatajstree', JSON.stringify(container));
             })
             $(document).on('dnd_stop.vakata', function(e, data) {
-                localStorage.setItem('enddatajstree', JSON.stringify($("#container-tree-menu").jstree(true)
-                    .get_node(data.data.nodes)));
+                var container = $("#container-tree-menu-sidebar").jstree(true).get_node(data.data
+                    .nodes);
+                if (container == false) {
+                    container = $("#container-tree-menu-profile").jstree(true).get_node(data.data
+                        .nodes);
+                }
+                localStorage.setItem('enddatajstree', JSON.stringify(container));
                 checkValidNodeDnd();
             });
-            $("#container-tree-menu").on('select_node.jstree', (e, data) => {
+            $("#container-tree-menu-sidebar").on('select_node.jstree', (e, data) => {
                 parentId = data.node.id;
                 if (data.node.children.length > 0 || parentId == 0) {
                     $("#delete-menu").addClass('disabled')
@@ -266,14 +365,37 @@
                     $("#show-menu").removeClass('disabled')
                 }
                 resetMenuForm();
-                $("#container-tree-menu").switchClass('col-12', 'col-6', 500);
+                $("#container-tree-menu-sidebar").switchClass('col-12', 'col-6', 500);
                 $("#form-container").switchClass('d-none', 'd-block', 500);
                 setTimeout(() => {
                     $('.select2').select2();
                 }, 600);
             })
-            $("#container-tree-menu").on('deselect_node.jstree', () => {
-                $("#container-tree-menu").switchClass('col-6', 'col-12', 700);
+            $("#container-tree-menu-sidebar").on('deselect_node.jstree', () => {
+                $("#container-tree-menu-sidebar").switchClass('col-6', 'col-12', 700);
+                $("#form-container").switchClass('d-block', 'd-none', 50);
+            });
+            $("#container-tree-menu-profile").on('select_node.jstree', (e, data) => {
+                parentId = data.node.id;
+                if (data.node.children.length > 0 || parentId == 0) {
+                    $("#delete-menu").addClass('disabled')
+                } else {
+                    $("#delete-menu").removeClass('disabled')
+                }
+                if (parentId == 0) {
+                    $("#show-menu").addClass('disabled')
+                } else {
+                    $("#show-menu").removeClass('disabled')
+                }
+                resetMenuForm();
+                $("#container-tree-menu-profile").switchClass('col-12', 'col-6', 500);
+                $("#form-container").switchClass('d-none', 'd-block', 500);
+                setTimeout(() => {
+                    $('.select2').select2();
+                }, 600);
+            });
+            $("#container-tree-menu-profile").on('deselect_node.jstree', () => {
+                $("#container-tree-menu-profile").switchClass('col-6', 'col-12', 700);
                 $("#form-container").switchClass('d-block', 'd-none', 50);
             })
             $('#save-menu').click(function() {
@@ -310,10 +432,13 @@
                                 dataType: "json",
                                 success: function(response) {
                                     resetMenuForm();
-                                    $("#container-tree-menu").jstree(true)
-                                        .create_node(response.data.parent, {
-                                            ...response.data
-                                        });
+                                    $("#container-tree-menu-sidebar")
+                                        .jstree(
+                                            true)
+                                        .create_node(response.data
+                                            .parent, {
+                                                ...response.data
+                                            });
                                     resetJstree()
                                 }
                             });
@@ -346,23 +471,89 @@
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
-                            id = $("#container-tree-menu").jstree(true)
+                            id = $("#container-tree-menu-sidebar").jstree(true)
                                 .get_selected()[0]
+                            if (id == undefined) {
+                                id = $("#container-tree-menu-profile").jstree(true)
+                                    .get_selected()[0]
+                            }
+                            place = $("#container-tree-menu-sidebar").jstree(true)
+                                .get_selected(true)[0]
+                            if (place == undefined) {
+                                place = $("#container-tree-menu-profile").jstree(true)
+                                    .get_selected(true)[0];
+                            }
                             data = serializeObject($("#form-menu"));
                             $.ajax({
                                 type: "PUT",
-                                url: "{{ route('master.menu.update') }}/" + id,
+                                url: "{{ route('master.menu.update') }}/" +
+                                    id,
                                 data: {
                                     _token: `{{ csrf_token() }}`,
                                     ...data
                                 },
                                 dataType: "json",
                                 success: function(response) {
-                                    $("#container-tree-menu").jstree(true)
-                                        .rename_node($("#container-tree-menu")
-                                            .jstree(true).get_selected(),
-                                            response.data.nama);
-                                    resetJstree()
+                                    console.log(response)
+                                    if (data.letak == place.original.letak &&
+                                        data.letak == 'sidebar') {
+                                        $("#container-tree-menu-sidebar")
+                                            .jstree(true)
+                                            .rename_node(
+                                                $(
+                                                    "#container-tree-menu-sidebar"
+                                                )
+                                                .jstree(true)
+                                                .get_selected(),
+                                                response.data.nama);
+                                        resetJstree()
+                                    } else if (data.letak != place.original
+                                        .letak && data.letak == 'sidebar') {
+                                        $("#container-tree-menu-sidebar")
+                                            .jstree(true)
+                                            .create_node('0-sidebar', {
+                                                id: response.data.id,
+                                                text: response.data.nama,
+                                                children: []
+                                            });
+                                        $("#container-tree-menu-profile")
+                                            .jstree(true)
+                                            .delete_node($(
+                                                "#container-tree-menu-profile"
+                                            ).jstree(true).get_node([`${response
+                                                    .data.id}`]));
+                                        resetJstree()
+                                    } else if (data.letak == place.original
+                                        .letak &&
+                                        data.letak == 'profile') {
+                                        $("#container-tree-menu-profile")
+                                            .jstree(true)
+                                            .rename_node(
+                                                $(
+                                                    "#container-tree-menu-profile"
+                                                )
+                                                .jstree(true)
+                                                .get_selected(),
+                                                response.data.nama);
+                                        resetJstree()
+                                    } else if (data.letak != place.original
+                                        .letak && data.letak == 'profile') {
+                                        $("#container-tree-menu-profile")
+                                            .jstree(true)
+                                            .create_node('0-profile', {
+                                                id: response.data.id,
+                                                text: response.data.nama,
+                                                children: []
+                                            });
+                                        $("#container-tree-menu-sidebar")
+                                            .jstree(true)
+                                            .delete_node($(
+                                                    "#container-tree-menu-sidebar"
+                                                )
+                                                .jstree(true).get_node(response
+                                                    .data.id));
+                                        resetJstree()
+                                    }
                                 },
                                 error: function() {
                                     resetJstree()
@@ -398,19 +589,24 @@
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
-                            id = $("#container-tree-menu").jstree(true)
+                            id = $("#container-tree-menu-sidebar").jstree(true)
                                 .get_selected()[0]
                             $.ajax({
                                 type: "DELETE",
-                                url: "{{ route('master.menu.delete') }}/" + id,
+                                url: "{{ route('master.menu.delete') }}/" +
+                                    id,
                                 data: {
                                     _token: `{{ csrf_token() }}`
                                 },
                                 dataType: "json",
                                 success: function(response) {
-                                    $("#container-tree-menu").jstree(true)
+                                    $("#container-tree-menu-sidebar")
+                                        .jstree(
+                                            true)
                                         .delete_node($(
-                                                "#container-tree-menu").jstree(
+                                                "#container-tree-menu-sidebar"
+                                            )
+                                            .jstree(
                                                 true)
                                             .get_selected());
                                     resetJstree()
@@ -431,14 +627,24 @@
                 });
             })
             $('#show-menu').click(function() {
-                id = $("#container-tree-menu").jstree(true)
+                id = $("#container-tree-menu-sidebar").jstree(true)
                     .get_selected()[0]
+                if (id == undefined) {
+                    id = $("#container-tree-menu-profile").jstree(true)
+                        .get_selected()[0]
+                }
+                data = $("#container-tree-menu-sidebar").jstree(true)
+                    .get_selected(true)[0]
+                if (data == undefined) {
+                    data = $("#container-tree-menu-profile").jstree(true)
+                        .get_selected(true)[0]
+                }
                 $.ajax({
                     type: "GET",
-                    url: "{{ route('master.menu.show', 0) }}" + id,
+                    url: "{{ route('master.menu.show') }}/" + id,
                     dataType: "json",
                     success: function(response) {
-                        dataToValueElement(response.data);
+                        dataToValueElement(response.data, data.children.length);
                         $("#save-menu").addClass('d-none');
                         $("#update-menu").removeClass('d-none');
                         $('.form-title-menu').html('Edit Menu')
