@@ -860,7 +860,30 @@
                     $(this).focus();
                     return
                 }
-                $(this).val(`BA-{{ env('APP_YEAR') }}-${this.value}-{{ kodeOrganisasi() }}`)
+                $(this).val(`BA-{{ env('APP_YEAR') }}-${this.value}-{{ kodeOrganisasi() }}`);
+                let input = this
+                $.ajax({
+                    type: "get",
+                    url: "{{ route('perolehan.bap.check') }}/" +
+                        `${$(this).val()}/${$(this).attr('name')}`,
+                    dataType: "json",
+                    success: function(response) {
+                        $(input).removeClass('is-invalid').siblings('span').removeClass(
+                            'border-danger');
+                    },
+                    error: function(error) {
+                        iziToast.error({
+                            title: 'Error',
+                            message: error.responseJSON.message,
+                            position: 'topRight',
+                            icon: "bx bx-error",
+                            timeout: 10000,
+                        });
+                        $(input).addClass('is-invalid').siblings('span').addClass(
+                            'border-danger');
+                        $(input).focus()
+                    }
+                });
             });
             $('.formated').focus(function() {
                 value = (this.value).split(`BA-{{ env('APP_YEAR') }}-`)
