@@ -878,6 +878,7 @@
                             position: 'topRight',
                             icon: "bx bx-error",
                             timeout: 10000,
+                            displayMode: 2
                         });
                         $(input).addClass('is-invalid').siblings('span').addClass(
                             'border-danger');

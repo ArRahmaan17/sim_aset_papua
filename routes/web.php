@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BarangController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\MenuController;
@@ -39,6 +40,8 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
         Route::put('/master/menu/update/{id?}', [MenuController::class, 'update'])->name('menu.update');
         Route::delete('/master/menu/delete/{id?}', [MenuController::class, 'destroy'])->name('menu.delete');
         Route::post('/master/menu/store', [MenuController::class, 'store'])->name('menu.store');
+        Route::get('/master/barang', [BarangController::class, 'index'])->name('barang');
+        Route::get('/master/barang/all', [BarangController::class, 'all'])->name('barang.all');
         Route::get('/master/warna', [WarnaController::class, 'index'])->name('warna');
         Route::get('/master/warna/{id?}', [WarnaController::class, 'show'])->name('warna.show');
         Route::post('/master/warna/store', [WarnaController::class, 'store'])->name('warna.store');
