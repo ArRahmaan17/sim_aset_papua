@@ -44,6 +44,7 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
         Route::get('/master/barang/show/{id?}', [BarangController::class, 'show'])->name('barang.show');
         Route::post('/master/barang/store', [BarangController::class, 'store'])->name('barang.store');
         Route::put('/master/barang/update/{id?}', [BarangController::class, 'update'])->name('barang.update');
+        Route::delete('/master/barang/delete/{id?}', [BarangController::class, 'destroy'])->name('barang.delete');
         Route::get('/master/barang/all', [BarangController::class, 'all'])->name('barang.all');
         Route::get('/master/warna', [WarnaController::class, 'index'])->name('warna');
         Route::get('/master/warna/{id?}', [WarnaController::class, 'show'])->name('warna.show');

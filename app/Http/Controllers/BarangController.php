@@ -156,6 +156,20 @@ class BarangController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $kodebarang = explode('.', $id);
+            DB::table('masterbarang')->where([
+                'kodegolongan' => $kodebarang[0],
+                'kodebidang' => $kodebarang[1],
+                'kodekelompok' => $kodebarang[2],
+                'kodesub' => $kodebarang[3],
+                'kodesubsub' => $kodebarang[4]
+            ])->delete();
+            return response()->json(['message' => 'Hapus master barang berhasil'], 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['message' => 'Hapus master barang gagal'], 422);
+        }
     }
 }
