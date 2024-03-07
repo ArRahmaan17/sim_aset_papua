@@ -41,6 +41,9 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
         Route::delete('/master/menu/delete/{id?}', [MenuController::class, 'destroy'])->name('menu.delete');
         Route::post('/master/menu/store', [MenuController::class, 'store'])->name('menu.store');
         Route::get('/master/barang', [BarangController::class, 'index'])->name('barang');
+        Route::get('/master/barang/show/{id?}', [BarangController::class, 'show'])->name('barang.show');
+        Route::post('/master/barang/store', [BarangController::class, 'store'])->name('barang.store');
+        Route::put('/master/barang/update/{id?}', [BarangController::class, 'update'])->name('barang.update');
         Route::get('/master/barang/all', [BarangController::class, 'all'])->name('barang.all');
         Route::get('/master/warna', [WarnaController::class, 'index'])->name('warna');
         Route::get('/master/warna/{id?}', [WarnaController::class, 'show'])->name('warna.show');

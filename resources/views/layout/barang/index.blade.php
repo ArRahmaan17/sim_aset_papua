@@ -15,59 +15,36 @@
                         <div id="container-form-barang" class="col-12 col-md-6 d-none">
                             <h5>Aksi Master Barang</h5>
                             <div class="dome-inline-spacing mb-2">
-                                <button id="show-menu" type="button" class="btn btn-info">
+                                <button id="show-barang" type="button" class="btn btn-info">
                                     <i class='bx bx-show-alt'></i>
                                     lihat</button>
-                                <button id="delete-menu" type="button" class="btn btn-danger"><i
+                                <button id="delete-barang" type="button" class="btn btn-danger"><i
                                         class='bx bxs-trash mb-1'></i>
                                     hapus</button>
                             </div>
-                            <h5 class="form-title-menu">Tambah Anak Master Barang</h5>
-                            <form action="" id='form-menu'>
+                            <h5 class="form-title-barang">Tambah Anak Master Barang</h5>
+                            <form action="" id='form-barang'>
                                 <div class="mb-3">
-                                    <label for="nama" class="form-label">Nama</label>
-                                    <input type="text" class="form-control" name="nama" id="nama"
-                                        placeholder="Master">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="icons" class="form-label">Icon</label>
-                                    <input type="text" class="form-control" name="icons" id="icons"
-                                        placeholder="bx bxs-x-square">
+                                    <label for="kodebarang" class="form-label">Kode Barang</label>
+                                    <input type="text" readonly class="form-control" name="kodebarang" id="kodebarang"
+                                        placeholder="kodebarang">
                                     <div id="defaultFormControlHelp" class="form-text">
-                                        Icon yang kompatibel di <a href="https://boxicons.com/" target="_blank">boxicons</a>
+                                        inputan ini akan terisi secara otomatis dan tidak bisa di rubah
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="link" class="form-label">Link Master Barang</label>
-                                    <select class="form-select select2" name="link" id="link">
-                                        <option selected="">Pilih link menu</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="letak" class="form-label">Letak Master Barang</label>
-                                    <select class="form-select select2" name="letak" id="letak">
-                                        <option selected="">Pilih letak menu</option>
-                                        <option value="sidebar">sidebar</option>
-                                        <option value="profile">profile</option>
-                                    </select>
-                                    <div class="form-text">
-                                        Tidak di izinkan mengubah letak menu apabila memiliki anak menu
-                                    </div>
-                                </div>
-                                <label for="" class="form-label">Role Accessibility</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="role[]" value="1"
-                                        id="role-1" checked disabled>
-                                    <label class="form-check-label" for="role-1"> Developer </label>
+                                    <label for="urai" class="form-label">Nama Barang</label>
+                                    <input type="text" class="form-control" name="urai" id="urai"
+                                        placeholder="Bangunan Bersejarah">
                                 </div>
                                 <div class="demo-inline-spacing">
-                                    <button id="save-menu" type="button" class="btn btn-success"><i
+                                    <button id="save-barang" type="button" class="btn btn-success"><i
                                             class='bx bxs-save mb-1'></i>
                                         Simpan</button>
-                                    <button id="update-menu" type="button" class="btn btn-success d-none"><i
+                                    <button id="update-barang" type="button" class="btn btn-success d-none"><i
                                             class='bx bxs-pencil mb-1'></i>
                                         Edit</button>
-                                    <button id="cancel-menu" type="button" class="btn btn-warning"><i
+                                    <button id="cancel-barang" type="button" class="btn btn-warning"><i
                                             class='bx bxs-x-square mb-1'></i>
                                         Batal</button>
                                 </div>
@@ -85,6 +62,73 @@
     <script src="{{ asset('assets/js/jstree.min.js') }}"></script>
     <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
     <script>
+        function showBarang(id) {
+            $('.form-title-barang').html(`Edit Master Barang`);
+            $.ajax({
+                type: "GET",
+                url: "{{ route('master.barang.show') }}/" + id,
+                dataType: "json",
+                success: function(response) {
+                    dataToValue(response.data);
+                    $('#save-barang').addClass('d-none');
+                    $('#update-barang').removeClass('d-none');
+                }
+            });
+        }
+
+        function dataToValue(data) {
+            $("#form-barang").find('input').map((index, element) => {
+                if (data.hasOwnProperty(element.name)) {
+                    $(element).val(data[element.name])
+                }
+            })
+        }
+
+        function resetForm() {
+            $("#form-barang").find('input').val('')
+        }
+
+        function resetJsTree() {
+            $("#container-jstree-barang").jstree(true).deselect_node($("#container-jstree-barang").jstree(true)
+                .get_selected());
+            resetForm();
+        }
+
+        function updateMasterBarang() {
+            data = serializeObject($("#form-barang"));
+            $.ajax({
+                type: "PUT",
+                url: "{{ route('master.barang.update') }}/" + data.kodebarang,
+                data: {
+                    _token: `{{ csrf_token() }}`,
+                    ...data
+                },
+                dataType: "json",
+                success: function(response) {
+                    resetJsTree();
+                }
+            });
+        }
+
+        function saveMasterBarang() {
+            data = serializeObject($("#form-barang"));
+            $.ajax({
+                type: "POST",
+                url: "{{ route('master.barang.store') }}",
+                data: {
+                    _token: `{{ csrf_token() }}`,
+                    ...data
+                },
+                dataType: "json",
+                success: function(response) {
+                    resetJsTree();
+                },
+                error: function() {
+
+                }
+            });
+        }
+
         function initialJsTree() {
             $.ajax({
                 type: "GET",
@@ -121,7 +165,6 @@
                             "check_callback": true,
                         },
                     });
-                    $("#container-form-barang").removeClass('d-none')
                 },
                 error: function() {
                     var toast = document.querySelector('.iziToast'); // Selector of your toast
@@ -130,7 +173,52 @@
             });
         }
         $(function() {
-            initialJsTree()
+            initialJsTree();
+            $("#container-jstree-barang").on('select_node.jstree', (e, data) => {
+                parentId = data.node.id;
+                if (parentId !== '0') {
+                    resetForm()
+                    if (data.node.children.length > 0) {
+                        var child = data.node.children[data.node.children.length - 1].split('.0');
+                        var replacement = parseInt(child[0].split('.')[child[0].split('.').length - 1]) + 1;
+                        child[0] = child[0].split('.');
+                        child[0][child[0].length - 1] = replacement.toString();
+                        child[0] = child[0].join('.');
+                        console.log(child)
+                        $('#kodebarang').val(child[0].padEnd(11, '.0'));
+                        $('.form-title-barang').html(`Tambah Anak Master Barang`);
+                    } else {
+                        showBarang(parentId);
+                    }
+                    if (data.node.children.length > 0) {
+                        $("#delete-barang").addClass('disabled')
+                    } else {
+                        $("#delete-barang").removeClass('disabled')
+                    }
+                    $("#show-barang").removeClass('disabled')
+                    $("#container-jstree-barang").switchClass('col-12', 'col-6', 500);
+                    $("#container-form-barang").switchClass('d-none', 'd-block', 500);
+                } else {
+                    $("#show-barang").addClass('disabled');
+                    resetForm()
+                }
+            });
+            $("#container-jstree-barang").on('deselect_node.jstree', () => {
+                $("#container-tree-barang").switchClass('col-6', 'col-12', 700);
+                $("#container-form-barang").switchClass('d-block', 'd-none', 50);
+            });
+            $('#cancel-barang').click(function() {
+                resetJsTree();
+            });
+            $('#show-barang').click(function() {
+                showBarang($("#container-jstree-barang").jstree(true).get_selected()[0]);
+            });
+            $('#save-barang').click(function() {
+                saveMasterBarang();
+            });
+            $('#update-barang').click(function() {
+                updateMasterBarang();
+            });
         });
     </script>
 @endpush
