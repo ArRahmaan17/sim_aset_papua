@@ -22,7 +22,7 @@ class BarangController extends Controller
                 DB::raw(
                     "CONCAT(kodegolongan, '', kodebidang, '', kodekelompok, '', kodesub, '', kodesubsub) as id"
                 ),
-                "urai",
+                DB::raw("CONCAT(kodegolongan, '.', kodebidang, '.', kodekelompok, '.', kodesub, '.', kodesubsub, ' ', urai) as text"),
                 DB::raw(
                     "(case 
                                             when kodegolongan <> 0
@@ -42,7 +42,7 @@ class BarangController extends Controller
                                                 and kodekelompok <> 0
                                                 and kodesub <> 0
                                                 and kodesubsub = 0 
-                                        then '0'
+                                        then CONCAT(kodegolongan, kodebidang, kodekelompok, '0', '0')
                                             when kodegolongan <> 0
                                                 and kodebidang <> 0
                                                 and kodekelompok <> 0
@@ -53,8 +53,6 @@ class BarangController extends Controller
                                     end) as parent"
                 )
             )
-            // ->limit(2)
-            ->where('kodebidang', '<>', 0)
             ->orderByRaw(" kodegolongan, kodebidang, kodekelompok, kodesub, kodesubsub")
             ->get()
             ->toArray();
