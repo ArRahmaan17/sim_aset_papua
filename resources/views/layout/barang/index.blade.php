@@ -94,6 +94,21 @@
             resetForm();
         }
 
+        function deleteMasterBarang() {
+            id = $("#container-jstree-barang").jstree(true).get_selected()[0];
+            $.ajax({
+                type: "DELETE",
+                url: "{{ route('master.barang.delete') }}/" + id,
+                data: {
+                    _token: `{{ csrf_token() }}`
+                },
+                dataType: "json",
+                success: function(response) {
+
+                }
+            });
+        }
+
         function updateMasterBarang() {
             data = serializeObject($("#form-barang"));
             $.ajax({
@@ -218,6 +233,9 @@
             });
             $('#update-barang').click(function() {
                 updateMasterBarang();
+            });
+            $('#delete-barang').click(function() {
+                deleteMasterBarang();
             });
         });
     </script>
