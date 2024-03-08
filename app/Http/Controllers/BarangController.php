@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -85,6 +86,7 @@ class BarangController extends Controller
                 'kodesubsub' => $kodebarang[4],
                 'urai' => $request->urai
             ]);
+            DB::commit();
             return response()->json(['message' => 'Input master barang berhasil'], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -144,6 +146,7 @@ class BarangController extends Controller
             ])->update([
                 'urai' => $request->urai
             ]);
+            DB::commit();
             return response()->json(['message' => 'Ubah master barang berhasil'], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -159,16 +162,30 @@ class BarangController extends Controller
         DB::beginTransaction();
         try {
             $kodebarang = explode('.', $id);
-            DB::table('masterbarang')->where([
+            $count_already_use = DB::table('kib')->where([
                 'kodegolongan' => $kodebarang[0],
                 'kodebidang' => $kodebarang[1],
                 'kodekelompok' => $kodebarang[2],
                 'kodesub' => $kodebarang[3],
                 'kodesubsub' => $kodebarang[4]
-            ])->delete();
+            ])->count();
+            if ($count_already_use != 0) {
+                throw new Exception("master barang telah di gunakan pada perolehan", 422);
+            }
+            DB::table('masterbarang')
+                ->where([
+                    'kodegolongan' => $kodebarang[0],
+                    'kodebidang' => $kodebarang[1],
+                    'kodekelompok' => $kodebarang[2],
+                    'kodesub' => $kodebarang[3],
+                    'kodesubsub' => $kodebarang[4]
+                ])->delete();
             return response()->json(['message' => 'Hapus master barang berhasil'], 200);
-        } catch (\Throwable $th) {
+        } catch (Exception $th) {
             DB::rollBack();
+            if ($th->getCode() == 422) {
+                return response()->json(['message' => $th->getMessage()], 422);
+            }
             return response()->json(['message' => 'Hapus master barang gagal'], 422);
         }
     }
