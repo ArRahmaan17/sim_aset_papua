@@ -104,7 +104,9 @@
                 },
                 dataType: "json",
                 success: function(response) {
-
+                    $("#container-jstree-barang").jstree(true).delete_node($("#container-jstree-barang")
+                        .jstree(true).get_selected());
+                    resetJsTree()
                 }
             });
         }
@@ -120,6 +122,8 @@
                 },
                 dataType: "json",
                 success: function(response) {
+                    $("#container-jstree-barang").jstree(true).rename_node($("#container-jstree-barang")
+                        .jstree(true).get_selected(), `${data.kodebarang} ${data.urai}`)
                     resetJsTree();
                 }
             });
@@ -136,6 +140,11 @@
                 },
                 dataType: "json",
                 success: function(response) {
+                    $("#container-jstree-barang").jstree(true).create_node($("#container-jstree-barang")
+                        .jstree(true).get_selected(), {
+                            id: data.kodebarang,
+                            text: `${data.kodebarang} ${data.urai}`,
+                        })
                     resetJsTree();
                 },
                 error: function() {
