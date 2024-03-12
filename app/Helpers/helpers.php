@@ -233,6 +233,24 @@ function buildTreeMenu(array &$elements, $idParent = '0')
 
     return $branch;
 }
+function buildTreeOrganisasi(array &$elements, $idParent = '0')
+{
+    $branch = array();
+    foreach ($elements as $element) {
+        $element = (array)$element;
+        if ($element['parent'] === $idParent) {
+            // dd($elements, $element['parent'], $element['id']);
+            $children = buildTreeOrganisasi($elements, $element['id']);
+            if ($children) {
+                $element['children'] = $children;
+            }
+            unset($element['parent']);
+            $branch[] = $element;
+        }
+    }
+
+    return $branch;
+}
 
 function buildMenu(array &$elements)
 {

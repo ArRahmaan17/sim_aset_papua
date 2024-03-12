@@ -95,61 +95,148 @@
         }
 
         function deleteMasterBarang() {
-            id = $("#container-jstree-barang").jstree(true).get_selected()[0];
-            $.ajax({
-                type: "DELETE",
-                url: "{{ route('master.barang.delete') }}/" + id,
-                data: {
-                    _token: `{{ csrf_token() }}`
-                },
-                dataType: "json",
-                success: function(response) {
-                    $("#container-jstree-barang").jstree(true).delete_node($("#container-jstree-barang")
-                        .jstree(true).get_selected());
-                    resetJsTree()
-                }
+            iziToast.question({
+                timeout: 5000,
+                layout: 2,
+                close: false,
+                overlay: true,
+                displayMode: 'once',
+                id: 'question',
+                zindex: 9999,
+                color: 'red',
+                title: 'Konfirmasi',
+                message: 'Apakah anda yakin akan menghapus master barang ini?',
+                position: 'center',
+                icon: 'bx bx-question-mark',
+                buttons: [
+                    ['<button><b>YES</b></button>', function(instance, toast) {
+                        instance.hide({
+                            transitionOut: 'fadeOut'
+                        }, toast, 'button');
+                        id = $("#container-jstree-barang").jstree(true).get_selected()[0];
+                        $.ajax({
+                            type: "DELETE",
+                            url: "{{ route('master.barang.delete') }}/" + id,
+                            data: {
+                                _token: `{{ csrf_token() }}`
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                $("#container-jstree-barang").jstree(true).delete_node($(
+                                        "#container-jstree-barang")
+                                    .jstree(true).get_selected());
+                                resetJsTree()
+                            }
+                        });
+                    }, true],
+                    ['<button>NO</button>', function(instance, toast) {
+                        instance.hide({
+                            transitionOut: 'fadeOut'
+                        }, toast, 'button');
+
+                    }],
+                ],
             });
         }
 
         function updateMasterBarang() {
-            data = serializeObject($("#form-barang"));
-            $.ajax({
-                type: "PUT",
-                url: "{{ route('master.barang.update') }}/" + data.kodebarang,
-                data: {
-                    _token: `{{ csrf_token() }}`,
-                    ...data
-                },
-                dataType: "json",
-                success: function(response) {
-                    $("#container-jstree-barang").jstree(true).rename_node($("#container-jstree-barang")
-                        .jstree(true).get_selected(), `${data.kodebarang} ${data.urai}`)
-                    resetJsTree();
-                }
+            iziToast.question({
+                timeout: 5000,
+                layout: 2,
+                close: false,
+                overlay: true,
+                displayMode: 'once',
+                id: 'question',
+                zindex: 9999,
+                color: 'yellow',
+                title: 'Konfirmasi',
+                message: 'Apakah anda yakin akan mengubah master barang ini?',
+                position: 'center',
+                icon: 'bx bx-question-mark',
+                buttons: [
+                    ['<button><b>YES</b></button>', function(instance, toast) {
+                        instance.hide({
+                            transitionOut: 'fadeOut'
+                        }, toast, 'button');
+                        data = serializeObject($("#form-barang"));
+                        $.ajax({
+                            type: "PUT",
+                            url: "{{ route('master.barang.update') }}/" + data.kodebarang,
+                            data: {
+                                _token: `{{ csrf_token() }}`,
+                                ...data
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                $("#container-jstree-barang").jstree(true).rename_node($(
+                                        "#container-jstree-barang")
+                                    .jstree(true).get_selected(),
+                                    `${data.kodebarang} ${data.urai}`)
+                                resetJsTree();
+                            }
+                        });
+                    }, true],
+                    ['<button>NO</button>', function(instance, toast) {
+
+                        instance.hide({
+                            transitionOut: 'fadeOut'
+                        }, toast, 'button');
+
+                    }],
+                ],
             });
         }
 
         function saveMasterBarang() {
-            data = serializeObject($("#form-barang"));
-            $.ajax({
-                type: "POST",
-                url: "{{ route('master.barang.store') }}",
-                data: {
-                    _token: `{{ csrf_token() }}`,
-                    ...data
-                },
-                dataType: "json",
-                success: function(response) {
-                    $("#container-jstree-barang").jstree(true).create_node($("#container-jstree-barang")
-                        .jstree(true).get_selected(), {
-                            id: data.kodebarang,
-                            text: `${data.kodebarang} ${data.urai}`,
-                        })
-                    resetJsTree();
-                },
-                error: function() {
+            iziToast.question({
+                timeout: 5000,
+                layout: 2,
+                close: false,
+                overlay: true,
+                displayMode: 'once',
+                id: 'question',
+                zindex: 9999,
+                color: 'green',
+                title: 'Konfirmasi',
+                message: 'Apakah anda yakin akan menyimpan master barang ini?',
+                position: 'center',
+                icon: 'bx bx-question-mark',
+                buttons: [
+                    ['<button><b>YES</b></button>', function(instance, toast) {
+                        instance.hide({
+                            transitionOut: 'fadeOut'
+                        }, toast, 'button');
+                        data = serializeObject($("#form-barang"));
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('master.barang.store') }}",
+                            data: {
+                                _token: `{{ csrf_token() }}`,
+                                ...data
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                $("#container-jstree-barang").jstree(true).create_node($(
+                                        "#container-jstree-barang")
+                                    .jstree(true).get_selected(), {
+                                        id: data.kodebarang,
+                                        text: `${data.kodebarang} ${data.urai}`,
+                                    })
+                                resetJsTree();
+                            },
+                            error: function() {
 
-                }
+                            }
+                        });
+                    }, true],
+                    ['<button>NO</button>', function(instance, toast) {
+
+                        instance.hide({
+                            transitionOut: 'fadeOut'
+                        }, toast, 'button');
+
+                    }],
+                ],
             });
         }
 
