@@ -5,6 +5,7 @@ use App\Http\Controllers\BarangController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\OrganisasiController;
 use App\Http\Controllers\Perolehan\PerolehanController;
 use App\Http\Controllers\WarnaController;
 use App\Imports\MasterImport;
@@ -46,6 +47,8 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
         Route::put('/master/barang/update/{id?}', [BarangController::class, 'update'])->name('barang.update');
         Route::delete('/master/barang/delete/{id?}', [BarangController::class, 'destroy'])->name('barang.delete');
         Route::get('/master/barang/all', [BarangController::class, 'all'])->name('barang.all');
+        Route::get('/master/organisasi', [OrganisasiController::class, 'index'])->name('organisasi');
+        Route::get('/master/organisasi/all', [OrganisasiController::class, 'all'])->name('organisasi.all');
         Route::get('/master/warna', [WarnaController::class, 'index'])->name('warna');
         Route::get('/master/warna/{id?}', [WarnaController::class, 'show'])->name('warna.show');
         Route::post('/master/warna/store', [WarnaController::class, 'store'])->name('warna.store');

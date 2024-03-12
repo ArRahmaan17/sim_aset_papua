@@ -54,7 +54,6 @@ class BarangController extends Controller
                                     end) as parent"
                 )
             )
-            ->where('kodegolongan', 131)
             ->orderByRaw(" kodegolongan, kodebidang, kodekelompok, kodesub, kodesubsub")
             ->get()
             ->toArray();
@@ -119,14 +118,6 @@ class BarangController extends Controller
             $message = ['message' => 'detail data master barang tidak ditemukan', 'data' => $data];
         }
         return response()->json($message, $status);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
