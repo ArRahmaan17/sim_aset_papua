@@ -109,16 +109,12 @@ class MasaManfaatController extends Controller
                 ->offset($request['start'])
                 ->get();
 
-            // $totalFiltered = DB::table('mastermasamanfaat')->select('*')
-            //     ->whereRaw("not exists (select kodegolongan, kodebidang, kodekelompok, kodesub, kodesubsub from masterbarang where kodesubsub <> 0)")
-            //     ->orWhere(function (Builder $query) use ($request) {
-            //         $query->where('urai', 'like', '%' . $request['search']['value'] . '%')
-            //             ->where('kodegolongan', 'like', '%' . $request['search']['value'] . '%');
-            //     });
             $totalFiltered = DB::table('mastermasamanfaat')->select('*')
-                ->where('urai', 'like', '%' . $request['search']['value'] . '%')
-                ->orWhere('kodegolongan', 'like', '%' . $request['search']['value'] . '%')
-                ->whereRaw("not exists (select kodegolongan, kodebidang, kodekelompok, kodesub, kodesubsub from masterbarang where kodesubsub <> 0)");
+                ->whereRaw("not exists (select kodegolongan, kodebidang, kodekelompok, kodesub, kodesubsub from masterbarang where kodesubsub <> 0)")
+                ->orWhere(function (Builder $query) use ($request) {
+                    $query->where('urai', 'like', '%' . $request['search']['value'] . '%')
+                        ->where('kodegolongan', 'like', '%' . $request['search']['value'] . '%');
+                });
             if (isset($request['order'][0]['column'])) {
                 $totalFiltered->orderByRaw('kodegolongan,kodebidang,kodekelompok,kodesub,kodesubsub ' . $request['order'][0]['dir']);
             }
