@@ -173,8 +173,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive">
-                        <table id="table-master-barang" class="table table-bordered data-table">
+                    <div class="table-responsive text-nowrap">
+                        <table id="table-master-barang" class="table table-bordered " style="min-width: 100%;">
                             <thead>
                                 <tr>
                                     <th>kode</th>
@@ -233,8 +233,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive p-1">
-                        <table id="list-perolehan" class="table table-hover data-table">
+                    <div class="table-responsive text-nowrap">
+                        <table id="list-perolehan" class="table" style="min-width: 100%;">
                             <thead>
                                 <tr>
                                     <th>BAP</th>
@@ -890,7 +890,7 @@
                 $(this).val(value)
             })
             setMaskMoney();
-            $('.data-table').DataTable();
+            $('.table').DataTable();
             initialDataTable();
             onClickMasterBarang();
             $('#add-detail-asset').click(function() {

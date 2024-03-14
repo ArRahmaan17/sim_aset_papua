@@ -19,8 +19,8 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive m-0 p-0">
-                        <table class="table table-striped data-table" id="table_masamanfaat">
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-striped data-table" id="table_masamanfaat" style="min-width: 100%;">
                             <thead>
                                 <tr>
                                     <th>Nomer</th>
@@ -46,8 +46,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive m-0 p-0 d-none col-12">
-                        <table class="table table-striped data-table" id="barang_belum_masamanfaat">
+                    <div class="table-responsive text-nowrap d-none col-12">
+                        <table class="table table-striped data-table" id="barang_belum_masamanfaat"
+                            style="min-width: 100%;">
                             <thead>
                                 <tr>
                                     <th>Nomer</th>

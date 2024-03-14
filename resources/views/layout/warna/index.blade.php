@@ -16,8 +16,8 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-stripped data-table" id="list-warna">
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-stripped data-table" id="list-warna" style="min-width: 100%;">
                             <thead>
                                 <tr>
                                     <th>Nomer</th>
