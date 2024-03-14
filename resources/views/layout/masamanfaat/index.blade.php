@@ -62,7 +62,7 @@
                         <input type="hidden" name="kodemasamanfaat">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon11"><i class='bx bx-palette'></i></span>
-                            <input type="text" class="form-control" name="masamanfaat" placeholder="6">
+                            <input type="text" class="form-control money-mask" name="masamanfaat" placeholder="6">
                         </div>
                     </form>
                 </div>
@@ -80,6 +80,7 @@
 @endsection
 @push('js')
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.inputmask.js') }}"></script>
     <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
     <script>
         window.datatable_masamanfaat = undefined
@@ -301,6 +302,16 @@
                 saveMasterWarna();
                 $('#modalFormMasterWarna').modal('show');
                 $('#modalFormMasterWarna').find('.modal-title').html('Tambah Master Warna');
+            });
+            $('.money-mask').attr('maxlength', '2').inputmask('numeric', {
+                radixPoint: ",",
+                allowMinus: false,
+                regex: "[0-9]*",
+                groupSeparator: ".",
+                rightAlign: false,
+                digits: 2,
+                min: 0,
+                alias: 'numeric'
             });
         });
     </script>
