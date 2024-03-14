@@ -143,9 +143,10 @@ class MasaManfaatController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-        $kode = explode(" ", $request->kode);
-        $kode = explode('.', $kode[0]);
         try {
+            $request->validate(['kode' => 'required', 'masamanfaat' => 'required']);
+            $kode = explode(" ", $request->kode);
+            $kode = explode('.', $kode[0]);
             $count = DB::table('mastermasamanfaat')->where([
                 'kodegolongan' => $kode[0],
                 'kodebidang' => $kode[1],
@@ -189,6 +190,7 @@ class MasaManfaatController extends Controller
     {
         DB::beginTransaction();
         try {
+            $request->validate(['masamanfaat' => 'required']);
             $count = DB::table('mastermasamanfaat')->where('kodemasamanfaat', $id)->count();
             if ($count == 0) {
                 throw new Exception("Masa Manfaat Barang tidak di temukan", 422);
