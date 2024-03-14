@@ -1,7 +1,6 @@
 @extends('template.parent')
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/css/iziToast.css') }}">
-    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/fh-3.4.0/dt-1.13.10/r-2.5.0/datatables.min.css" rel="stylesheet">
 @endpush
 @section('content')
     <div class="row">
@@ -85,7 +84,6 @@
     </div>
 @endsection
 @push('js')
-    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/fh-3.4.0/dt-1.13.10/r-2.5.0/datatables.min.js"></script>
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
     <script>
@@ -113,6 +111,24 @@
             $.ajax({
                 type: "PUT",
                 url: "{{ route('master.warna.update') }}/" + data.kodewarna,
+                data: {
+                    _token: `{{ csrf_token() }}`,
+                    ...data
+                },
+                dataType: "json",
+                success: function(response) {
+                    $('.data-table').DataTable().destroy();
+                    $('.data-table').find('tbody').html(renderDataToTable(response.data))
+                    $('.data-table').DataTable();
+                }
+            });
+        }
+
+        function saveMasterWarna() {
+            data = serializeObject($('#form-warna'));
+            $.ajax({
+                type: "POST",
+                url: "{{ route('master.warna.store') }}",
                 data: {
                     _token: `{{ csrf_token() }}`,
                     ...data
@@ -197,23 +213,7 @@
             });
         }
 
-        function saveMasterWarna() {
-            data = serializeObject($('#form-warna'));
-            $.ajax({
-                type: "POST",
-                url: "{{ route('master.warna.store') }}",
-                data: {
-                    _token: `{{ csrf_token() }}`,
-                    ...data
-                },
-                dataType: "json",
-                success: function(response) {
-                    $('.data-table').DataTable().destroy();
-                    $('.data-table').find('tbody').html(renderDataToTable(response.data))
-                    $('.data-table').DataTable();
-                }
-            });
-        }
+
         $(function() {
             $('.data-table').DataTable();
             actionData();

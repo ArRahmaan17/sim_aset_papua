@@ -1,6 +1,5 @@
 @extends('template.parent')
 @push('css')
-    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/fh-3.4.0/dt-1.13.10/r-2.5.0/datatables.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/iziToast.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datepicker3.min.css') }}">
@@ -88,9 +87,8 @@
                                             <div class="input-group input-group-merge">
                                                 <span id="nokontrakicon" class="input-group-text"><i
                                                         class='bx bx-info-circle'></i></span>
-                                                <input type="text" class="form-control" id="nokontrak"
-                                                    name="nokontrak" aria-label="John Doe"
-                                                    aria-describedby="nokontrakicon" />
+                                                <input type="text" class="form-control" id="nokontrak" name="nokontrak"
+                                                    aria-label="John Doe" aria-describedby="nokontrakicon" />
                                             </div>
                                         </div>
                                         <div class="mb-3">
@@ -272,7 +270,6 @@
     </div>
 @endsection
 @push('js')
-    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/fh-3.4.0/dt-1.13.10/r-2.5.0/datatables.min.js"></script>
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap-datepicker.id.min.js') }}"></script>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MasaManfaatController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrganisasiController;
@@ -47,6 +48,13 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
         Route::put('/master/barang/update/{id?}', [BarangController::class, 'update'])->name('barang.update');
         Route::delete('/master/barang/delete/{id?}', [BarangController::class, 'destroy'])->name('barang.delete');
         Route::get('/master/barang/all', [BarangController::class, 'all'])->name('barang.all');
+        Route::get('/master/masamanfaat', [MasaManfaatController::class, 'index'])->name('masamanfaat');
+        Route::post('/master/masamanfaat/store', [MasaManfaatController::class, 'store'])->name('masamanfaat.store');
+        Route::put('/master/masamanfaat/update/{id?}', [MasaManfaatController::class, 'update'])->name('masamanfaat.update');
+        Route::get('/master/masamanfaat/data-table', [MasaManfaatController::class, 'dataTable'])->name('masamanfaat.data-table');
+        Route::get('/master/masamanfaat/data-belum-masamanfaat', [MasaManfaatController::class, 'belumMasaManfaat'])->name('masamanfaat.data-belum-masamanfaat');
+        Route::get('/master/masamanfaat/show/{id?}', [MasaManfaatController::class, 'show'])->name('masamanfaat.show');
+        Route::delete('/master/masamanfaat/delete/{id?}', [MasaManfaatController::class, 'destroy'])->name('masamanfaat.delete');
         Route::get('/master/organisasi', [OrganisasiController::class, 'index'])->name('organisasi');
         Route::get('/master/organisasi/all', [OrganisasiController::class, 'all'])->name('organisasi.all');
         Route::get('/master/warna', [WarnaController::class, 'index'])->name('warna');
