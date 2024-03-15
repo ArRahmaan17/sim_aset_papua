@@ -28,9 +28,11 @@ class MasaManfaatController extends Controller
         $totalFiltered = $totalData;
         if (empty($request['search']['value'])) {
             $assets = DB::table('mastermasamanfaat')->select('*')
-                ->limit($request['length'])
-                ->offset($request['start'])
                 ->where('masamanfaat', '<>', NULL);
+            if ($request['length'] != '-1') {
+                $assets->limit($request['length'])
+                    ->offset($request['start']);
+            }
             if (isset($request['order'][0]['column'])) {
                 $assets->orderByRaw('kodegolongan,kodebidang,kodekelompok,kodesub,kodesubsub ' . $request['order'][0]['dir']);
             }
@@ -43,9 +45,11 @@ class MasaManfaatController extends Controller
             if (isset($request['order'][0]['column'])) {
                 $assets->orderByRaw('kodegolongan,kodebidang,kodekelompok,kodesub,kodesubsub ' . $request['order'][0]['dir']);
             }
-            $assets = $assets->limit($request['length'])
-                ->offset($request['start'])
-                ->get();
+            if ($request['length'] != '-1') {
+                $assets->limit($request['length'])
+                    ->offset($request['start']);
+            }
+            $assets = $assets->get();
 
             $totalFiltered = DB::table('mastermasamanfaat')->select('*')
                 ->where('urai', 'like', '%' . $request['search']['value'] . '%')

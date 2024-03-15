@@ -17,6 +17,61 @@ class WarnaController extends Controller
         return view('layout.warna.index', compact('warna'));
     }
 
+    public function dataTable(Request $request)
+    {
+        $totalData = DB::table('masterwarna')
+            ->orderBy('kodemasamanfaat', 'asc')
+            ->count();
+        $totalFiltered = $totalData;
+        if (empty($request['search']['value'])) {
+            $assets = DB::table('masterwarna')
+                ->select('*');
+
+            if ($request['length'] != '-1') {
+                $assets->limit($request['length'])
+                    ->offset($request['start']);
+            }
+            if (isset($request['order'][0]['column'])) {
+                $assets->orderByRaw('warna ' . $request['order'][0]['dir']);
+            }
+            $assets = $assets->get();
+        } else {
+            $assets = DB::table('masterwarna')->select('*')
+                ->where('warna', 'like', '%' . $request['search']['value'] . '%');
+            if (isset($request['order'][0]['column'])) {
+                $assets->orderByRaw('warna ' . $request['order'][0]['dir']);
+            }
+            if ($request['length'] != '-1') {
+                $assets->limit($request['length'])
+                    ->offset($request['start']);
+            }
+            $assets = $assets->get();
+
+            $totalFiltered = DB::table('masterwarna')->select('*')
+                ->where('warna', 'like', '%' . $request['search']['value'] . '%');
+            if (isset($request['order'][0]['column'])) {
+                $totalFiltered->orderByRaw('warna ' . $request['order'][0]['dir']);
+            }
+            $totalFiltered = $totalFiltered->count();
+        }
+        $dataFiltered = [];
+        foreach ($assets as $index => $item) {
+            $row = [];
+            $row[] = $index + 1;
+            $row[] = $item->warna;
+            $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
+            $row[] = $item->kodewarna;
+            $dataFiltered[] = $row;
+        }
+        $response = [
+            'draw' => $request['draw'],
+            'recordsFiltered' => $totalFiltered,
+            'recordsTotal' => count($dataFiltered),
+            'aaData' => $dataFiltered
+        ];
+
+        return Response()->json($response, 200);
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -107,8 +162,7 @@ class WarnaController extends Controller
             }
             DB::table('masterwarna')->where('kodewarna', $id)->delete();
             DB::commit();
-            $data = DB::table('masterwarna')->get()->toArray();
-            $message = ['message' => 'berhasil menghapus data master warna', 'data' => $data];
+            $message = ['message' => 'berhasil menghapus data master warna'];
             $status = 200;
         } catch (Exception $th) {
             DB::rollBack();

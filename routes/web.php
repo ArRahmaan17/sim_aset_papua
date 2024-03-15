@@ -58,6 +58,7 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
         Route::get('/master/organisasi', [OrganisasiController::class, 'index'])->name('organisasi');
         Route::get('/master/organisasi/all', [OrganisasiController::class, 'all'])->name('organisasi.all');
         Route::get('/master/warna', [WarnaController::class, 'index'])->name('warna');
+        Route::get('/master/warna/data-table', [WarnaController::class, 'dataTable'])->name('warna.data-table');
         Route::get('/master/warna/{id?}', [WarnaController::class, 'show'])->name('warna.show');
         Route::post('/master/warna/store', [WarnaController::class, 'store'])->name('warna.store');
         Route::put('/master/warna/update/{id?}', [WarnaController::class, 'update'])->name('warna.update');

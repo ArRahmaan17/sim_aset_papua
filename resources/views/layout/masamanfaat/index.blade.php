@@ -87,26 +87,6 @@
         window.datatable_masamanfaat = undefined
         window.datatable_belum = undefined
 
-        function renderDataToTable(data) {
-            html = '';
-            data.forEach((element, index) => {
-                html += `<tr>
-                            <td>${index++}</td>
-                            <td>${element.kodegolongan}${element.kodebidang}${element.kodekelompok}${element.kodesub}${element.kodesubsub}${element.urai}</td>
-                            <td>${element.masamanfaat}</td>
-                            <td>
-                                <button class="btn btn-warning edit" data-id='${JSON.stringify(element.kodemasamanfaat)}'><i
-                                        class='bx bx-pencil mb-1'></i>
-                                    Update</button>
-                                <button class="btn btn-danger delete" data-id='${JSON.stringify(element.kodemasamanfaat)}'><i
-                                        class='bx bx-trash mb-1'></i>
-                                    Delete</button>
-                            </td>
-                        </tr>`;
-            });
-            return html;
-        }
-
         function actionData() {
             $('.edit').click(function() {
                 if (window.datatable_masamanfaat.rows('.selected').data().length == 0) {
