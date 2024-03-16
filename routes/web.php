@@ -76,10 +76,10 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
     Route::get('/perolehan/bap/check/{ba?}/{column?}', [PerolehanController::class, 'bapCheck'])->name('perolehan.bap.check');
     Route::get('/perolehan/bap/detail/{id?}', [PerolehanController::class, 'getDetailBap'])->name('perolehan.bap.show');
 });
-Route::middleware(['authenticated', 'select-app'])->group(function () {
+Route::middleware(['authenticated'])->group(function () {
     Route::post('/set-organisasi', [AuthController::class, 'setOrganisasi'])->name('set-organisasi');
-    Route::get('/', [HomeController::class, 'selectApplication'])->name('select-application');
-    Route::post('/', [HomeController::class, 'chooseApplication'])->name('choose-application');
+    Route::get('/', [HomeController::class, 'selectApplication'])->name('select-application')->middleware('select-app');
+    Route::post('/', [HomeController::class, 'chooseApplication'])->name('choose-application')->middleware('select-app');
     Route::get('/master/organisasi-child', [MasterController::class, 'masterOrganisasiChild'])->name('master.organisasi-child');
 });
 Route::middleware(['un_authenticated'])->group(function () {
