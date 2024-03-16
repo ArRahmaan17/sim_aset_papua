@@ -37,6 +37,7 @@ class HomeController extends Controller
             }
             return view('layout.home', compact('organisasi', 'countBaNow', 'countBaPast'));
         } else  if (session('app') == 'ssh') {
+            session()->forget('app');
             return view('layout.under-maintenance');
         } else {
             return redirect()->route('select-application');
