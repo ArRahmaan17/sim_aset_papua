@@ -85,7 +85,9 @@
         }
 
         function resetForm() {
-            $("#form-barang").find('input').val('')
+            $("#form-barang").find('input').val('');
+            $("#save-barang").removeClass('d-none');
+            $("#update-barang").addClass('d-none');
         }
 
         function resetJsTree() {
