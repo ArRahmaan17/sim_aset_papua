@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LokasiController;
 use App\Http\Controllers\MasaManfaatController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\MenuController;
@@ -25,7 +26,7 @@ use Maatwebsite\Excel\Facades\Excel;
 */
 
 Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::middleware(['authenticated'])->name('master.')->group(function () {
         Route::get('/master/asal-usul', [MasterController::class, 'masterAsalUsul'])->name('asal-usul');
         Route::get('/master/kondisi', [MasterController::class, 'masterKondisi'])->name('kondisi');
@@ -63,6 +64,10 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
         Route::post('/master/warna/store', [WarnaController::class, 'store'])->name('warna.store');
         Route::put('/master/warna/update/{id?}', [WarnaController::class, 'update'])->name('warna.update');
         Route::delete('/master/warna/delete/{id?}', [WarnaController::class, 'destroy'])->name('warna.delete');
+        Route::get('/master/lokasi', [LokasiController::class, 'index'])->name('lokasi');
+        Route::get('/master/lokasi/data-table', [LokasiController::class, 'dataTable'])->name('lokasi.data-table');
+        Route::get('/master/lokasi/show/{id?}', [LokasiController::class, 'show'])->name('lokasi.show');
+        Route::delete('/master/lokasi/delete/{id?}', [LokasiController::class, 'destroy'])->name('lokasi.delete');
     });
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
     Route::post('/perolehan/store', [PerolehanController::class, 'store'])->name('perolehan.store');
@@ -71,8 +76,10 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
     Route::get('/perolehan/bap/check/{ba?}/{column?}', [PerolehanController::class, 'bapCheck'])->name('perolehan.bap.check');
     Route::get('/perolehan/bap/detail/{id?}', [PerolehanController::class, 'getDetailBap'])->name('perolehan.bap.show');
 });
-Route::middleware(['authenticated'])->group(function () {
+Route::middleware(['authenticated', 'select-app'])->group(function () {
     Route::post('/set-organisasi', [AuthController::class, 'setOrganisasi'])->name('set-organisasi');
+    Route::get('/', [HomeController::class, 'selectApplication'])->name('select-application');
+    Route::post('/', [HomeController::class, 'chooseApplication'])->name('choose-application');
     Route::get('/master/organisasi-child', [MasterController::class, 'masterOrganisasiChild'])->name('master.organisasi-child');
 });
 Route::middleware(['un_authenticated'])->group(function () {

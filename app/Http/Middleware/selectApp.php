@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UnAuthenticated
+class selectApp
 {
     /**
      * Handle an incoming request.
@@ -15,12 +15,10 @@ class UnAuthenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!session('user') && !session('app')) {
+        if (!session('app')) {
             return $next($request);
-        } else if (session('user') && !session('app')) {
-            return redirect()->route('select-application');
         } else {
-            return redirect()->route('home');
+            return redirect()->to('home');
         }
     }
 }

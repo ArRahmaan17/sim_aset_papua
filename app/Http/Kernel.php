@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\Authenticated;
 use App\Http\Middleware\haveOrganisasi;
+use App\Http\Middleware\selectApp;
 use App\Http\Middleware\UnAuthenticated;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -70,5 +71,6 @@ class Kernel extends HttpKernel
         'un_authenticated' => UnAuthenticated::class,
         'authenticated' => Authenticated::class,
         'have-organisasi' => haveOrganisasi::class,
+        'select-app' => selectApp::class,
     ];
 }

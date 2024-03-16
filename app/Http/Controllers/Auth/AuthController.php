@@ -24,7 +24,7 @@ class AuthController extends Controller
             if (Hash::check($request->password, $user->password)) {
                 session()->flush();
                 session(['user' => $user]);
-                return redirect()->route('home');
+                return redirect()->route('select-application');
             }
             return redirect()
                 ->route('login')
