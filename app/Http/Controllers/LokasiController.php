@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -97,19 +98,33 @@ class LokasiController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->except('_token');
+        DB::beginTransaction();
+        try {
+            $unique = DB::table('masterlokasi')
+                ->where('nama', 'like', "'%" . $request->nama . "%'")
+                ->where('kodelokasi', $id)
+                ->count();
+            if ($unique != 0) {
+                throw new Exception('gagal melakukan simpan data lokasi, terdapat duplikasi data lokasi', 422);
+            }
+            DB::table('masterlokasi')->where('kodelokasi', $id)->update($data);
+            DB::commit();
+            $status = 200;
+            $message = ['message' => 'Master warna berhasil diubah'];
+        } catch (Exception $th) {
+            $message = ['message' => 'Master warna gagal diubah'];
+            if ($th->getCode() == 422) {
+                $message = ['message' => $th->getMessage()];
+            }
+            $status = 422;
+            DB::rollBack();
+        }
+        return response()->json($message, $status);
     }
 
     /**
@@ -117,6 +132,25 @@ class LokasiController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $data = DB::table('masterlokasi')->where('kodelokasi', $id)->first();
+            $count = DB::table('kib')->where('lokasi', $data->nama)->count();
+            if ($count > 0) {
+                throw new Exception('data sudah di gunakan di tabel lain, mohon hapus terlebih dahulu data tersebut', 422);
+            }
+            DB::table('masterlokasi')->where('kodelokasi', $id)->delete();
+            DB::commit();
+            $message = ['message' => 'berhasil menghapus data master lokasi'];
+            $status = 200;
+        } catch (Exception $th) {
+            DB::rollBack();
+            $message = ['message' => 'gagal menghapus data master lokasi'];
+            if ($th->getCode() == 422) {
+                $message = ['message' => $th->getMessage()];
+            }
+            $status = 422;
+        }
+        return response()->json($message, $status);
     }
 }

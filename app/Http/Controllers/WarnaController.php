@@ -135,9 +135,8 @@ class WarnaController extends Controller
             }
             DB::table('masterwarna')->where('kodewarna', $id)->update($data);
             DB::commit();
-            $data = DB::table('masterwarna')->get()->toArray();
             $status = 200;
-            $message = ['message' => 'Master warna berhasil diubah', 'data' => $data];
+            $message = ['message' => 'Master warna berhasil diubah'];
         } catch (Exception $th) {
             $message = ['message' => 'Master warna gagal diubah'];
             if ($th->getCode() == 422) {
