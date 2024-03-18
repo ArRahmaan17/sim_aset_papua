@@ -134,12 +134,18 @@ class LokasiController extends Controller
     {
         DB::beginTransaction();
         try {
-            $data = DB::table('masterlokasi')->where('kodelokasi', $id)->first();
-            $count = DB::table('kib')->where('lokasi', $data->nama)->count();
+            $data = DB::table('masterlokasi')
+                ->where('kodelokasi', $id)
+                ->first();
+            $count = DB::table('kib')
+                ->where('lokasi', $data->nama)
+                ->count();
             if ($count > 0) {
                 throw new Exception('data sudah di gunakan di tabel lain, mohon hapus terlebih dahulu data tersebut', 422);
             }
-            DB::table('masterlokasi')->where('kodelokasi', $id)->delete();
+            DB::table('masterlokasi')
+                ->where('kodelokasi', $id)
+                ->delete();
             DB::commit();
             $message = ['message' => 'berhasil menghapus data master lokasi'];
             $status = 200;
