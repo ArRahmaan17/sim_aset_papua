@@ -71,13 +71,6 @@ class LokasiController extends Controller
 
         return Response()->json($response, 200);
     }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -92,7 +85,15 @@ class LokasiController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = DB::table('masterlokasi')->where('kodelokasi', $id)->first();
+        if ($data) {
+            $status = 200;
+            $message = ['message' => "data master lokasi berhasil di temukan", 'data' => $data];
+        } else {
+            $status = 404;
+            $message = ['message' => "data master lokasi gagal di temukan", 'data' => $data];
+        }
+        return response()->json($message, $status);
     }
 
     /**

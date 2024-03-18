@@ -270,7 +270,8 @@
                 $('#modalFormMasterMasaManfaat').modal('show');
                 $('#modalFormMasterMasaManfaat').find('.modal-title').html('Edit Master Warna');
                 $('#modalFormMasterMasaManfaat').find('.table-responsive').removeClass('d-none');
-                window.datatable_belum.ajax.reload()
+                window.datatable_belum.ajax.reload();
+                $("#form-masamanfaat")[0].reset()
             });
             $('.single').click(function() {
                 if (window.state == 'add') {

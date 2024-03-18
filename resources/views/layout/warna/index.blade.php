@@ -89,25 +89,6 @@
     <script>
         window.datatable_warna = undefined;
 
-        function renderDataToTable(data) {
-            html = '';
-            data.forEach((element, index) => {
-                html += `<tr>
-                            <td>${index++}</td>
-                            <td>${element.warna}</td>
-                            <td>
-                                <button class="btn btn-warning edit" data-id='${JSON.stringify(element)}'><i
-                                        class='bx bx-pencil mb-1'></i>
-                                    Update</button>
-                                <button class="btn btn-danger delete" data-id='${JSON.stringify(element)}'><i
-                                        class='bx bx-trash mb-1'></i>
-                                    Delete</button>
-                            </td>
-                        </tr>`;
-            });
-            return html;
-        }
-
         function updateMasterWarna() {
             data = serializeObject($('#form-warna'));
             $.ajax({
@@ -119,9 +100,7 @@
                 },
                 dataType: "json",
                 success: function(response) {
-                    $('.data-table').DataTable().destroy();
-                    $('.data-table').find('tbody').html(renderDataToTable(response.data))
-                    $('.data-table').DataTable();
+                    window.datatable_warna.ajax.reload();
                 }
             });
         }
@@ -137,9 +116,7 @@
                 },
                 dataType: "json",
                 success: function(response) {
-                    $('.data-table').DataTable().destroy();
-                    $('.data-table').find('tbody').html(renderDataToTable(response.data))
-                    $('.data-table').DataTable();
+                    window.datatable_warna.ajax.reload();
                 }
             });
         }
@@ -251,6 +228,7 @@
                 $('.multiple').removeClass('d-none');
                 $('#modalFormMasterWarna').modal('show');
                 $('#modalFormMasterWarna').find('.modal-title').html('Edit Master Warna');
+                $("#form-warna")[0].reset()
             });
             $('.single').click(function() {
                 if (window.state == 'add') {

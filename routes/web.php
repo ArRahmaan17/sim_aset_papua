@@ -67,6 +67,8 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
         Route::get('/master/lokasi', [LokasiController::class, 'index'])->name('lokasi');
         Route::get('/master/lokasi/data-table', [LokasiController::class, 'dataTable'])->name('lokasi.data-table');
         Route::get('/master/lokasi/show/{id?}', [LokasiController::class, 'show'])->name('lokasi.show');
+        Route::post('/master/lokasi/store', [LokasiController::class, 'store'])->name('lokasi.store');
+        Route::put('/master/lokasi/update/{id?}', [LokasiController::class, 'update'])->name('lokasi.update');
         Route::delete('/master/lokasi/delete/{id?}', [LokasiController::class, 'destroy'])->name('lokasi.delete');
     });
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
