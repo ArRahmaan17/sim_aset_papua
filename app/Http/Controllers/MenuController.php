@@ -60,14 +60,17 @@ class MenuController extends Controller
 
     public function updateParent(Request $request)
     {
-        $menu = $request->only('menu')['menu'];
-        $id = $menu['id'];
-        unset($menu['text'], $menu['id']);
-        $update = DB::table('menu')->where('idmenu', $id)->update($menu);
-        if ($update) {
+        DB::beginTransaction();
+        try {
+            $menu = $request->only('menu')['menu'];
+            $id = $menu['id'];
+            unset($menu['text'], $menu['id']);
+            DB::table('menu')->where('idmenu', $id)->update($menu);
+            DB::commit();
             $response = ['message' => "menu updated successfully"];
             $status = 200;
-        } else {
+        } catch (\Throwable $th) {
+            DB::rollback();
             $response = ['message' => "failed update menu"];
             $status = 501;
         }
@@ -79,32 +82,38 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        $menu = $request->except('role', '_token');
-        $menu['updated_at'] = $menu['created_at'] = now('Asia/Jakarta');
-        $roles = ($request->has('role')) ? $request->only('role') : ['role' => []];
-        $idmenu = DB::table('menu')->insertGetId($menu, 'idmenu');
-        $data_role = [];
-        if ($request->has('role')) {
-            foreach ($roles['role'] as $index => $role) {
-                $data_role[] = [
-                    'idrole' => $role,
-                    'idmenu' => $idmenu,
-                    'created_at' => now('Asia/Jakarta'),
-                    'updated_at' => now('Asia/Jakarta')
-                ];
+        DB::beginTransaction();
+        try {
+            $menu = $request->except('role', '_token');
+            if ($request->parents == '0-sidebar' || $request->parents == '0-profile') {
+                $menu['parents'] = 0;
             }
-        }
-        $data_role[] = [
-            'idrole' => 1,
-            'idmenu' => $idmenu,
-            'created_at' => now('Asia/Jakarta'),
-            'updated_at' => now('Asia/Jakarta')
-        ];
-        $insertStatus = DB::table('role_menu')->insert($data_role);
-        if ($insertStatus) {
-            $data = ['message' => 'menu berhasil di buat', 'data' => ['text' => $menu['nama'], 'id' => $idmenu, 'parent' => $menu['parents']]];
+            $menu['updated_at'] = $menu['created_at'] = now('Asia/Jakarta');
+            $roles = ($request->has('role')) ? $request->only('role') : ['role' => []];
+            $idmenu = DB::table('menu')->insertGetId($menu, 'idmenu');
+            $data_role = [];
+            if ($request->has('role')) {
+                foreach ($roles['role'] as $index => $role) {
+                    $data_role[] = [
+                        'idrole' => $role,
+                        'idmenu' => $idmenu,
+                        'created_at' => now('Asia/Jakarta'),
+                        'updated_at' => now('Asia/Jakarta')
+                    ];
+                }
+            }
+            $data_role[] = [
+                'idrole' => 1,
+                'idmenu' => $idmenu,
+                'created_at' => now('Asia/Jakarta'),
+                'updated_at' => now('Asia/Jakarta')
+            ];
+            DB::table('role_menu')->insert($data_role);
+            DB::commit();
+            $data = ['message' => 'menu berhasil di buat', 'data' => ['text' => $menu['nama'], 'id' => $idmenu, 'parent' => $request->parents == '0-sidebar' ? '0-sidebar' : ($request->parents == '0-profile' ? '0-profile' : $menu['parents'])]];
             $status = 200;
-        } else {
+        } catch (\Throwable $th) {
+            DB::rollBack();
             $data = ['message' => 'menu gagal di buat', 'data' => []];
             $status = 400;
         }

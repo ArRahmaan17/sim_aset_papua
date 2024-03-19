@@ -354,26 +354,22 @@
             });
             $("#container-tree-menu-sidebar").on('select_node.jstree', (e, data) => {
                 parentId = data.node.id;
-                if (parentId !== '0-sidebar') {
-                    if (data.node.children.length > 0 || parentId == 0) {
-                        $("#delete-menu").addClass('disabled')
-                    } else {
-                        $("#delete-menu").removeClass('disabled')
-                    }
-                    if (parentId == 0) {
-                        $("#show-menu").addClass('disabled')
-                    } else {
-                        $("#show-menu").removeClass('disabled')
-                    }
-                    resetMenuForm();
-                    $("#container-tree-menu-sidebar").switchClass('col-12', 'col-6', 500);
-                    $("#form-container").switchClass('d-none', 'd-block', 500);
-                    setTimeout(() => {
-                        $('.select2').select2();
-                    }, 600);
+                if (data.node.children.length > 0 || parentId == 0) {
+                    $("#delete-menu").addClass('disabled')
                 } else {
-                    resetJstree()
+                    $("#delete-menu").removeClass('disabled')
                 }
+                if (parentId == 0) {
+                    $("#show-menu").addClass('disabled')
+                } else {
+                    $("#show-menu").removeClass('disabled')
+                }
+                resetMenuForm();
+                $("#container-tree-menu-sidebar").switchClass('col-12', 'col-6', 500);
+                $("#form-container").switchClass('d-none', 'd-block', 500);
+                setTimeout(() => {
+                    $('.select2').select2();
+                }, 600);
             })
             $("#container-tree-menu-sidebar").on('deselect_node.jstree', () => {
                 $("#container-tree-menu-sidebar").switchClass('col-6', 'col-12', 700);
@@ -381,26 +377,22 @@
             });
             $("#container-tree-menu-profile").on('select_node.jstree', (e, data) => {
                 parentId = data.node.id;
-                if (parentId !== '0-profile') {
-                    if (data.node.children.length > 0 || parentId == 0) {
-                        $("#delete-menu").addClass('disabled')
-                    } else {
-                        $("#delete-menu").removeClass('disabled')
-                    }
-                    if (parentId == 0) {
-                        $("#show-menu").addClass('disabled')
-                    } else {
-                        $("#show-menu").removeClass('disabled')
-                    }
-                    resetMenuForm();
-                    $("#container-tree-menu-profile").switchClass('col-12', 'col-6', 500);
-                    $("#form-container").switchClass('d-none', 'd-block', 500);
-                    setTimeout(() => {
-                        $('.select2').select2();
-                    }, 600);
+                if (data.node.children.length > 0 || parentId == 0) {
+                    $("#delete-menu").addClass('disabled')
                 } else {
-                    resetJstree()
+                    $("#delete-menu").removeClass('disabled')
                 }
+                if (parentId == 0) {
+                    $("#show-menu").addClass('disabled')
+                } else {
+                    $("#show-menu").removeClass('disabled')
+                }
+                resetMenuForm();
+                $("#container-tree-menu-profile").switchClass('col-12', 'col-6', 500);
+                $("#form-container").switchClass('d-none', 'd-block', 500);
+                setTimeout(() => {
+                    $('.select2').select2();
+                }, 600);
             });
             $("#container-tree-menu-profile").on('deselect_node.jstree', () => {
                 $("#container-tree-menu-profile").switchClass('col-6', 'col-12', 700);
