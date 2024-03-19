@@ -165,7 +165,7 @@ class StatusTanahController extends Controller
             if ($count > 0) {
                 throw new Exception('data sudah di gunakan di tabel lain, mohon hapus terlebih dahulu data tersebut', 422);
             }
-            DB::table('mastersatuan')->where('kodestatustanah', $id)->delete();
+            DB::table('masterstatustanah')->where('kodestatustanah', $id)->delete();
             DB::commit();
             $message = ['message' => 'berhasil menghapus data master status tanah'];
             $status = 200;

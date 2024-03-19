@@ -44,7 +44,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="form-lokasi" action="">
-                        <input type="hidden" name="kodewarna">
+                        <input type="hidden" name="kodelokasi">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon11"><i class='bx bx-palette'></i></span>
                             <input type="text" class="form-control" name="nama" placeholder="DPRD DAERAH">
@@ -143,14 +143,14 @@
             data = serializeObject($('#form-lokasi'));
             $.ajax({
                 type: "PUT",
-                url: "{{ route('master.lokasi.update') }}/" + data.kodewarna,
+                url: "{{ route('master.lokasi.update') }}/" + data.kodelokasi,
                 data: {
                     _token: `{{ csrf_token() }}`,
                     ...data
                 },
                 dataType: "json",
                 success: function(response) {
-                    window.datatable_warna.ajax.reload();
+                    window.datatable_lokasi.ajax.reload();
                 }
             });
         }
@@ -166,7 +166,7 @@
                 },
                 dataType: "json",
                 success: function(response) {
-                    window.datatable_warna.ajax.reload();
+                    window.datatable_lokasi.ajax.reload();
                 }
             });
         }
