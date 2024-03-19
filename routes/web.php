@@ -79,12 +79,12 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::get('/master/satuan/show/{id?}', [SatuanController::class, 'show'])->name('satuan.show');
         Route::put('/master/satuan/update/{id?}', [SatuanController::class, 'update'])->name('satuan.update');
         Route::delete('/master/satuan/delete/{id?}', [SatuanController::class, 'destroy'])->name('satuan.delete');
-        Route::get('/master/satuantanah', [StatusTanahController::class, 'index'])->name('statustanah');
-        Route::post('/master/satuantanah/store', [StatusTanahController::class, 'store'])->name('statustanah.store');
-        Route::get('/master/satuantanah/show/{id?}', [StatusTanahController::class, 'show'])->name('statustanah.show');
-        Route::get('/master/satuantanah/data-table', [StatusTanahController::class, 'dataTable'])->name('statustanah.data-table');
-        Route::put('/master/satuantanah/update/{id?}', [StatusTanahController::class, 'update'])->name('statustanah.update');
-        Route::delete('/master/satuantanah/delete/{id?}', [StatusTanahController::class, 'destroy'])->name('statustanah.delete');
+        Route::get('/master/statustanah', [StatusTanahController::class, 'index'])->name('statustanah');
+        Route::post('/master/statustanah/store', [StatusTanahController::class, 'store'])->name('statustanah.store');
+        Route::get('/master/statustanah/show/{id?}', [StatusTanahController::class, 'show'])->name('statustanah.show');
+        Route::get('/master/statustanah/data-table', [StatusTanahController::class, 'dataTable'])->name('statustanah.data-table');
+        Route::put('/master/statustanah/update/{id?}', [StatusTanahController::class, 'update'])->name('statustanah.update');
+        Route::delete('/master/statustanah/delete/{id?}', [StatusTanahController::class, 'destroy'])->name('statustanah.delete');
         Route::get('/master/golonganbarang', [GolonganBarangController::class, 'index'])->name('golonganbarang');
         Route::get('/master/golonganbarang/data-table', [GolonganBarangController::class, 'dataTable'])->name('golonganbarang.data-table');
         Route::post('/master/golonganbarang/store', [GolonganBarangController::class, 'store'])->name('golonganbarang.store');
