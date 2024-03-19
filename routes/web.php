@@ -25,7 +25,7 @@ use Maatwebsite\Excel\Facades\Excel;
 |
 */
 
-Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
+Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::middleware(['authenticated'])->name('master.')->group(function () {
         Route::get('/master/asal-usul', [MasterController::class, 'masterAsalUsul'])->name('asal-usul');
@@ -80,7 +80,7 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
     Route::get('/auth/app/logout', [AuthController::class, 'logout'])->name('logout.application');
     Route::get('/auth/system/logout', [AuthController::class, 'logout_system'])->name('logout.system');
 });
-Route::middleware(['authenticated'])->group(function () {
+Route::middleware(['throttle:application', 'authenticated'])->group(function () {
     Route::post('/set-organisasi', [AuthController::class, 'setOrganisasi'])->name('set-organisasi');
     Route::get('/', [HomeController::class, 'selectApplication'])->name('select-application')->middleware('select-app');
     Route::post('/', [HomeController::class, 'chooseApplication'])->name('choose-application')->middleware('select-app');
