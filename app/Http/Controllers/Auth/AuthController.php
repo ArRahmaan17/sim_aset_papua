@@ -36,10 +36,21 @@ class AuthController extends Controller
             ->with("error", "Your provide <i><b>username</b></i> dons't exists in our application")
             ->withInput();
     }
+
     public function setOrganisasi(Request $request)
     {
         $organisasi = (new MasterController)->masterOrganisasi($request);
         $request->session()->put('organisasi', $organisasi);
         return response()->json(['status' => true, 'redirect' => route('home')], $organisasi ? 200 : 400);
+    }
+    public function logout()
+    {
+        session()->forget('app');
+        return redirect()->route('home');
+    }
+    public function logout_system()
+    {
+        session()->flush();
+        return redirect()->route('home');
     }
 }

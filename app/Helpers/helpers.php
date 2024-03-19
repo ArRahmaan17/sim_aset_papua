@@ -252,14 +252,15 @@ function buildTreeOrganisasi(array &$elements, $idParent = '0')
     return $branch;
 }
 
-function buildMenu(array &$elements)
+function buildMenu(array &$elements, $place = 'sidebar')
 {
     $html = "";
     foreach ($elements as $element) {
         $element = (array)$element;
-        if (isset($element['children'])) {
-            $children = buildMenu($element['children']);
-            $html .= '<li class="menu-item">
+        if ($place == 'sidebar') {
+            if (isset($element['children'])) {
+                $children = buildMenu($element['children']);
+                $html .= '<li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons ' . $element['icons'] . '"></i>
                             <div data-i18n="Layouts">' . $element['nama'] . '</div>
@@ -267,13 +268,25 @@ function buildMenu(array &$elements)
 
                         <ul class="menu-sub">' . $children . '</ul>
                     </li>';
-        } else {
-            $html .= '<li class="menu-item ' . (app('request')->route()->named($element['link']) ? 'active' : '') . '">
+            } else {
+                $html .= '<li class="menu-item ' . (app('request')->route()->named($element['link']) ? 'active' : '') . '">
                     <a href="' . route($element['link']) . '" class="menu-link ">
                         <i class="menu-icon tf-icons ' . $element['icons'] . '"></i>
                         <div data-i18n="Analytics">' . $element['nama'] . '</div>
                     </a>
                 </li>';
+            }
+        } else if ($place == 'profile') {
+            $html .= '<li>
+                        <a class="dropdown-item" href="' . route($element['link']) . '">
+                            <span class="d-flex align-items-center align-middle">
+                                <i class="flex-shrink-0 me-2 ' . $element['icons'] . '"></i>
+                                <span class="flex-grow-1 align-middle">' . $element['nama'] . '</span>
+                                <span
+                                    class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
+                            </span>
+                        </a>
+                    </li>';
         }
     }
 

@@ -46,8 +46,7 @@ class MenuController extends Controller
         $menuProfile = DB::table('menu')
             ->select(DB::raw(' idmenu as id, nama as text, parents as parent, letak'))
             ->where('letak', 'profile')
-            ->get()
-            ->toArray();
+            ->get()->toArray();
         $treeMenuProfile = buildTree($menuProfile);
         if (count($treeMenuSideBar) == 0 && count($treeMenuProfile) == 0) {
             $response = ['message' => 'Data Menu Berhasil Di buat', 'data' => ['menu_sidebar' => $treeMenuSideBar, 'menu_profile' => $treeMenuProfile]];

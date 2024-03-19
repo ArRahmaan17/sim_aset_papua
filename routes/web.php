@@ -77,6 +77,8 @@ Route::middleware(['authenticated', 'have-organisasi'])->group(function () {
     Route::get('/perolehan/all-bap', [PerolehanController::class, 'getAllOrganizationBaps'])->name('perolehan.bap');
     Route::get('/perolehan/bap/check/{ba?}/{column?}', [PerolehanController::class, 'bapCheck'])->name('perolehan.bap.check');
     Route::get('/perolehan/bap/detail/{id?}', [PerolehanController::class, 'getDetailBap'])->name('perolehan.bap.show');
+    Route::get('/auth/app/logout', [AuthController::class, 'logout'])->name('logout.application');
+    Route::get('/auth/system/logout', [AuthController::class, 'logout_system'])->name('logout.system');
 });
 Route::middleware(['authenticated'])->group(function () {
     Route::post('/set-organisasi', [AuthController::class, 'setOrganisasi'])->name('set-organisasi');
