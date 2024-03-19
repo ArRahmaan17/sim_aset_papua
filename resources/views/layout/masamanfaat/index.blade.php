@@ -89,6 +89,7 @@
 
         function actionData() {
             $('.edit').click(function() {
+                window.state = 'update';
                 if (window.datatable_masamanfaat.rows('.selected').data().length == 0) {
                     $('#table_masamanfaat tbody').find('tr').removeClass('selected');
                     $(this).parents('tr').addClass('selected')

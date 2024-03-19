@@ -17,11 +17,11 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive text-nowrap">
-                        <table class="table table-striped data-table" id="table_satuan" style="min-width: 100%;">
+                        <table class="table table-striped data-table" id="table_golongan_barang" style="min-width: 100%;">
                             <thead>
                                 <tr>
                                     <th>Nomer</th>
-                                    <th>Satuan</th>
+                                    <th>Golongan Barang</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -33,20 +33,20 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalFormMasterSatuan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-hidden="true">
+    <div class="modal fade" id="modalFormMasterGolonganBarang" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalFormMasterSatuanTitle">Tambah Master Satuan</h5>
+                    <h5 class="modal-title" id="modalFormMasterGolonganBarangTitle">Tambah Master Golongan Barang</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="form-satuan" action="">
-                        <input type="hidden" name="kodesatuan">
+                    <form id="form-golongan-barang" action="">
+                        <input type="hidden" name="kodegolonganbarang">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon11"><i class='bx bx-palette'></i></span>
-                            <input type="text" class="form-control" name="satuan" placeholder="Pcs">
+                            <input type="text" class="form-control" name="golonganbarang" placeholder="Tanah Keluarga">
                         </div>
                     </form>
                 </div>
@@ -66,36 +66,36 @@
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
     <script>
-        window.datatable_satuan = undefined;
+        window.datatable_golongan_barang = undefined;
 
-        function updateMasterSatuan() {
-            data = serializeObject($('#form-satuan'));
+        function updateMasterGolonganBarang() {
+            data = serializeObject($('#form-golongan-barang'));
             $.ajax({
                 type: "PUT",
-                url: "{{ route('master.satuan.update') }}/" + data.kodesatuan,
+                url: "{{ route('master.golonganbarang.update') }}/" + data.kodegolonganbarang,
                 data: {
                     _token: `{{ csrf_token() }}`,
                     ...data
                 },
                 dataType: "json",
                 success: function(response) {
-                    window.datatable_satuan.ajax.reload();
+                    window.datatable_golongan_barang.ajax.reload();
                 }
             });
         }
 
-        function saveMasterSatuan() {
-            data = serializeObject($('#form-satuan'));
+        function saveMasterGolonganBarang() {
+            data = serializeObject($('#form-golongan-barang'));
             $.ajax({
                 type: "POST",
-                url: "{{ route('master.satuan.store') }}",
+                url: "{{ route('master.golonganbarang.store') }}",
                 data: {
                     _token: `{{ csrf_token() }}`,
                     ...data
                 },
                 dataType: "json",
                 success: function(response) {
-                    window.datatable_satuan.ajax.reload();
+                    window.datatable_golongan_barang.ajax.reload();
                 }
             });
         }
@@ -104,32 +104,32 @@
         function actionData() {
             $('.edit').click(function() {
                 window.state = 'update';
-                if (window.datatable_satuan.rows('.selected').data().length == 0) {
-                    $('#table_satuan tbody').find('tr').removeClass('selected');
+                if (window.datatable_golongan_barang.rows('.selected').data().length == 0) {
+                    $('#table_golongan_barang tbody').find('tr').removeClass('selected');
                     $(this).parents('tr').addClass('selected')
                 }
-                var data = window.datatable_satuan.rows('.selected').data()[0];
-                $('#modalFormMasterSatuan').modal('show');
-                $('#modalFormMasterSatuan').find('.modal-title').html('Edit Master Satuan');
+                var data = window.datatable_golongan_barang.rows('.selected').data()[0];
+                $('#modalFormMasterGolonganBarang').modal('show');
+                $('#modalFormMasterGolonganBarang').find('.modal-title').html('Edit Master Golongan Barang');
                 $.ajax({
                     type: "GET",
-                    url: "{{ route('master.satuan.show') }}/" + data[3],
+                    url: "{{ route('master.golonganbarang.show') }}/" + data[3],
                     dataType: "json",
                     success: function(response) {
-                        $("#form-satuan").find('[name=kodesatuan]')
-                            .val(response.data.kodesatuan);
-                        $("#form-satuan").find('[name=satuan]')
-                            .val(response.data.satuan);
+                        $("#form-golongan-barang").find('[name=kodegolonganbarang]')
+                            .val(response.data.kodegolonganbarang);
+                        $("#form-golongan-barang").find('[name=golonganbarang]')
+                            .val(response.data.golonganbarang);
                     }
                 });
                 $('.multiple').addClass('d-none');
             })
             $('.delete').click(function() {
-                if (window.datatable_satuan.rows('.selected').data().length == 0) {
-                    $('#table_satuan tbody').find('tr').removeClass('selected');
+                if (window.datatable_golongan_barang.rows('.selected').data().length == 0) {
+                    $('#table_golongan_barang tbody').find('tr').removeClass('selected');
                     $(this).parents('tr').addClass('selected')
                 }
-                var data = window.datatable_satuan.rows('.selected').data()[0];
+                var data = window.datatable_golongan_barang.rows('.selected').data()[0];
                 iziToast.question({
                     timeout: 5000,
                     layout: 2,
@@ -150,13 +150,14 @@
                             }, toast, 'button');
                             $.ajax({
                                 type: "DELETE",
-                                url: "{{ route('master.satuan.delete') }}/" + data[3],
+                                url: "{{ route('master.golonganbarang.delete') }}/" + data[
+                                    3],
                                 data: {
                                     _token: `{{ csrf_token() }}`,
                                 },
                                 dataType: "json",
                                 success: function(response) {
-                                    window.datatable_satuan.ajax.reload()
+                                    window.datatable_golongan_barang.ajax.reload()
                                 }
                             });
                         }, true],
@@ -171,7 +172,7 @@
         }
 
         $(function() {
-            $('#table_satuan tbody').on('click', 'tr', function(e) {
+            $('#table_golongan_barang tbody').on('click', 'tr', function(e) {
                 if ($(e.currentTarget).hasClass('selected')) {
                     $('tr').removeClass('selected');
                 } else {
@@ -179,8 +180,8 @@
                     $(e.currentTarget).addClass('selected');
                 }
             });
-            window.datatable_satuan = new DataTable('#table_satuan', {
-                ajax: "{{ route('master.satuan.data-table') }}",
+            window.datatable_golongan_barang = new DataTable('#table_golongan_barang', {
+                ajax: "{{ route('master.golonganbarang.data-table') }}",
                 processing: true,
                 serverSide: true,
                 order: [
@@ -200,27 +201,29 @@
                     orderable: false,
                 }],
             });
-            window.datatable_satuan.on('draw.dt', function() {
+            window.datatable_golongan_barang.on('draw.dt', function() {
                 actionData();
             });
             $(".add").click(function() {
                 window.state = 'add';
                 $('.multiple').removeClass('d-none');
-                $('#modalFormMasterSatuan').modal('show');
-                $('#modalFormMasterSatuan').find('.modal-title').html('Edit Master Satuan');
-                $("#form-satuan")[0].reset()
+                $('#modalFormMasterGolonganBarang').modal('show');
+                $('#modalFormMasterGolonganBarang').find('.modal-title').html(
+                    'Edit Master Golongan Barang');
+                $("#form-golongan-barang")[0].reset()
             });
             $('.single').click(function() {
                 if (window.state == 'add') {
-                    saveMasterSatuan();
+                    saveMasterGolonganBarang();
                 } else {
-                    updateMasterSatuan();
+                    updateMasterGolonganBarang();
                 }
             });
             $('.multiple').click(function() {
-                saveMasterSatuan();
-                $('#modalFormMasterSatuan').modal('show');
-                $('#modalFormMasterSatuan').find('.modal-title').html('Tambah Master Satuan');
+                saveMasterGolonganBarang();
+                $('#modalFormMasterGolonganBarang').modal('show');
+                $('#modalFormMasterGolonganBarang').find('.modal-title').html(
+                    'Tambah Master Golongan Barang');
             });
         });
     </script>

@@ -67,12 +67,13 @@
     <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
     <script>
         window.datatable_status_tanah = undefined;
+        window.state = 'add';
 
         function updateMasterStatusTanah() {
             data = serializeObject($('#form-status-tanah'));
             $.ajax({
                 type: "PUT",
-                url: "{{ route('master.status-tanah.update') }}/" + data.kodestatustanah,
+                url: "{{ route('master.statustanah.update') }}/" + data.kodestatustanah,
                 data: {
                     _token: `{{ csrf_token() }}`,
                     ...data
@@ -88,7 +89,7 @@
             data = serializeObject($('#form-status-tanah'));
             $.ajax({
                 type: "POST",
-                url: "{{ route('master.status-tanah.store') }}",
+                url: "{{ route('master.statustanah.store') }}",
                 data: {
                     _token: `{{ csrf_token() }}`,
                     ...data
@@ -103,6 +104,7 @@
 
         function actionData() {
             $('.edit').click(function() {
+                window.state = 'update';
                 if (window.datatable_status_tanah.rows('.selected').data().length == 0) {
                     $('#table_status_tanah tbody').find('tr').removeClass('selected');
                     $(this).parents('tr').addClass('selected')
@@ -112,7 +114,7 @@
                 $('#modalFormMasterStatusTanah').find('.modal-title').html('Edit Master Status Tanah');
                 $.ajax({
                     type: "GET",
-                    url: "{{ route('master.status-tanah.show') }}/" + data[3],
+                    url: "{{ route('master.statustanah.show') }}/" + data[3],
                     dataType: "json",
                     success: function(response) {
                         $("#form-status-tanah").find('[name=kodestatustanah]')
@@ -149,7 +151,7 @@
                             }, toast, 'button');
                             $.ajax({
                                 type: "DELETE",
-                                url: "{{ route('master.status-tanah.delete') }}/" + data[3],
+                                url: "{{ route('master.statustanah.delete') }}/" + data[3],
                                 data: {
                                     _token: `{{ csrf_token() }}`,
                                 },
@@ -179,7 +181,7 @@
                 }
             });
             window.datatable_status_tanah = new DataTable('#table_status_tanah', {
-                ajax: "{{ route('master.status-tanah.data-table') }}",
+                ajax: "{{ route('master.statustanah.data-table') }}",
                 processing: true,
                 serverSide: true,
                 order: [

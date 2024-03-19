@@ -76,11 +76,11 @@ class SatuanController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->except('_token');
+        $data = $request->except('_token', 'kodesatuan');
         DB::beginTransaction();
         try {
             $unique = DB::table('mastersatuan')
-                ->where('satuan', 'like', "'%" . $request->satuan . "%'")
+                ->where('satuan', $request->satuan)
                 ->count();
             if ($unique != 0) {
                 throw new Exception('gagal melakukan simpan data satuan, terdapat duplikasi data satuan', 422);
@@ -128,6 +128,7 @@ class SatuanController extends Controller
         try {
             $unique = DB::table('mastersatuan')
                 ->where('satuan',   $request->satuan)
+                ->where('kodesatuan', '<>',   $id)
                 ->count();
             if ($unique != 0) {
                 throw new Exception('gagal melakukan simpan data satuan, terdapat duplikasi data satuan', 422);

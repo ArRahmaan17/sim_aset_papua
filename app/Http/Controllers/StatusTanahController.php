@@ -80,11 +80,11 @@ class StatusTanahController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->except('_token');
+        $data = $request->except('_token', 'kodestatustanah');
         DB::beginTransaction();
         try {
             $unique = DB::table('masterstatustanah')
-                ->where('statustanah', 'like', "'%" . $request->statustanah . "%'")
+                ->where('statustanah', $request->statustanah)
                 ->count();
             if ($unique != 0) {
                 throw new Exception('gagal melakukan simpan data status tanah, terdapat duplikasi data status tanah', 422);
@@ -132,6 +132,7 @@ class StatusTanahController extends Controller
         try {
             $unique = DB::table('masterstatustanah')
                 ->where('statustanah',   $request->statustanah)
+                ->where('kodestatustanah', '<>',   $id)
                 ->count();
             if ($unique != 0) {
                 throw new Exception('gagal melakukan simpan data status tanah, terdapat duplikasi data status tanah', 422);

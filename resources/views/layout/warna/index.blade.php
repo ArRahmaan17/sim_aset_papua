@@ -104,6 +104,7 @@
 
         function actionData() {
             $('.edit').click(function() {
+                window.state = 'update';
                 if (window.datatable_warna.rows('.selected').data().length == 0) {
                     $('#table_warna tbody').find('tr').removeClass('selected');
                     $(this).parents('tr').addClass('selected')

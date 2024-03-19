@@ -76,11 +76,11 @@ class WarnaController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->except('_token');
+        $data = $request->except('_token', 'kodewarna');
         DB::beginTransaction();
         try {
             $unique = DB::table('masterwarna')
-                ->where('warna', 'like', "'%" . $request->warna . "%'")
+                ->where('warna', $request->warna)
                 ->count();
             if ($unique != 0) {
                 throw new Exception('gagal melakukan simpan data warna, terdapat duplikasi data warna', 422);
@@ -126,7 +126,8 @@ class WarnaController extends Controller
         DB::beginTransaction();
         try {
             $unique = DB::table('masterwarna')
-                ->where('warna', 'like', "'%" . $request->warna . "%'")
+                ->where('warna', $request->warna)
+                ->where('kodewarna', '<>', $id)
                 ->count();
             if ($unique != 0) {
                 throw new Exception('gagal melakukan simpan data warna, terdapat duplikasi data warna', 422);
