@@ -109,7 +109,7 @@
                 }
                 var data = window.datatable_satuan.rows('.selected').data()[0];
                 $('#modalFormMasterSatuan').modal('show');
-                $('#modalFormMasterSatuan').find('.modal-title').html('Edit Master Warna');
+                $('#modalFormMasterSatuan').find('.modal-title').html('Edit Master Satuan');
                 $.ajax({
                     type: "GET",
                     url: "{{ route('master.satuan.show') }}/" + data[3],
@@ -206,7 +206,7 @@
                 window.state = 'add';
                 $('.multiple').removeClass('d-none');
                 $('#modalFormMasterSatuan').modal('show');
-                $('#modalFormMasterSatuan').find('.modal-title').html('Edit Master Warna');
+                $('#modalFormMasterSatuan').find('.modal-title').html('Edit Master Satuan');
                 $("#form-satuan")[0].reset()
             });
             $('.single').click(function() {
@@ -219,7 +219,7 @@
             $('.multiple').click(function() {
                 saveMasterWarna();
                 $('#modalFormMasterSatuan').modal('show');
-                $('#modalFormMasterSatuan').find('.modal-title').html('Tambah Master Warna');
+                $('#modalFormMasterSatuan').find('.modal-title').html('Tambah Master Satuan');
             });
         });
     </script>
