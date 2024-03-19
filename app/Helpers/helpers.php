@@ -282,11 +282,10 @@ function buildMenu(array &$elements, $place = 'sidebar')
                             <span class="d-flex align-items-center align-middle">
                                 <i class="flex-shrink-0 me-2 ' . $element['icons'] . '"></i>
                                 <span class="flex-grow-1 align-middle">' . $element['nama'] . '</span>
-                                <span
-                                    class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
                             </span>
                         </a>
                     </li>';
+            // '<span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>'
         }
     }
 

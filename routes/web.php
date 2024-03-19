@@ -94,5 +94,5 @@ Route::middleware(['un_authenticated'])->group(function () {
     // })->name('import-master');
     // end DangerLine
     Route::get('/auth/login', [AuthController::class, 'index'])->name('login');
-    Route::post('/auth/login', [AuthController::class, 'login'])->name('login-process');
+    Route::post('/auth/login', [AuthController::class, 'login'])->middleware(['throttle:login-process'])->name('login-process');
 });
