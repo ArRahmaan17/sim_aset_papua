@@ -17,11 +17,11 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive text-nowrap">
-                        <table class="table table-striped data-table" id="table_warna" style="min-width: 100%;">
+                        <table class="table table-striped data-table" id="table_satuan" style="min-width: 100%;">
                             <thead>
                                 <tr>
                                     <th>Nomer</th>
-                                    <th>Warna</th>
+                                    <th>Satuan</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -33,21 +33,20 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalFormMasterWarna" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <div class="modal fade" id="modalFormMasterSatuan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalFormMasterWarnaTitle">Tambah Master Warna</h5>
+                    <h5 class="modal-title" id="modalFormMasterSatuanTitle">Tambah Master Satuan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="form-warna" action="">
-                        <input type="hidden" name="kodewarna">
+                    <form id="form-satuan" action="">
+                        <input type="hidden" name="kodesatuan">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon11"><i class='bx bx-palette'></i></span>
-                            <input type="text" class="form-control" name="warna" placeholder="Warna" aria-label="Warna"
-                                aria-describedby="basic-addon11">
+                            <input type="text" class="form-control" name="satuan" placeholder="Pcs">
                         </div>
                     </form>
                 </div>
@@ -67,36 +66,36 @@
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
     <script>
-        window.datatable_warna = undefined;
+        window.datatable_satuan = undefined;
 
         function updateMasterWarna() {
-            data = serializeObject($('#form-warna'));
+            data = serializeObject($('#form-satuan'));
             $.ajax({
                 type: "PUT",
-                url: "{{ route('master.warna.update') }}/" + data.kodewarna,
+                url: "{{ route('master.satuan.update') }}/" + data.kodesatuan,
                 data: {
                     _token: `{{ csrf_token() }}`,
                     ...data
                 },
                 dataType: "json",
                 success: function(response) {
-                    window.datatable_warna.ajax.reload();
+                    window.datatable_satuan.ajax.reload();
                 }
             });
         }
 
         function saveMasterWarna() {
-            data = serializeObject($('#form-warna'));
+            data = serializeObject($('#form-satuan'));
             $.ajax({
                 type: "POST",
-                url: "{{ route('master.warna.store') }}",
+                url: "{{ route('master.satuan.store') }}",
                 data: {
                     _token: `{{ csrf_token() }}`,
                     ...data
                 },
                 dataType: "json",
                 success: function(response) {
-                    window.datatable_warna.ajax.reload();
+                    window.datatable_satuan.ajax.reload();
                 }
             });
         }
@@ -104,32 +103,32 @@
 
         function actionData() {
             $('.edit').click(function() {
-                if (window.datatable_warna.rows('.selected').data().length == 0) {
-                    $('#table_warna tbody').find('tr').removeClass('selected');
+                if (window.datatable_satuan.rows('.selected').data().length == 0) {
+                    $('#table_satuan tbody').find('tr').removeClass('selected');
                     $(this).parents('tr').addClass('selected')
                 }
-                var data = window.datatable_warna.rows('.selected').data()[0];
-                $('#modalFormMasterWarna').modal('show');
-                $('#modalFormMasterWarna').find('.modal-title').html('Edit Master Warna');
+                var data = window.datatable_satuan.rows('.selected').data()[0];
+                $('#modalFormMasterSatuan').modal('show');
+                $('#modalFormMasterSatuan').find('.modal-title').html('Edit Master Warna');
                 $.ajax({
                     type: "GET",
-                    url: "{{ route('master.warna.show') }}/" + data[3],
+                    url: "{{ route('master.satuan.show') }}/" + data[3],
                     dataType: "json",
                     success: function(response) {
-                        $("#form-warna").find('[name=kodewarna]')
-                            .val(response.data.kodewarna);
-                        $("#form-warna").find('[name=warna]')
-                            .val(response.data.warna);
+                        $("#form-satuan").find('[name=kodesatuan]')
+                            .val(response.data.kodesatuan);
+                        $("#form-satuan").find('[name=satuan]')
+                            .val(response.data.satuan);
                     }
                 });
                 $('.multiple').addClass('d-none');
             })
             $('.delete').click(function() {
-                if (window.datatable_warna.rows('.selected').data().length == 0) {
-                    $('#table_warna tbody').find('tr').removeClass('selected');
+                if (window.datatable_satuan.rows('.selected').data().length == 0) {
+                    $('#table_satuan tbody').find('tr').removeClass('selected');
                     $(this).parents('tr').addClass('selected')
                 }
-                var data = window.datatable_warna.rows('.selected').data()[0];
+                var data = window.datatable_satuan.rows('.selected').data()[0];
                 iziToast.question({
                     timeout: 5000,
                     layout: 2,
@@ -150,13 +149,13 @@
                             }, toast, 'button');
                             $.ajax({
                                 type: "DELETE",
-                                url: "{{ route('master.warna.delete') }}/" + data[3],
+                                url: "{{ route('master.satuan.delete') }}/" + data[3],
                                 data: {
                                     _token: `{{ csrf_token() }}`,
                                 },
                                 dataType: "json",
                                 success: function(response) {
-                                    window.datatable_warna.ajax.reload()
+                                    window.datatable_satuan.ajax.reload()
                                 }
                             });
                         }, true],
@@ -171,7 +170,7 @@
         }
 
         $(function() {
-            $('#table_warna tbody').on('click', 'tr', function(e) {
+            $('#table_satuan tbody').on('click', 'tr', function(e) {
                 if ($(e.currentTarget).hasClass('selected')) {
                     $('tr').removeClass('selected');
                 } else {
@@ -179,8 +178,8 @@
                     $(e.currentTarget).addClass('selected');
                 }
             });
-            window.datatable_warna = new DataTable('#table_warna', {
-                ajax: "{{ route('master.warna.data-table') }}",
+            window.datatable_satuan = new DataTable('#table_satuan', {
+                ajax: "{{ route('master.satuan.data-table') }}",
                 processing: true,
                 serverSide: true,
                 order: [
@@ -200,15 +199,15 @@
                     orderable: false,
                 }],
             });
-            window.datatable_warna.on('draw.dt', function() {
+            window.datatable_satuan.on('draw.dt', function() {
                 actionData();
             });
             $(".add").click(function() {
                 window.state = 'add';
                 $('.multiple').removeClass('d-none');
-                $('#modalFormMasterWarna').modal('show');
-                $('#modalFormMasterWarna').find('.modal-title').html('Edit Master Warna');
-                $("#form-warna")[0].reset()
+                $('#modalFormMasterSatuan').modal('show');
+                $('#modalFormMasterSatuan').find('.modal-title').html('Edit Master Warna');
+                $("#form-satuan")[0].reset()
             });
             $('.single').click(function() {
                 if (window.state == 'add') {
@@ -219,8 +218,8 @@
             });
             $('.multiple').click(function() {
                 saveMasterWarna();
-                $('#modalFormMasterWarna').modal('show');
-                $('#modalFormMasterWarna').find('.modal-title').html('Tambah Master Warna');
+                $('#modalFormMasterSatuan').modal('show');
+                $('#modalFormMasterSatuan').find('.modal-title').html('Tambah Master Warna');
             });
         });
     </script>

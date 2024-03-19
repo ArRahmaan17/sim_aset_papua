@@ -9,6 +9,7 @@ use App\Http\Controllers\MasterController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrganisasiController;
 use App\Http\Controllers\Perolehan\PerolehanController;
+use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\WarnaController;
 use App\Imports\MasterImport;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +28,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::middleware(['authenticated'])->name('master.')->group(function () {
+    Route::name('master.')->group(function () {
         Route::get('/master/asal-usul', [MasterController::class, 'masterAsalUsul'])->name('asal-usul');
         Route::get('/master/kondisi', [MasterController::class, 'masterKondisi'])->name('kondisi');
         Route::get('/master/satuan', [MasterController::class, 'masterSatuan'])->name('satuan');
@@ -70,6 +71,12 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::post('/master/lokasi/store', [LokasiController::class, 'store'])->name('lokasi.store');
         Route::put('/master/lokasi/update/{id?}', [LokasiController::class, 'update'])->name('lokasi.update');
         Route::delete('/master/lokasi/delete/{id?}', [LokasiController::class, 'destroy'])->name('lokasi.delete');
+        Route::get('/master/satuan', [SatuanController::class, 'index'])->name('satuan');
+        Route::get('/master/satuan/store', [SatuanController::class, 'store'])->name('satuan.store');
+        Route::get('/master/satuan/data-table', [SatuanController::class, 'dataTable'])->name('satuan.data-table');
+        Route::get('/master/satuan/show/{id?}', [SatuanController::class, 'show'])->name('satuan.show');
+        Route::get('/master/satuan/update/{id?}', [SatuanController::class, 'update'])->name('satuan.update');
+        Route::get('/master/satuan/delete/{id?}', [SatuanController::class, 'destroy'])->name('satuan.delete');
     });
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
     Route::post('/perolehan/store', [PerolehanController::class, 'store'])->name('perolehan.store');
