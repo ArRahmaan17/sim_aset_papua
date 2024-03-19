@@ -68,7 +68,7 @@
     <script>
         window.datatable_satuan = undefined;
 
-        function updateMasterWarna() {
+        function updateMasterSatuan() {
             data = serializeObject($('#form-satuan'));
             $.ajax({
                 type: "PUT",
@@ -84,7 +84,7 @@
             });
         }
 
-        function saveMasterWarna() {
+        function saveMasterSatuan() {
             data = serializeObject($('#form-satuan'));
             $.ajax({
                 type: "POST",
@@ -211,13 +211,13 @@
             });
             $('.single').click(function() {
                 if (window.state == 'add') {
-                    saveMasterWarna();
+                    saveMasterSatuan();
                 } else {
-                    updateMasterWarna();
+                    updateMasterSatuan();
                 }
             });
             $('.multiple').click(function() {
-                saveMasterWarna();
+                saveMasterSatuan();
                 $('#modalFormMasterSatuan').modal('show');
                 $('#modalFormMasterSatuan').find('.modal-title').html('Tambah Master Satuan');
             });
