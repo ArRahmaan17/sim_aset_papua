@@ -76,7 +76,28 @@ class SatuanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->except('_token');
+        DB::beginTransaction();
+        try {
+            $unique = DB::table('mastersatuan')
+                ->where('satuan', 'like', "'%" . $request->satuan . "%'")
+                ->count();
+            if ($unique != 0) {
+                throw new Exception('gagal melakukan simpan data satuan, terdapat duplikasi data satuan', 422);
+            }
+            DB::table('mastersatuan')->insert($data);
+            DB::commit();
+            $status = 200;
+            $message = ['message' => 'Master satuan berhasil ditambahkan'];
+        } catch (Exception $th) {
+            $message = ['message' => 'Master satuan gagal ditambahkan'];
+            if ($th->getCode() == 422) {
+                $message = ['message' => $th->getMessage()];
+            }
+            $status = 422;
+            DB::rollBack();
+        }
+        return response()->json($message, $status);
     }
 
     /**
@@ -89,10 +110,10 @@ class SatuanController extends Controller
             ->first();
         if ($data) {
             $status = 200;
-            $message = ['message' => "data master warna berhasil di temukan", 'data' => $data];
+            $message = ['message' => "data master tanah berhasil di temukan", 'data' => $data];
         } else {
             $status = 404;
-            $message = ['message' => "data master warna gagal di temukan", 'data' => $data];
+            $message = ['message' => "data master tanah gagal di temukan", 'data' => $data];
         }
         return response()->json($message, $status);
     }
