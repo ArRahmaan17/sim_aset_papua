@@ -84,7 +84,9 @@ class SatuanController extends Controller
      */
     public function show(string $id)
     {
-        $data = DB::table('mastersatuan')->where('kodesatuan', $id)->first();
+        $data = DB::table('mastersatuan')
+            ->where('kodesatuan', $id)
+            ->first();
         if ($data) {
             $status = 200;
             $message = ['message' => "data master warna berhasil di temukan", 'data' => $data];
@@ -104,18 +106,19 @@ class SatuanController extends Controller
         DB::beginTransaction();
         try {
             $unique = DB::table('mastersatuan')
-                ->where('warna', 'like', "'%" . $request->warna . "%'")
-                ->where('kodewarna', $id)
+                ->where('satuan',   $request->satuan)
                 ->count();
             if ($unique != 0) {
-                throw new Exception('gagal melakukan simpan data satuan, terdapat duplikasi data warna', 422);
+                throw new Exception('gagal melakukan simpan data satuan, terdapat duplikasi data satuan', 422);
             }
-            DB::table('mastersatuan')->where('kodewarna', $id)->update($data);
+            DB::table('mastersatuan')
+                ->where('kodesatuan', $id)
+                ->update($data);
             DB::commit();
             $status = 200;
-            $message = ['message' => 'Master warna berhasil diubah'];
+            $message = ['message' => 'Master satuan berhasil diubah'];
         } catch (Exception $th) {
-            $message = ['message' => 'Master warna gagal diubah'];
+            $message = ['message' => 'Master satuan gagal diubah'];
             if ($th->getCode() == 422) {
                 $message = ['message' => $th->getMessage()];
             }
@@ -130,6 +133,24 @@ class SatuanController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $count = DB::table('kib')->where('kodesatuan', $id)->count();
+            if ($count > 0) {
+                throw new Exception('data sudah di gunakan di tabel lain, mohon hapus terlebih dahulu data tersebut', 422);
+            }
+            DB::table('mastersatuan')->where('kodesatuan', $id)->delete();
+            DB::commit();
+            $message = ['message' => 'berhasil menghapus data master satuan'];
+            $status = 200;
+        } catch (Exception $th) {
+            DB::rollBack();
+            $message = ['message' => 'gagal menghapus data master satuan'];
+            if ($th->getCode() == 422) {
+                $message = ['message' => $th->getMessage()];
+            }
+            $status = 422;
+        }
+        return response()->json($message, $status);
     }
 }
