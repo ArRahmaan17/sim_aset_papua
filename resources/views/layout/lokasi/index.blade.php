@@ -72,6 +72,7 @@
 
         function actionData() {
             $('.edit').click(function() {
+                window.state = 'update';
                 if (window.datatable_lokasi.rows('.selected').data().length == 0) {
                     $('#table_lokasi tbody').find('tr').removeClass('selected');
                     $(this).parents('tr').addClass('selected')

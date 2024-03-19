@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\GolonganBarangController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LokasiController;
 use App\Http\Controllers\MasaManfaatController;
@@ -78,12 +79,18 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::get('/master/satuan/show/{id?}', [SatuanController::class, 'show'])->name('satuan.show');
         Route::put('/master/satuan/update/{id?}', [SatuanController::class, 'update'])->name('satuan.update');
         Route::delete('/master/satuan/delete/{id?}', [SatuanController::class, 'destroy'])->name('satuan.delete');
-        Route::get('/master/satuan-tanah', [StatusTanahController::class, 'index'])->name('status-tanah');
-        Route::post('/master/satuan-tanah/store', [StatusTanahController::class, 'store'])->name('status-tanah.store');
-        Route::get('/master/satuan-tanah/show/{id?}', [StatusTanahController::class, 'show'])->name('status-tanah.show');
-        Route::get('/master/satuan-tanah/data-table', [StatusTanahController::class, 'dataTable'])->name('status-tanah.data-table');
-        Route::put('/master/satuan-tanah/update/{id?}', [StatusTanahController::class, 'update'])->name('status-tanah.update');
-        Route::delete('/master/satuan-tanah/delete/{id?}', [StatusTanahController::class, 'destroy'])->name('status-tanah.delete');
+        Route::get('/master/satuantanah', [StatusTanahController::class, 'index'])->name('statustanah');
+        Route::post('/master/satuantanah/store', [StatusTanahController::class, 'store'])->name('statustanah.store');
+        Route::get('/master/satuantanah/show/{id?}', [StatusTanahController::class, 'show'])->name('statustanah.show');
+        Route::get('/master/satuantanah/data-table', [StatusTanahController::class, 'dataTable'])->name('statustanah.data-table');
+        Route::put('/master/satuantanah/update/{id?}', [StatusTanahController::class, 'update'])->name('statustanah.update');
+        Route::delete('/master/satuantanah/delete/{id?}', [StatusTanahController::class, 'destroy'])->name('statustanah.delete');
+        Route::get('/master/golonganbarang', [GolonganBarangController::class, 'index'])->name('golonganbarang');
+        Route::get('/master/golonganbarang/data-table', [GolonganBarangController::class, 'dataTable'])->name('golonganbarang.data-table');
+        Route::post('/master/golonganbarang/store', [GolonganBarangController::class, 'store'])->name('golonganbarang.store');
+        Route::get('/master/golonganbarang/show/{id?}', [GolonganBarangController::class, 'show'])->name('golonganbarang.show');
+        Route::put('/master/golonganbarang/update/{id?}', [GolonganBarangController::class, 'update'])->name('golonganbarang.update');
+        Route::delete('/master/golonganbarang/delete/{id?}', [GolonganBarangController::class, 'destroy'])->name('golonganbarang.delete');
     });
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
     Route::post('/perolehan/store', [PerolehanController::class, 'store'])->name('perolehan.store');

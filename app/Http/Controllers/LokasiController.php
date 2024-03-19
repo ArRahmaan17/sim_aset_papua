@@ -78,7 +78,28 @@ class LokasiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->except('_token', 'kodelokasi');
+        DB::beginTransaction();
+        try {
+            $unique = DB::table('masterlokasi')
+                ->where('nama', $request->nama)
+                ->count();
+            if ($unique != 0) {
+                throw new Exception('gagal melakukan simpan data lokasi, terdapat duplikasi data lokasi', 422);
+            }
+            DB::table('masterlokasi')->insert($data);
+            DB::commit();
+            $status = 200;
+            $message = ['message' => 'Master lokasi berhasil ditambahkan'];
+        } catch (Exception $th) {
+            $message = ['message' => 'Master lokasi gagal ditambahkan'];
+            if ($th->getCode() == 422) {
+                $message = ['message' => $th->getMessage()];
+            }
+            $status = 422;
+            DB::rollBack();
+        }
+        return response()->json($message, $status);
     }
 
     /**
@@ -106,7 +127,7 @@ class LokasiController extends Controller
         DB::beginTransaction();
         try {
             $unique = DB::table('masterlokasi')
-                ->where('nama', 'like', "'%" . $request->nama . "%'")
+                ->where('nama', $request->nama)
                 ->where('kodelokasi', $id)
                 ->count();
             if ($unique != 0) {
