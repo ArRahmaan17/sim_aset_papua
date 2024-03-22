@@ -32,7 +32,7 @@
                 dataType: "json",
                 beforeSend: function() {
                     iziToast.question({
-                        message: 'Loading Master Barang',
+                        message: 'Loading Master Organisasi',
                         icon: 'bx bx-loader-circle bx-spin',
                         progressBar: false,
                         timeout: 20000,

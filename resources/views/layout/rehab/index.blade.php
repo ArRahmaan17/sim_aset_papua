@@ -48,7 +48,6 @@
                             <table class="table table-striped data-table" id="table_barang" style="min-width: 100%;">
                                 <thead>
                                     <tr>
-                                        <th>Nomer</th>
                                         <th>Rehab</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -193,7 +192,12 @@
 
         function actionData() {
             $('.edit').click(function() {
+                if ($.fn.dataTable.isDataTable('#table_barang') == true) {
+                    window.datatable_barang.destroy();
+                }
+                $('#table_barang').addClass('d-none');
                 $('.add-detail').removeClass('disabled');
+                $('#modalFormMasterRehab').find('input[name=kodebarang]').attr('readonly', true);
                 window.state = 'update';
                 if (window.datatable_rehab.rows('.selected').data().length == 0) {
                     $('#table_rehab tbody').find('tr').removeClass('selected');
@@ -245,7 +249,7 @@
                     id: 'question',
                     zindex: 9999,
                     title: 'Konfirmasi',
-                    message: 'Apakah anda yakin akan menghapus data masa manfaat ini?',
+                    message: 'Apakah anda yakin akan menghapus data master rehab ini?',
                     position: 'center',
                     icon: 'bx bx-question-mark',
                     buttons: [
@@ -273,6 +277,51 @@
                     ],
                 });
             });
+            $('.use').click(function() {
+                iziToast.question({
+                    timeout: 5000,
+                    layout: 2,
+                    close: false,
+                    overlay: true,
+                    color: 'yellow',
+                    displayMode: 'once',
+                    id: 'question',
+                    zindex: 9999,
+                    title: 'Konfirmasi',
+                    message: 'Apakah anda yakin akan menggunakan data master rehab ini?',
+                    position: 'center',
+                    icon: 'bx bx-question-mark',
+                    buttons: [
+                        ['<button><b>YES</b></button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                            $('.add-detail').removeClass('disabled');
+                            $('#modalFormMasterRehab').find('input[name=kodebarang]').attr(
+                                'readonly', true);
+                            window.state = 'add';
+                            if (window.datatable_barang.rows('.selected').data().length == 0) {
+                                $('#table_barang tbody').find('tr').removeClass('selected');
+                                $(this).parents('tr').addClass('selected')
+                            }
+                            var data = window.datatable_barang.rows('.selected').data()[0];
+                            $(this).parents('tr').removeClass('selected')
+                            $('input[name=kodebarang]').val(data[2]);
+                            $('input[name=urai]').val(data[0].split(data[2]).join(''));
+                            if ($.fn.dataTable.isDataTable('#table_barang') == true) {
+                                window.datatable_barang.destroy();
+                            }
+                            $('#table_barang').addClass('d-none');
+                            $('.add-detail').removeClass('disabled');
+                        }, true],
+                        ['<button>NO</button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                        }],
+                    ],
+                });
+            })
         }
 
         function detail_table(d) {
@@ -330,49 +379,44 @@
                     },
                 ],
             });
-            window.datatable_barang = new DataTable('#table_barang', {
-                ajax: "{{ route('master.rehab.list-barang') }}",
-                processing: true,
-                serverSide: true,
-                order: [
-                    [1, 'desc']
-                ],
-                columns: [{
-                        orderable: false,
-                        target: 0,
-                    },
-                    {
-                        orderable: true,
-                        target: 1,
-                    },
-                    {
-                        orderable: false,
-                        target: 2,
-                    },
-                ],
-            });
             window.datatable_rehab.on('draw.dt', function() {
                 actionData();
             });
-
+            $("#modalFormMasterRehab").on('hidden.bs.modal', function() {
+                if ($.fn.dataTable.isDataTable('#table_barang') == true) {
+                    window.datatable_barang.destroy();
+                }
+                $('.detail-rehab').html('');
+                $('.add-detail').removeClass('disabled');
+            })
             $(".add").click(function() {
                 window.state = 'add';
                 $('.multiple').removeClass('d-none');
                 $('#modalFormMasterRehab').modal('show');
-                $('#modalFormMasterRehab').find('.modal-title').html('Edit Master Rehab');
-                $('#modalFormMasterRehab').find('input[readonly]').attr('readonly', false);
+                $('#modalFormMasterRehab').find('.modal-title').html('Tambah Master Rehab');
+                $('#modalFormMasterRehab').find('input[name=kodebarang]').attr('readonly', false);
                 $("#form-rehab")[0].reset();
-                window.datatable_rehab.on('click', 'td.dt-control', function(e) {
-                    let tr = e.target.closest('tr');
-                    let row = window.datatable_rehab.row(tr);
 
-                    if (row.child.isShown()) {
-                        // This row is already open - close it
-                        row.child.hide();
-                    } else {
-                        // Open this row
-                        row.child(detail_table(row.data())).show();
-                    }
+                $('#table_barang').removeClass('d-none');
+                window.datatable_barang = new DataTable('#table_barang', {
+                    ajax: "{{ route('master.rehab.list-barang') }}",
+                    processing: true,
+                    serverSide: true,
+                    order: [
+                        [1, 'desc']
+                    ],
+                    columns: [{
+                            orderable: false,
+                            target: 0,
+                        },
+                        {
+                            orderable: true,
+                            target: 1,
+                        },
+                    ],
+                });
+                window.datatable_barang.on('draw.dt', function() {
+                    actionData();
                 });
             });
             $('.single').click(function() {

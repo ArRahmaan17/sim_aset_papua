@@ -173,9 +173,8 @@ class RehabController extends Controller
         $dataFiltered = [];
         foreach ($assets as $index => $item) {
             $row = [];
-            $row[] = $request['start'] + ($index + 1);
             $row[] = $item->kodegolongan . '.' . $item->kodebidang . '.' . $item->kodekelompok . '.' . $item->kodesub . '.' . $item->kodesubsub . ' ' . $item->urai;
-            $row[] = "<button class='btn btn-warning use' ><i class='bx bxs-pencil'></i> Pakai</button>";
+            $row[] = "<button class='btn btn-warning use' ><i class='bx bx-check'></i> Pakai</button>";
             $row[] = $item->kodegolongan . '.' . $item->kodebidang . '.' . $item->kodekelompok . '.' . $item->kodesub . '.' . $item->kodesubsub;
             $dataFiltered[] = $row;
         }
@@ -186,15 +185,6 @@ class RehabController extends Controller
             'aaData' => $dataFiltered
         ];
         return Response()->json($response, 200);
-
-        if (count($data) == 0) {
-            $response = ['message' => 'master barang yang belum memiliki data rehab tidak di temukan'];
-            $status = 404;
-        } else {
-            $status = 200;
-            $response = ['message' => 'master barang yang belum memiliki data rehab di temukan'];
-        }
-        return response()->json($response, $status);
     }
     /**
      * Store a newly created resource in storage.

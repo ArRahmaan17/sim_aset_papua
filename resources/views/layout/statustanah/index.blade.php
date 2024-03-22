@@ -141,7 +141,7 @@
                     id: 'question',
                     zindex: 9999,
                     title: 'Konfirmasi',
-                    message: 'Apakah anda yakin akan menghapus data masa manfaat ini?',
+                    message: 'Apakah anda yakin akan menghapus data status tanah ini?',
                     position: 'center',
                     icon: 'bx bx-question-mark',
                     buttons: [
