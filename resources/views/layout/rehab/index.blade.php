@@ -408,16 +408,26 @@
                         className: 'dt-control',
                         orderable: false,
                         data: null,
-                        defaultContent: ''
+                        defaultContent: '',
+                        width: '5%'
                     },
                     {
                         orderable: false,
+                        width: '5%'
                     },
                     {
                         orderable: true,
+                        width: '50%',
+                        render: (data, type, row, meta) => {
+                            return `<div class='text-wrap'>${data}</div>`
+                        }
                     },
                     {
                         orderable: false,
+                        width: '40%',
+                        render: (data, type, row, meta) => {
+                            return `<div class='d-flex gap gap-1 justify-content-center'>${data}</div>`
+                        }
                     },
                 ],
             });

@@ -230,17 +230,26 @@
                     targets: 1,
                     name: 'kodebarang_urai',
                     searchable: false,
-                    orderable: true
+                    orderable: true,
+                    render: (data, type, row, meta) => {
+                        return `<div class='text-wrap'>${data}</div>`
+                    }
                 }, {
                     targets: 2,
                     name: 'masamanfaat',
                     searchable: false,
                     orderable: false,
+                    render: (data, type, row, meta) => {
+                        return `<div class='text-wrap'>${data}</div>`
+                    }
                 }, {
                     targets: 3,
                     name: 'aksi',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    render: (data, type, row, meta) => {
+                        return `<div class='d-flex gap gap-1 justify-content-center'>${data}</div>`
+                    }
                 }],
             });
             window.datatable_masamanfaat.on('draw.dt', function() {

@@ -190,15 +190,21 @@
                 columnDefer: [{
                     targets: 0,
                     searchable: false,
-                    orderable: false
+                    orderable: false,
                 }, {
                     targets: 1,
                     searchable: true,
-                    orderable: true
+                    orderable: true,
+                    render: (data, type, row, meta) => {
+                        return `<div class='text-wrap'>${data}</div>`
+                    }
                 }, {
                     targets: 2,
                     searchable: false,
                     orderable: false,
+                    render: (data, type, row, meta) => {
+                        return `<div class='d-flex gap gap-1 justify-content-center'>${data}</div>`
+                    }
                 }],
             });
             window.datatable_golongan_barang.on('draw.dt', function() {
