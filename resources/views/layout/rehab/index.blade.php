@@ -93,6 +93,7 @@
         window.datatable_barang = undefined;
         window.state = undefined;
         window.kodebarang = undefined;
+        window.add_valid = undefined;
 
         function setMaskMoney() {
             $('.number-mask').attr('maxlength', '3').inputmask('numeric', {
@@ -147,20 +148,22 @@
                        <i class='bx bx-down-arrow' ></i>
                     </div>
                 </div>
-                <div class='form-floating col-4'>
+                <div class='form-floating col-lg-4 col-4 mb-2'>
                     <input type="hidden" name="koderehab[]">
                     <input type="text" class="form-control number-mask" name="persentase_awal[]">
                     <label>Persentase Awal</label>
                 </div>
-                <div class='form-floating col-4'>
+                <div class='form-floating col-lg-4 col-4 mb-2'>
                     <input type="text" class="form-control number-mask" name="persentase_akhir[]">
                     <label>Persentase Akhir</label>
                 </div>
-                <div class='form-floating col-3'>
+                <div class='form-floating col-lg-3 col-4 mb-2'>
                     <input type="text" class="form-control number-mask" name="tahunmasamanfaat[]">
                     <label>Kurun Waktu</label>
                 </div>
-                <button type='button' class='btn btn-danger col-1 delete-detail ${deleted ? '' :'disabled'}'><i class='bx bxs-trash-alt'></i></button>
+                <div class="col-lg-1 col-12">
+                    <button type='button' class='btn btn-danger delete-detail form-control ${deleted ? '' :'disabled'}'><i class='bx bxs-trash-alt'></i></button>
+                </div>
             </div>`)
             $('.delete-detail').click(function() {
                 $(this).parents('.row:first').remove()
@@ -173,7 +176,7 @@
                     $('.add-detail').removeClass('disabled');
                 }
             });
-            if (data != undefined) {
+            if (data != null) {
                 var e = jQuery.Event("keydown");
                 e.which = 32;
                 $('input[name^="koderehab"]:last').val(`${data.koderehab}`).trigger(e);
@@ -182,11 +185,29 @@
                 $('input[name^="tahunmasamanfaat"]:last').val(`${data.tahunmasamanfaat}`).trigger(e);
             }
             $('.number-mask').focus(function() {
-                setMaskMoney();
+                $(this).attr('maxlength', '3').inputmask('numeric', {
+                    radixPoint: ",",
+                    allowMinus: false,
+                    regex: "[0-9]*",
+                    groupSeparator: ".",
+                    rightAlign: false,
+                    digits: 2,
+                    min: (-1),
+                    allowZero: true,
+                    alias: 'numeric'
+                })
             });
             $('.number-mask').blur(function() {
                 $(this).val($(this).inputmask('unmaskedvalue') != '' ? $(this).inputmask('unmaskedvalue') : 0)
                     .inputmask('remove');
+                $('.detail-rehab').find('input.number-mask').each((index, element) => {
+                    window.add_valid = true;
+                    if ($(element).val() == "") window.add_valid = false
+                });
+                if (window.add_valid) {
+                    $('.single').removeClass('disabled');
+                    $('.multiple').removeClass('disabled');
+                }
             });
         }
 
@@ -278,6 +299,12 @@
                 });
             });
             $('.use').click(function() {
+                if (window.datatable_barang.rows('.selected').data().length == 0) {
+                    $('#table_barang tbody').find('tr').removeClass('selected');
+                    $(this).parents('tr').addClass('selected')
+                }
+                var data = window.datatable_barang.rows('.selected').data()[0];
+                $(this).parents('tr').removeClass('selected')
                 iziToast.question({
                     timeout: 5000,
                     layout: 2,
@@ -300,12 +327,6 @@
                             $('#modalFormMasterRehab').find('input[name=kodebarang]').attr(
                                 'readonly', true);
                             window.state = 'add';
-                            if (window.datatable_barang.rows('.selected').data().length == 0) {
-                                $('#table_barang tbody').find('tr').removeClass('selected');
-                                $(this).parents('tr').addClass('selected')
-                            }
-                            var data = window.datatable_barang.rows('.selected').data()[0];
-                            $(this).parents('tr').removeClass('selected')
                             $('input[name=kodebarang]').val(data[2]);
                             $('input[name=urai]').val(data[0].split(data[2]).join(''));
                             if ($.fn.dataTable.isDataTable('#table_barang') == true) {
@@ -313,6 +334,8 @@
                             }
                             $('#table_barang').addClass('d-none');
                             $('.add-detail').removeClass('disabled');
+                            $('.single').addClass('disabled');
+                            $('.multiple').addClass('disabled');
                         }, true],
                         ['<button>TIDAK</button>', function(instance, toast) {
                             instance.hide({
@@ -396,7 +419,9 @@
                 $('#modalFormMasterRehab').find('.modal-title').html('Tambah Master Rehab');
                 $('#modalFormMasterRehab').find('input[name=kodebarang]').attr('readonly', false);
                 $("#form-rehab")[0].reset();
-
+                $('.add-detail').addClass('disabled');
+                $('.single').addClass('disabled');
+                $('.multiple').addClass('disabled');
                 $('#table_barang').removeClass('d-none');
                 window.datatable_barang = new DataTable('#table_barang', {
                     ajax: "{{ route('master.rehab.list-barang') }}",

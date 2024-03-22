@@ -191,7 +191,39 @@ class RehabController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        DB::beginTransaction();
+        try {
+            $data = [];
+            $kodebarang = explode('.', $request->kodebarang);
+            for ($i = 0; $i < count($request->persentase_awal); $i++) {
+                if ($request->persentase_awal[$i] == $request->persentase_awal[$i + 1] || $request->persentase_akhir[$i] == $request->persentase_akhir[$i + 1] || $request->tahunmasamanfaat[$i] == $request->tahunmasamanfaat[$i + 1]) {
+                    throw new Exception('mohon untuk pengisian nilai detail data rehab untuk tidak sama', 422);
+                }
+                $data[] = [
+                    'kodegolongan' => $kodebarang[0],
+                    'kodebidang' => $kodebarang[1],
+                    'kodekelompok' => $kodebarang[2],
+                    'kodesub' => $kodebarang[3],
+                    'kodesubsub' => $kodebarang[4],
+                    'urai' => $request->urai,
+                    'persentase_awal' => $request->persentase_awal[$i],
+                    'persentase_awal' => $request->persentase_awal[$i],
+                    'persentase_akhir' => $request->persentase_akhir[$i],
+                    'tahunmasamanfaat' => $request->tahunmasamanfaat[$i],
+                ];
+            }
+            DB::table('masterrehab')->insert($data);
+            // DB::commit();
+            $response = ['message' => 'berhasil menambahkan data master rebah'];
+            return response()->json($response, 200);
+        } catch (Exception $th) {
+            DB::rollBack();
+            $response = ['message' => 'gagal menambahkan data master rebah'];
+            if ($th->getCode() == 422) {
+                $response = ['message' => $th->getMessage()];
+            }
+            return response()->json($response, 422);
+        }
     }
 
     /**
@@ -240,7 +272,7 @@ class RehabController extends Controller
                     'tahunmasamanfaat' => $request->tahunmasamanfaat[$i],
                 ]);
             }
-            // DB::commit();
+            DB::commit();
         } catch (Exception $th) {
             DB::rollBack();
             //throw $th;
