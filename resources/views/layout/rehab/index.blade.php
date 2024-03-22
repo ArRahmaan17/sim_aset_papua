@@ -474,6 +474,9 @@
                     columns: [{
                             orderable: false,
                             target: 0,
+                            render: (data, type, row, meta) => {
+                                return `<div class='text-wrap '>${data}</div>`
+                            }
                         },
                         {
                             orderable: true,
