@@ -113,7 +113,7 @@
                     position: 'center',
                     icon: 'bx bx-question-mark',
                     buttons: [
-                        ['<button><b>YES</b></button>', function(instance, toast) {
+                        ['<button><b>IYA</b></button>', function(instance, toast) {
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
@@ -129,7 +129,7 @@
                                 }
                             });
                         }, true],
-                        ['<button>NO</button>', function(instance, toast) {
+                        ['<button>TIDAK</button>', function(instance, toast) {
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');

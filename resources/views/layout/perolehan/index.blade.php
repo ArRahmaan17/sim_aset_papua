@@ -430,7 +430,7 @@
                 message: 'Apakah anda yakin akan menghapus detail aset ini?',
                 position: 'center',
                 buttons: [
-                    ['<button><b>YES</b></button>', function(instance, toast) {
+                    ['<button><b>IYA</b></button>', function(instance, toast) {
                         instance.hide({
                             transitionOut: 'fadeOut'
                         }, toast, 'button');
@@ -442,7 +442,7 @@
                         ($("#container-detail-asset").find('li').length == 0) ? $("#save-ba").addClass(
                             'disabled'): '';
                     }, true],
-                    ['<button>NO</button>', function(instance, toast) {
+                    ['<button>TIDAK</button>', function(instance, toast) {
 
                         instance.hide({
                             transitionOut: 'fadeOut'
@@ -946,13 +946,13 @@
                     message: 'Apakah anda yakin akan membatalkan bap ini?',
                     position: 'center',
                     buttons: [
-                        ['<button><b>YES</b></button>', function(instance, toast) {
+                        ['<button><b>IYA</b></button>', function(instance, toast) {
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
                             resetBa();
                         }, true],
-                        ['<button>NO</button>', function(instance, toast) {
+                        ['<button>TIDAK</button>', function(instance, toast) {
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
@@ -972,13 +972,13 @@
                     message: 'Apakah anda yakin akan menambahkan bap dan list asset ini?',
                     position: 'center',
                     buttons: [
-                        ['<button><b>YES</b></button>', function(instance, toast) {
+                        ['<button><b>IYA</b></button>', function(instance, toast) {
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
                             savePerolehan();
                         }, true],
-                        ['<button>NO</button>', function(instance, toast) {
+                        ['<button>TIDAK</button>', function(instance, toast) {
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
@@ -998,13 +998,13 @@
                     message: 'Apakah anda yakin akan merubah bap dan list asset ini?',
                     position: 'center',
                     buttons: [
-                        ['<button><b>YES</b></button>', function(instance, toast) {
+                        ['<button><b>IYA</b></button>', function(instance, toast) {
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
                             updatePerolehan();
                         }, true],
-                        ['<button>NO</button>', function(instance, toast) {
+                        ['<button>TIDAK</button>', function(instance, toast) {
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
