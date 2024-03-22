@@ -424,6 +424,18 @@
             window.datatable_rehab.on('draw.dt', function() {
                 actionData();
             });
+            window.datatable_rehab.on('click', 'td.dt-control', function(e) {
+                let tr = e.target.closest('tr');
+                let row = window.datatable_rehab.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                } else {
+                    // Open this row
+                    row.child(detail_table(row.data())).show();
+                }
+            });
             $("#modalFormMasterRehab").on('hidden.bs.modal', function() {
                 if ($.fn.dataTable.isDataTable('#table_barang') == true) {
                     window.datatable_barang.destroy();
