@@ -59,7 +59,7 @@ class RehabController extends Controller
         foreach ($assets as $index => $item) {
             $row = [];
             $row[] = null;
-            $row[] = $index + 1;
+            $row[] = $request['start'] + ($index + 1);
             $row[] = $item->kodegolongan . '.' . $item->kodebidang . '.' . $item->kodekelompok . '.' . $item->kodesub . '.' . $item->kodesubsub . ' ' . $item->urai;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
             $row[] = $item->kodegolongan . '.' . $item->kodebidang . '.' . $item->kodekelompok . '.' . $item->kodesub . '.' . $item->kodesubsub;
@@ -80,7 +80,122 @@ class RehabController extends Controller
         ];
         return Response()->json($response, 200);
     }
+    public function listBarang(Request $request)
+    {
+        $totalData = DB::table('masterbarang as mb')->select('mb.kodegolongan', 'mb.kodebidang', 'mb.kodekelompok', 'mb.kodesub', 'mb.kodesubsub', 'mb.urai', 'mr.koderehab')
+            ->leftJoin(
+                'masterrehab as mr',
+                [
+                    ['mr.kodegolongan', 'mb.kodegolongan'],
+                    ['mr.kodebidang', 'mb.kodebidang'],
+                    ['mr.kodekelompok', 'mb.kodekelompok'],
+                    ['mr.kodesub', 'mb.kodesub'],
+                    ['mr.kodesubsub', 'mb.kodesubsub']
+                ]
+            )
+            ->where([
+                ['mb.kodesub', 0],
+                ['mb.kodekelompok', '<>', 0],
+            ])->groupByRaw('kodegolongan, kodebidang, kodekelompok, kodesub, kodesubsub, urai, koderehab')->get();
+        $totalData = $totalData->where('koderehab', null)->count();
+        $totalFiltered = $totalData;
+        if (empty($request['search']['value'])) {
+            $assets = DB::table('masterbarang as mb')
+                ->select('mb.kodegolongan', 'mb.kodebidang', 'mb.kodekelompok', 'mb.kodesub', 'mb.kodesubsub', 'mb.urai', 'mr.koderehab')
+                ->leftJoin(
+                    'masterrehab as mr',
+                    [
+                        ['mr.kodegolongan', 'mb.kodegolongan'],
+                        ['mr.kodebidang', 'mb.kodebidang'],
+                        ['mr.kodekelompok', 'mb.kodekelompok'],
+                        ['mr.kodesub', 'mb.kodesub'],
+                        ['mr.kodesubsub', 'mb.kodesubsub']
+                    ]
+                )->where([
+                    ['mb.kodesub', 0],
+                    ['mb.kodekelompok', '<>', 0],
+                ])->groupByRaw('kodegolongan, kodebidang, kodekelompok, kodesub, kodesubsub, urai, koderehab')->get();
+            $assets = collect(array_values($assets->where('koderehab', null)->values()->all()));
+            if ($request['length'] != '-1') {
+                $assets =  $assets->only(limitOffsetToArray($request['length'], ($request['start'] + 1)));
+            }
+            if (isset($request['order'][0]['column'])) {
+                $assets =   $assets->sortBy('urai', SORT_REGULAR, $request['order'][0]['column'] == 'desc' ? true : false)->values()->all();
+            }
+            $assets = $assets;
+        } else {
+            $assets = DB::table('masterbarang as mb')
+                ->select('mb.kodegolongan', 'mb.kodebidang', 'mb.kodekelompok', 'mb.kodesub', 'mb.kodesubsub', 'mb.urai', 'mr.koderehab')
+                ->leftJoin(
+                    'masterrehab as mr',
+                    [
+                        ['mr.kodegolongan', 'mb.kodegolongan'],
+                        ['mr.kodebidang', 'mb.kodebidang'],
+                        ['mr.kodekelompok', 'mb.kodekelompok'],
+                        ['mr.kodesub', 'mb.kodesub'],
+                        ['mr.kodesubsub', 'mb.kodesubsub']
+                    ]
+                )->where([
+                    ['mb.kodesub', 0],
+                    ['mb.kodekelompok', '<>', 0],
+                    ['mb.urai', 'like', "%" . $request['search']['value'] . "%"]
+                ])->get();
+            if (isset($request['order'][0]['column'])) {
+                $assets =   $assets->sortBy('urai', SORT_REGULAR, $request['order'][0]['column'] == 'desc' ? true : false)->values()->all();
+            }
+            if ($request['length'] != '-1') {
+                // return json_encode([limitOffsetToArray($request['length'], ($request['start'] + 1)), $request['length'], $request['start']]);
+                $assets =  $assets->only(limitOffsetToArray($request['length'], ($request['start'] + 1)))->values()->all();
+            }
 
+            $totalData =
+                DB::table('masterbarang as mb')
+                ->select('mb.kodegolongan', 'mb.kodebidang', 'mb.kodekelompok', 'mb.kodesub', 'mb.kodesubsub', 'mb.urai', 'mr.koderehab')
+                ->leftJoin(
+                    'masterrehab as mr',
+                    [
+                        ['mr.kodegolongan', 'mb.kodegolongan'],
+                        ['mr.kodebidang', 'mb.kodebidang'],
+                        ['mr.kodekelompok', 'mb.kodekelompok'],
+                        ['mr.kodesub', 'mb.kodesub'],
+                        ['mr.kodesubsub', 'mb.kodesubsub']
+                    ]
+                )->where([
+                    ['mb.kodesub', 0],
+                    ['mb.kodekelompok', '<>', 0],
+                    ['mb.urai', 'like', "%" . $request['search']['value'] . "%"]
+                ])->get();
+            if (isset($request['order'][0]['column'])) {
+                $totalData =   $totalData->sortBy('urai', SORT_REGULAR, $request['order'][0]['column'] == 'desc' ? true : false)->values()->all();
+            }
+            $totalFiltered = $totalData->count();
+        }
+        $dataFiltered = [];
+        foreach ($assets as $index => $item) {
+            $row = [];
+            $row[] = $request['start'] + ($index + 1);
+            $row[] = $item->kodegolongan . '.' . $item->kodebidang . '.' . $item->kodekelompok . '.' . $item->kodesub . '.' . $item->kodesubsub . ' ' . $item->urai;
+            $row[] = "<button class='btn btn-warning use' ><i class='bx bxs-pencil'></i> Pakai</button>";
+            $row[] = $item->kodegolongan . '.' . $item->kodebidang . '.' . $item->kodekelompok . '.' . $item->kodesub . '.' . $item->kodesubsub;
+            $dataFiltered[] = $row;
+        }
+        $response = [
+            'draw' => $request['draw'],
+            'recordsFiltered' => $totalFiltered,
+            'recordsTotal' => count($dataFiltered),
+            'aaData' => $dataFiltered
+        ];
+        return Response()->json($response, 200);
+
+        if (count($data) == 0) {
+            $response = ['message' => 'master barang yang belum memiliki data rehab tidak di temukan'];
+            $status = 404;
+        } else {
+            $status = 200;
+            $response = ['message' => 'master barang yang belum memiliki data rehab di temukan'];
+        }
+        return response()->json($response, $status);
+    }
     /**
      * Store a newly created resource in storage.
      */

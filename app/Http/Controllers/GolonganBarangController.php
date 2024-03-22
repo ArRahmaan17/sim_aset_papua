@@ -106,7 +106,7 @@ class GolonganBarangController extends Controller
         $dataFiltered = [];
         foreach ($assets as $index => $item) {
             $row = [];
-            $row[] = $index + 1;
+            $row[] = $request['start'] + ($index + 1);
             $row[] = $item->golonganbarang;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
             $row[] = $item->kodegolonganbarang;

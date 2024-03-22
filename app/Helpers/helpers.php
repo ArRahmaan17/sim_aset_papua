@@ -291,3 +291,11 @@ function buildMenu(array &$elements, $place = 'sidebar')
 
     return $html;
 }
+function limitOffsetToArray($limit = 5, $offset = 1)
+{
+    $data = [];
+    for ($i = ($limit + $offset) - $limit; $i < ($limit + $offset); $i++) {
+        array_push($data, $i);
+    }
+    return $data;
+}

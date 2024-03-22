@@ -94,6 +94,7 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::delete('/master/golonganbarang/delete/{id?}', [GolonganBarangController::class, 'destroy'])->name('golonganbarang.delete');
         Route::get('/master/rehab', [RehabController::class, 'index'])->name('rehab');
         Route::post('/master/rehab/store', [RehabController::class, 'store'])->name('rehab.store');
+        Route::get('/master/rehab/list-barang', [RehabController::class, 'listBarang'])->name('rehab.list-barang');
         Route::get('/master/rehab/data-table', [RehabController::class, 'dataTable'])->name('rehab.data-table');
         Route::get('/master/rehab/show/{id?}', [RehabController::class, 'show'])->name('rehab.show');
         Route::put('/master/rehab/update/{id?}', [RehabController::class, 'update'])->name('rehab.update');

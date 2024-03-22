@@ -43,6 +43,21 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-striped data-table" id="table_barang" style="min-width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Nomer</th>
+                                        <th>Rehab</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <form id="form-rehab" action="">
                         <input type="hidden" name="kodebarang">
                         <div class="input-group mb-3">
@@ -76,6 +91,7 @@
     <script src="{{ asset('assets/js/jquery.inputmask.js') }}"></script>
     <script>
         window.datatable_rehab = undefined;
+        window.datatable_barang = undefined;
         window.state = undefined;
         window.kodebarang = undefined;
 
@@ -314,27 +330,50 @@
                     },
                 ],
             });
+            window.datatable_barang = new DataTable('#table_barang', {
+                ajax: "{{ route('master.rehab.list-barang') }}",
+                processing: true,
+                serverSide: true,
+                order: [
+                    [1, 'desc']
+                ],
+                columns: [{
+                        orderable: false,
+                        target: 0,
+                    },
+                    {
+                        orderable: true,
+                        target: 1,
+                    },
+                    {
+                        orderable: false,
+                        target: 2,
+                    },
+                ],
+            });
             window.datatable_rehab.on('draw.dt', function() {
                 actionData();
             });
-            window.datatable_rehab.on('click', 'td.dt-control', function(e) {
-                let tr = e.target.closest('tr');
-                let row = window.datatable_rehab.row(tr);
 
-                if (row.child.isShown()) {
-                    // This row is already open - close it
-                    row.child.hide();
-                } else {
-                    // Open this row
-                    row.child(detail_table(row.data())).show();
-                }
-            });
             $(".add").click(function() {
                 window.state = 'add';
                 $('.multiple').removeClass('d-none');
                 $('#modalFormMasterRehab').modal('show');
                 $('#modalFormMasterRehab').find('.modal-title').html('Edit Master Rehab');
-                $("#form-rehab")[0].reset()
+                $('#modalFormMasterRehab').find('input[readonly]').attr('readonly', false);
+                $("#form-rehab")[0].reset();
+                window.datatable_rehab.on('click', 'td.dt-control', function(e) {
+                    let tr = e.target.closest('tr');
+                    let row = window.datatable_rehab.row(tr);
+
+                    if (row.child.isShown()) {
+                        // This row is already open - close it
+                        row.child.hide();
+                    } else {
+                        // Open this row
+                        row.child(detail_table(row.data())).show();
+                    }
+                });
             });
             $('.single').click(function() {
                 if (window.state == 'add') {
