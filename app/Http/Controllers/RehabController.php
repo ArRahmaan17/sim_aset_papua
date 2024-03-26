@@ -213,7 +213,7 @@ class RehabController extends Controller
                 ];
             }
             DB::table('masterrehab')->insert($data);
-            // DB::commit();
+            DB::commit();
             $response = ['message' => 'berhasil menambahkan data master rebah'];
             return response()->json($response, 200);
         } catch (Exception $th) {
@@ -282,8 +282,44 @@ class RehabController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $kodebarang = explode('.', $id);
+            $count_rehab = DB::table('kibtransaksi as kt')
+                ->join('bap as b', 'b.idbap', '=', 'kt.kodebap')
+                ->join('kib as k', 'k.kodekib', '=', 'kt.kodekib')
+                ->where([
+                    'k.kodegolongan' => $kodebarang[0],
+                    'k.kodebidang' => $kodebarang[1],
+                    'k.kodekelompok' => $kodebarang[2],
+                    'k.kodesub' => $kodebarang[3],
+                    'k.kodesubsub' => $kodebarang[4],
+                    'b.kodejenistransaksi' => 113,
+                ])->count();
+            if ($count_rehab > 0) {
+                throw new Exception("Data tidak dihapus dikarenakan digunakan oleh data lain, harap hapus terlebih dahulu data tersebut", 422);
+            }
+            DB::table('masterrehab')
+                ->where([
+                    'kodegolongan' => $kodebarang[0],
+                    'kodebidang' => $kodebarang[1],
+                    'kodekelompok' => $kodebarang[2],
+                    'kodesub' => $kodebarang[3],
+                    'kodesubsub' => $kodebarang[4]
+                ])
+                ->delete();
+            $response = ['message' => 'data master rehab berhasil di hapus'];
+            DB::commit();
+            return response()->json($response, 200);
+        } catch (Exception $th) {
+            DB::rollBack();
+            if ($th->getCode() == 422) {
+                $response = ['message' => $th->getMessage()];
+            }
+            $response = ['message' => 'data master rehab gagal di hapus'];
+            return response()->json($response, 422);
+        }
     }
 }
