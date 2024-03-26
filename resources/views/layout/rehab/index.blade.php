@@ -148,12 +148,12 @@
                        <i class='bx bx-down-arrow' ></i>
                     </div>
                 </div>
-                <div class='form-floating col-lg-4 col-4 mb-2'>
+                <div class='form-floating col-lg-3 col-4 mb-2'>
                     <input type="hidden" name="koderehab[]">
                     <input type="text" class="form-control number-mask" name="persentase_awal[]">
                     <label>Persentase Awal</label>
                 </div>
-                <div class='form-floating col-lg-4 col-4 mb-2'>
+                <div class='form-floating col-lg-3 col-4 mb-2'>
                     <input type="text" class="form-control number-mask" name="persentase_akhir[]">
                     <label>Persentase Akhir</label>
                 </div>
@@ -161,8 +161,8 @@
                     <input type="text" class="form-control number-mask" name="tahunmasamanfaat[]">
                     <label>Kurun Waktu</label>
                 </div>
-                <div class="col-lg-1 col-12">
-                    <button type='button' class='btn btn-danger delete-detail form-control ${deleted ? '' :'disabled'}'><i class='bx bxs-trash-alt'></i></button>
+                <div class="col-lg-3 col-12">
+                    <button type='button' class='btn btn-danger mb-2 delete-detail form-control ${deleted ? '' :'disabled'}'><i class='bx bxs-trash-alt'></i></button>
                 </div>
             </div>`)
             $('.delete-detail').click(function() {
