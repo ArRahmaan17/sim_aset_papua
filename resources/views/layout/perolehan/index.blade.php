@@ -208,7 +208,7 @@
     </div>
     <div class="modal fade" id="modalDetailAsset" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalDetailAssetTitle">Tambah Detail Aset</h5>
@@ -226,7 +226,7 @@
     </div>
     <div class="modal fade" id="modalListBap" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalDetailAssetTitle">Modal List Bap <i>{{ getOrganisasi() }}</i></h5>
@@ -504,7 +504,7 @@
         function getMasterData() {
             $.ajax({
                 type: "GET",
-                url: `{{ route('master.asal-usul') }}`,
+                url: `{{ route('master.data.asal-usul') }}`,
                 dataType: "json",
                 success: function(response) {
                     $('[name=select-asal-usul-barang-perolehan-aset]').html(response.html_kategori).trigger(
@@ -517,7 +517,7 @@
             });
             $.ajax({
                 type: "GET",
-                url: `{{ route('master.kondisi') }}`,
+                url: `{{ route('master.data.kondisi') }}`,
                 dataType: "json",
                 success: function(response) {
                     $('[name=kodekondisi]').html(response.html_kondisi).trigger(
@@ -526,16 +526,16 @@
             });
             $.ajax({
                 type: "GET",
-                url: `{{ route('master.satuan') }}`,
+                url: `{{ route('master.data.satuan') }}`,
                 dataType: "json",
                 success: function(response) {
-                    $('[name=kodesatuan]').html(response.html_satuan).trigger(
-                        'change');
+                    $('[name=kodesatuan]').html(response.html_satuan)
+                        .trigger('change');
                 }
             });
             $.ajax({
                 type: "GET",
-                url: `{{ route('master.status-tanah') }}`,
+                url: `{{ route('master.data.status-tanah') }}`,
                 dataType: "json",
                 success: function(response) {
                     $('[name=kodestatustanah]').html(response.html_status_tanah).trigger(
@@ -544,7 +544,7 @@
             });
             $.ajax({
                 type: "GET",
-                url: `{{ route('master.golongan-barang') }}`,
+                url: `{{ route('master.data.golongan-barang') }}`,
                 dataType: "json",
                 success: function(response) {
                     $('[name=kodegolonganbarang]').html(response.html_golongan_barang).trigger(
@@ -553,7 +553,7 @@
             });
             $.ajax({
                 type: "GET",
-                url: `{{ route('master.warna') }}`,
+                url: `{{ route('master.data.warna') }}`,
                 dataType: "json",
                 success: function(response) {
                     $('[name=kodewarna]').html(response.html_warna).trigger(
@@ -562,7 +562,7 @@
             });
             $.ajax({
                 type: "GET",
-                url: `{{ route('master.hak') }}`,
+                url: `{{ route('master.data.hak') }}`,
                 dataType: "json",
                 success: function(response) {
                     $('[name=kodehak]').html(response.html_hak).trigger('change');

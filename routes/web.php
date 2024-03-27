@@ -32,13 +32,13 @@ use Maatwebsite\Excel\Facades\Excel;
 Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::name('master.')->group(function () {
-        Route::get('/master/asal-usul', [MasterController::class, 'masterAsalUsul'])->name('asal-usul');
-        Route::get('/master/kondisi', [MasterController::class, 'masterKondisi'])->name('kondisi');
-        Route::get('/master/satuan', [MasterController::class, 'masterSatuan'])->name('satuan');
-        Route::get('/master/status-tanah', [MasterController::class, 'masterStatusTanah'])->name('status-tanah');
-        Route::get('/master/golongan-barang', [MasterController::class, 'masterGolonganBarang'])->name('golongan-barang');
-        Route::get('/master/warna', [MasterController::class, 'masterWarna'])->name('warna');
-        Route::get('/master/hak', [MasterController::class, 'masterHak'])->name('hak');
+        Route::get('/master/data/asal-usul', [MasterController::class, 'masterAsalUsul'])->name('data.asal-usul');
+        Route::get('/master/data/kondisi', [MasterController::class, 'masterKondisi'])->name('data.kondisi');
+        Route::get('/master/data/satuan', [MasterController::class, 'masterSatuan'])->name('data.satuan');
+        Route::get('/master/data/status-tanah', [MasterController::class, 'masterStatusTanah'])->name('data.status-tanah');
+        Route::get('/master/data/golongan-barang', [MasterController::class, 'masterGolonganBarang'])->name('data.golongan-barang');
+        Route::get('/master/data/warna', [MasterController::class, 'masterWarna'])->name('data.warna');
+        Route::get('/master/data/hak', [MasterController::class, 'masterHak'])->name('data.hak');
         Route::get('/master/menu', [MenuController::class, 'index'])->name('menu');
         Route::post('/master/update-parent-menu', [MenuController::class, 'updateParent'])->name('update-parent-menu');
         Route::get('/master/list-menu', [MenuController::class, 'all'])->name('list-menu');

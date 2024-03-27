@@ -16,6 +16,7 @@ class PerolehanController extends Controller
         $dataBap = Bap::getAllOrganizationBaps();
         return view('layout.perolehan.index', compact('dataMaster', 'dataBap'));
     }
+
     public function store(Request $request)
     {
         $bap = $request->except('detail', '_token');
@@ -96,7 +97,7 @@ class PerolehanController extends Controller
                 $copied['kodejenistransaksi'] = 101;
                 $copied['kodejurnal'] = 0;
                 $copied['tanggaltransaksi'] = convertAlphabeticalToNumberDate($request->tanggalbap);
-                $copied['tanggalpenyusutan'] = convertAlphabeticalToNumberDate($request->tanggalbap);
+                $copied['tanggalpenyusutan'] = Carbon::createFromFormat('Y-m-d', convertAlphabeticalToNumberDate($request->tanggalbap))->addYear();
                 DB::table('kibtransaksi')->insert($copied);
             }
         }
@@ -302,6 +303,7 @@ class PerolehanController extends Controller
         }
         return response()->json($message, $status);
     }
+
     public function bapCheck($ba, $column)
     {
         if (DB::table('bap')->where($column, $ba)->count() == 0) {

@@ -46,6 +46,7 @@ class AuthController extends Controller
     public function logout()
     {
         session()->forget('app');
+        session()->forget('organisasi');
         return redirect()->route('home');
     }
     public function logout_system()
