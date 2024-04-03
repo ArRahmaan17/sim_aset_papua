@@ -30,8 +30,7 @@ class penyusutan_aset extends Command
         try {
             $data = DB::table('kibtransaksi as k')
                 ->select('k.kodekib')
-                ->whereRaw('MONTH(tanggalpenyusutan) = MONTH(CURDATE())-1 and k.tahunorganisasi = (YEAR(CURDATE()))')
-                // ->whereRaw('MONTH(tanggalpenyusutan) = MONTH(CURDATE()) and k.tahunorganisasi = (YEAR(CURDATE())-1) and k.tahunperolehan =' . env('TAHUN_APLIKASI'))
+                ->whereRaw('MONTH(tanggalpenyusutan) = MONTH(CURDATE()) and k.tahunorganisasi = (YEAR(CURDATE())-1) and k.tahunperolehan =' . env('TAHUN_APLIKASI'))
                 ->get()
                 ->toArray();
             $kodekib = array_column($data, 'kodekib');
@@ -97,7 +96,6 @@ class penyusutan_aset extends Command
             if ($dataKibTelahSusut[0] != null) {
                 DB::table('penyusutan')->insert($dataKibTelahSusut);
                 foreach ($dataKibTelahSusut as $index => $data) {
-                    // dd($data);
                     DB::table('kib')
                         ->where('kodekib', $data['kodekib'])
                         ->update(['nilaiakumulasibarang' => $data['akumulasi']]);
