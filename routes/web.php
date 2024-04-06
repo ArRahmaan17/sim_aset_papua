@@ -9,6 +9,7 @@ use App\Http\Controllers\MasaManfaatController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrganisasiController;
+use App\Http\Controllers\PenyusutanController;
 use App\Http\Controllers\Perolehan\PerolehanController;
 use App\Http\Controllers\RehabController;
 use App\Http\Controllers\SatuanController;
@@ -106,6 +107,7 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
     Route::get('/perolehan/all-bap', [PerolehanController::class, 'getAllOrganizationBaps'])->name('perolehan.bap');
     Route::get('/perolehan/bap/check/{ba?}/{column?}', [PerolehanController::class, 'bapCheck'])->name('perolehan.bap.check');
     Route::get('/perolehan/bap/detail/{id?}', [PerolehanController::class, 'getDetailBap'])->name('perolehan.bap.show');
+    Route::get('/penyusutan', [PenyusutanController::class, 'index'])->name('penyusutan');
     Route::get('/auth/app/logout', [AuthController::class, 'logout'])->name('logout.application');
     Route::get('/auth/system/logout', [AuthController::class, 'logout_system'])->name('logout.system');
 });
