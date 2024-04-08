@@ -10,7 +10,13 @@ if (isset($_GET['type']) && isset($_GET['file'])) {
     // File path
     $filename = __DIR__ . '/templates/' . $filedir;
 
-    $config = parse_ini_file('konfig.ini');
+    // $config = parse_ini_file('konfig.ini');
+    $config = [
+        'driver' => 'array',
+        'data' => [
+            ['user_id' => 0, 'fullname' => 'name1', 'email' => 'email1@a.com', 'gender' => 'M']
+        ]
+    ];
 
     // Generate report
     $report = new PHPJasperXML();
