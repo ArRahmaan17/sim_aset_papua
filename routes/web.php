@@ -11,6 +11,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrganisasiController;
 use App\Http\Controllers\PenyusutanController;
 use App\Http\Controllers\Perolehan\PerolehanController;
+use App\Http\Controllers\Perolehan\PerolehanSP2DController;
 use App\Http\Controllers\RehabController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\StatusTanahController;
@@ -101,6 +102,9 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::put('/master/rehab/update/{id?}', [RehabController::class, 'update'])->name('rehab.update');
         Route::delete('/master/rehab/delete/{id?}', [RehabController::class, 'destroy'])->name('rehab.delete');
     });
+    Route::get('/perolehan-sp2d', [PerolehanSP2DController::class, 'index'])->name('perolehan-sp2d');
+    Route::get('/perolehan-sp2d/all-kegiatan/{idprogram?}', [PerolehanSP2DController::class, 'getKegiatan'])->name('perolehan-sp2d.get-kegiatan');
+    Route::get('/perolehan-sp2d/all-rekening/{idkegiatan?}', [PerolehanSP2DController::class, 'getRekening'])->name('perolehan-sp2d.get-rekening');
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
     Route::post('/perolehan/store', [PerolehanController::class, 'store'])->name('perolehan.store');
     Route::put('/perolehan/update/{ba?}', [PerolehanController::class, 'update'])->name('perolehan.update');
