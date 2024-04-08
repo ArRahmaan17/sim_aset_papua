@@ -1,0 +1,1080 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LAPORAN_PENYUSUTAN_DAFTAR" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3a41fae3-2bda-47f5-823c-67bada69fc9d">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<queryString language="SQL">
+		<![CDATA[select
+	*
+from
+	kib k
+join masterbarang m on
+	k.kodegolongan = m.kodegolongan
+	and k.kodebidang = m.kodebidang
+	and k.kodekelompok  = m.kodekelompok
+	and k.kodesub = m.kodesub
+	and k.kodesubsub = m.kodesubsub
+	limit 5]]>
+	</queryString>
+	<field name="kodekib" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="kodekib"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodekib"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="kodeurusan" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodeurusan"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodeurusan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkorganisasi]]></fieldDescription>
+	</field>
+	<field name="kodesuburusan" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodesuburusan"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodesuburusan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkorganisasi]]></fieldDescription>
+	</field>
+	<field name="kodeorganisasi" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodeorganisasi"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodeorganisasi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkorganisasi]]></fieldDescription>
+	</field>
+	<field name="kodeunit" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodeunit"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodeunit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkorganisasi]]></fieldDescription>
+	</field>
+	<field name="kodesubunit" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodesubunit"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodesubunit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkorganisasi]]></fieldDescription>
+	</field>
+	<field name="tahunorganisasi" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="tahunorganisasi"/>
+		<property name="com.jaspersoft.studio.field.label" value="tahunorganisasi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkorganisasi]]></fieldDescription>
+	</field>
+	<field name="uraiorganisasi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="uraiorganisasi"/>
+		<property name="com.jaspersoft.studio.field.label" value="uraiorganisasi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[shortcut nama organisasi]]></fieldDescription>
+	</field>
+	<field name="kodegolongan" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodegolongan"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodegolongan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkbarang]]></fieldDescription>
+	</field>
+	<field name="kodebidang" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodebidang"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodebidang"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkbarang]]></fieldDescription>
+	</field>
+	<field name="kodekelompok" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodekelompok"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodekelompok"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkbarang]]></fieldDescription>
+	</field>
+	<field name="kodesub" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodesub"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodesub"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkbarang]]></fieldDescription>
+	</field>
+	<field name="kodesubsub" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodesubsub"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodesubsub"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkbarang]]></fieldDescription>
+	</field>
+	<field name="koderegister" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="koderegister"/>
+		<property name="com.jaspersoft.studio.field.label" value="koderegister"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[nomor urut barang, berdasarkan tahun perolehan dan barang yang sama]]></fieldDescription>
+	</field>
+	<field name="deskripsibarang" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="deskripsibarang"/>
+		<property name="com.jaspersoft.studio.field.label" value="deskripsibarang"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[menyimpan nama asli barang sebelum di kategorikan di masterbarang]]></fieldDescription>
+	</field>
+	<field name="uraibarang" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="uraibarang"/>
+		<property name="com.jaspersoft.studio.field.label" value="uraibarang"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[shortcut nama barang]]></fieldDescription>
+	</field>
+	<field name="tahunperolehan" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="tahunperolehan"/>
+		<property name="com.jaspersoft.studio.field.label" value="tahunperolehan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="nosensus" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nosensus"/>
+		<property name="com.jaspersoft.studio.field.label" value="nosensus"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="nolokasi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nolokasi"/>
+		<property name="com.jaspersoft.studio.field.label" value="nolokasi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[generate by controller]]></fieldDescription>
+	</field>
+	<field name="kodekibtanah" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="kodekibtanah"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodekibtanah"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[kodekib tanah (dr notanah KIB A) CDF]]></fieldDescription>
+	</field>
+	<field name="nodokumen" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nodokumen"/>
+		<property name="com.jaspersoft.studio.field.label" value="nodokumen"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[DF]]></fieldDescription>
+	</field>
+	<field name="tgldok" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="tgldok"/>
+		<property name="com.jaspersoft.studio.field.label" value="tgldok"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[DF]]></fieldDescription>
+	</field>
+	<field name="tglmulai" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="tglmulai"/>
+		<property name="com.jaspersoft.studio.field.label" value="tglmulai"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[F]]></fieldDescription>
+	</field>
+	<field name="nosertifikat" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nosertifikat"/>
+		<property name="com.jaspersoft.studio.field.label" value="nosertifikat"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[A]]></fieldDescription>
+	</field>
+	<field name="tglsertifikat" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="tglsertifikat"/>
+		<property name="com.jaspersoft.studio.field.label" value="tglsertifikat"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[A]]></fieldDescription>
+	</field>
+	<field name="alamat" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="alamat"/>
+		<property name="com.jaspersoft.studio.field.label" value="alamat"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[ACDEF]]></fieldDescription>
+	</field>
+	<field name="penggunaan" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="penggunaan"/>
+		<property name="com.jaspersoft.studio.field.label" value="penggunaan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[A]]></fieldDescription>
+	</field>
+	<field name="merktype" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="merktype"/>
+		<property name="com.jaspersoft.studio.field.label" value="merktype"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[B]]></fieldDescription>
+	</field>
+	<field name="bahan" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="bahan"/>
+		<property name="com.jaspersoft.studio.field.label" value="bahan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[B,E]]></fieldDescription>
+	</field>
+	<field name="nopabrik" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nopabrik"/>
+		<property name="com.jaspersoft.studio.field.label" value="nopabrik"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[B]]></fieldDescription>
+	</field>
+	<field name="norangka" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="norangka"/>
+		<property name="com.jaspersoft.studio.field.label" value="norangka"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[B]]></fieldDescription>
+	</field>
+	<field name="nopolisi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nopolisi"/>
+		<property name="com.jaspersoft.studio.field.label" value="nopolisi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[B]]></fieldDescription>
+	</field>
+	<field name="nobpkb" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nobpkb"/>
+		<property name="com.jaspersoft.studio.field.label" value="nobpkb"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[B]]></fieldDescription>
+	</field>
+	<field name="nomesin" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nomesin"/>
+		<property name="com.jaspersoft.studio.field.label" value="nomesin"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[B]]></fieldDescription>
+	</field>
+	<field name="noimb" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="noimb"/>
+		<property name="com.jaspersoft.studio.field.label" value="noimb"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[C]]></fieldDescription>
+	</field>
+	<field name="tglimb" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="tglimb"/>
+		<property name="com.jaspersoft.studio.field.label" value="tglimb"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[C]]></fieldDescription>
+	</field>
+	<field name="konstruksi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="konstruksi"/>
+		<property name="com.jaspersoft.studio.field.label" value="konstruksi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[D]]></fieldDescription>
+	</field>
+	<field name="bertingkat" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="bertingkat"/>
+		<property name="com.jaspersoft.studio.field.label" value="bertingkat"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[(Y/T) CF]]></fieldDescription>
+	</field>
+	<field name="beton" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="beton"/>
+		<property name="com.jaspersoft.studio.field.label" value="beton"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[(Y/T) CF]]></fieldDescription>
+	</field>
+	<field name="judul" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="judul"/>
+		<property name="com.jaspersoft.studio.field.label" value="judul"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[E]]></fieldDescription>
+	</field>
+	<field name="penerbit" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="penerbit"/>
+		<property name="com.jaspersoft.studio.field.label" value="penerbit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[E]]></fieldDescription>
+	</field>
+	<field name="pencipta" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="pencipta"/>
+		<property name="com.jaspersoft.studio.field.label" value="pencipta"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[E]]></fieldDescription>
+	</field>
+	<field name="spesifikasi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="spesifikasi"/>
+		<property name="com.jaspersoft.studio.field.label" value="spesifikasi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[E]]></fieldDescription>
+	</field>
+	<field name="asaldaerah" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="asaldaerah"/>
+		<property name="com.jaspersoft.studio.field.label" value="asaldaerah"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[E]]></fieldDescription>
+	</field>
+	<field name="jenis" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="jenis"/>
+		<property name="com.jaspersoft.studio.field.label" value="jenis"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[E]]></fieldDescription>
+	</field>
+	<field name="statusdata" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="statusdata"/>
+		<property name="com.jaspersoft.studio.field.label" value="statusdata"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[(aktif, mutasi, hapus)]]></fieldDescription>
+	</field>
+	<field name="keterangan" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="keterangan"/>
+		<property name="com.jaspersoft.studio.field.label" value="keterangan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="kodekondisi" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodekondisi"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodekondisi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkkondisi BCD]]></fieldDescription>
+	</field>
+	<field name="luas" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="luas"/>
+		<property name="com.jaspersoft.studio.field.label" value="luas"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[ACDF]]></fieldDescription>
+	</field>
+	<field name="panjang" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="panjang"/>
+		<property name="com.jaspersoft.studio.field.label" value="panjang"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[D]]></fieldDescription>
+	</field>
+	<field name="lebar" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="lebar"/>
+		<property name="com.jaspersoft.studio.field.label" value="lebar"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[D]]></fieldDescription>
+	</field>
+	<field name="nilaibarang" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="nilaibarang"/>
+		<property name="com.jaspersoft.studio.field.label" value="nilaibarang"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="ukuran" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ukuran"/>
+		<property name="com.jaspersoft.studio.field.label" value="ukuran"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[BE]]></fieldDescription>
+	</field>
+	<field name="luaslantai" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="luaslantai"/>
+		<property name="com.jaspersoft.studio.field.label" value="luaslantai"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[C]]></fieldDescription>
+	</field>
+	<field name="kodesatuan" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodesatuan"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodesatuan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fksatuan]]></fieldDescription>
+	</field>
+	<field name="kodepemilik" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodepemilik"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodepemilik"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkpemilik]]></fieldDescription>
+	</field>
+	<field name="kodeklasifikasi" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodeklasifikasi"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodeklasifikasi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkklasifikasi]]></fieldDescription>
+	</field>
+	<field name="kodehak" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodehak"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodehak"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkhak]]></fieldDescription>
+	</field>
+	<field name="koderuang" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="koderuang"/>
+		<property name="com.jaspersoft.studio.field.label" value="koderuang"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkruang]]></fieldDescription>
+	</field>
+	<field name="kodeasalusul" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodeasalusul"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodeasalusul"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkasalusul]]></fieldDescription>
+	</field>
+	<field name="kodewarna" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodewarna"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodewarna"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkwarna B]]></fieldDescription>
+	</field>
+	<field name="asalusul_u" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="asalusul_u"/>
+		<property name="com.jaspersoft.studio.field.label" value="asalusul_u"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="kodekiblama" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="kodekiblama"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodekiblama"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="saldoawal" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="saldoawal"/>
+		<property name="com.jaspersoft.studio.field.label" value="saldoawal"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="kodejenisbangunan" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="kodejenisbangunan"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodejenisbangunan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[P - permanen / SP - Semi permanen / D - Darurat]]></fieldDescription>
+	</field>
+	<field name="kodestatustanah" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodestatustanah"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodestatustanah"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[fkmasterstatustanah (F)]]></fieldDescription>
+	</field>
+	<field name="tahunpembuatan" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="tahunpembuatan"/>
+		<property name="com.jaspersoft.studio.field.label" value="tahunpembuatan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="kodekibtanah_u" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="kodekibtanah_u"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodekibtanah_u"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="nilaiakumulasibarang" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="nilaiakumulasibarang"/>
+		<property name="com.jaspersoft.studio.field.label" value="nilaiakumulasibarang"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="kodeklasifikasi_u" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodeklasifikasi_u"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodeklasifikasi_u"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="lokasi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="lokasi"/>
+		<property name="com.jaspersoft.studio.field.label" value="lokasi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="qrcode" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="qrcode"/>
+		<property name="com.jaspersoft.studio.field.label" value="qrcode"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="kodedigunakan" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodedigunakan"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodedigunakan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="kodeeksis" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodeeksis"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodeeksis"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="kodejelaseksis" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodejelaseksis"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodejelaseksis"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="jelaseksis" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="jelaseksis"/>
+		<property name="com.jaspersoft.studio.field.label" value="jelaseksis"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="kode17" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="kode17"/>
+		<property name="com.jaspersoft.studio.field.label" value="kode17"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+		<fieldDescription><![CDATA[isi kode 17 tahun 2019]]></fieldDescription>
+	</field>
+	<field name="isperolehanatribusi" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="isperolehanatribusi"/>
+		<property name="com.jaspersoft.studio.field.label" value="isperolehanatribusi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="mutasi_apbd" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="mutasi_apbd"/>
+		<property name="com.jaspersoft.studio.field.label" value="mutasi_apbd"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="penyedia_atb" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="penyedia_atb"/>
+		<property name="com.jaspersoft.studio.field.label" value="penyedia_atb"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="spesifikasi_atb" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="spesifikasi_atb"/>
+		<property name="com.jaspersoft.studio.field.label" value="spesifikasi_atb"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="alamat_penyedia_atb" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="alamat_penyedia_atb"/>
+		<property name="com.jaspersoft.studio.field.label" value="alamat_penyedia_atb"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="dokumen_pendukung_lainnya" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="dokumen_pendukung_lainnya"/>
+		<property name="com.jaspersoft.studio.field.label" value="dokumen_pendukung_lainnya"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="bentuk_fisik" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="bentuk_fisik"/>
+		<property name="com.jaspersoft.studio.field.label" value="bentuk_fisik"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="sumber_bast" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="sumber_bast"/>
+		<property name="com.jaspersoft.studio.field.label" value="sumber_bast"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="pengguna_atb" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="pengguna_atb"/>
+		<property name="com.jaspersoft.studio.field.label" value="pengguna_atb"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="bidang_penanggungjawab_atb" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="bidang_penanggungjawab_atb"/>
+		<property name="com.jaspersoft.studio.field.label" value="bidang_penanggungjawab_atb"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="unitkey" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="unitkey"/>
+		<property name="com.jaspersoft.studio.field.label" value="unitkey"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="asetkey" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="asetkey"/>
+		<property name="com.jaspersoft.studio.field.label" value="asetkey"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="nilaihibahtotal" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="nilaihibahtotal"/>
+		<property name="com.jaspersoft.studio.field.label" value="nilaihibahtotal"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="tahunpenilaian" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="tahunpenilaian"/>
+		<property name="com.jaspersoft.studio.field.label" value="tahunpenilaian"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="koderegister_sipkd" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="koderegister_sipkd"/>
+		<property name="com.jaspersoft.studio.field.label" value="koderegister_sipkd"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="tahun_sipkd" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="tahun_sipkd"/>
+		<property name="com.jaspersoft.studio.field.label" value="tahun_sipkd"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="bermasalah" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="bermasalah"/>
+		<property name="com.jaspersoft.studio.field.label" value="bermasalah"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="author" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="author"/>
+		<property name="com.jaspersoft.studio.field.label" value="author"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="kodegolonganbarang" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="kodegolonganbarang"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodegolonganbarang"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="created_at" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="created_at"/>
+		<property name="com.jaspersoft.studio.field.label" value="created_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="updated_at" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="updated_at"/>
+		<property name="com.jaspersoft.studio.field.label" value="updated_at"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="keterangan_lokasi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="keterangan_lokasi"/>
+		<property name="com.jaspersoft.studio.field.label" value="keterangan_lokasi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="qrcode_foto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="qrcode_foto"/>
+		<property name="com.jaspersoft.studio.field.label" value="qrcode_foto"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="detail_lokasi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="detail_lokasi"/>
+		<property name="com.jaspersoft.studio.field.label" value="detail_lokasi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="jumlahlantai" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="jumlahlantai"/>
+		<property name="com.jaspersoft.studio.field.label" value="jumlahlantai"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="tanggalperolehan" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="tanggalperolehan"/>
+		<property name="com.jaspersoft.studio.field.label" value="tanggalperolehan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="kib"/>
+	</field>
+	<field name="kodemasterbarang" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodemasterbarang"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodemasterbarang"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="masterbarang"/>
+	</field>
+	<field name="COLUMN_105" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodegolongan"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodegolongan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="masterbarang"/>
+	</field>
+	<field name="COLUMN_106" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodebidang"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodebidang"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="masterbarang"/>
+	</field>
+	<field name="COLUMN_107" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodekelompok"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodekelompok"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="masterbarang"/>
+	</field>
+	<field name="COLUMN_108" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodesub"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodesub"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="masterbarang"/>
+	</field>
+	<field name="COLUMN_109" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="kodesubsub"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodesubsub"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="masterbarang"/>
+	</field>
+	<field name="urai" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="urai"/>
+		<property name="com.jaspersoft.studio.field.label" value="urai"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="masterbarang"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="800" height="79" uuid="84fe0ab1-46cd-4605-bce7-71aff5ab6ac7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[LAPORAN DAFTAR PENYUSUTAN
+TAHUN 2024]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="58" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<staticText>
+				<reportElement x="0" y="0" width="19" height="58" uuid="47671228-8f36-4acc-b9a5-497dc1743df7"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="19" y="0" width="30" height="58" uuid="f38ce6fa-c564-4486-a5d4-a8e73cbc9445"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Akun]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="0" width="40" height="58" uuid="0d88fecd-9125-4cd1-a33e-9fd07566d1c6"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Kelompok]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="89" y="0" width="27" height="58" uuid="e9a4f4b8-40d9-4467-bbb8-bb9d0c48ee9b"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Jenis]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="0" width="27" height="58" uuid="5768fa9f-eaf0-4b94-be3c-2b5d2f9dd436"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Objek]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="143" y="0" width="27" height="58" uuid="af65e6e2-85ea-46e7-9299-723700ed69c4"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Rincian objek]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="0" width="27" height="58" uuid="807d1717-86be-427f-8736-b57b07117a36"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Sub rincian objek]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="197" y="0" width="27" height="58" uuid="afdb8325-dd97-4ee0-95cd-4534c318105a"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Sub sub rincian objek]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="224" y="0" width="37" height="58" uuid="a1f4be94-e73e-45fb-b083-9a7d9137287b"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Urai barang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="261" y="0" width="27" height="58" uuid="8f3c046c-26cc-45e9-bcc9-d6fb9fa08432"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Bulan Perolehan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="288" y="0" width="27" height="58" uuid="ac3e38d5-24a4-4590-bfca-98d1167342ec"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Tahun Perolehan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="315" y="0" width="27" height="58" uuid="48b718b4-1650-4bb2-88a1-3d9fbd73e04e"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Register]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="342" y="0" width="27" height="58" uuid="0808c966-3a9a-4149-bc36-d62988285ba3"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Harga Perolehan
+(Rp)
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="369" y="0" width="27" height="58" uuid="78f54ec2-395d-457b-b093-50dd6b670b3c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Harga Perolehan (baru) (Rp)
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="396" y="0" width="27" height="58" uuid="3812525d-1ddc-4869-bcf8-cd9b81e93d9f"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Masa Manfaat (Bulan)
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="423" y="0" width="27" height="58" uuid="68191500-5a64-4f10-9492-2b8d84fcf370"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Penyusutan Per semester]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="0" width="27" height="58" uuid="8f077d7b-5cb0-4245-b487-2df2714895e2"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Berakhirnya Penyusutan
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="477" y="0" width="27" height="58" uuid="adfe99cc-fcdc-4621-9fb7-aee2b31086f9"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Masa Manfaat Yang Telah Dilalui]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="504" y="0" width="27" height="58" uuid="16e3c302-241c-43de-9278-135fa52d5d77"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Akumulasi audited
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="531" y="18" width="27" height="40" uuid="905a8e40-56ba-44df-a2a2-d8c9d1ae0455"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Akumulasi penyusutan tahun lalu
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="558" y="18" width="27" height="40" uuid="a26b2581-ca13-4c77-8226-0cb4dd4113b1"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Akumulasi penyusutan tahun berjalan
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="585" y="18" width="27" height="40" uuid="a3bddd33-a890-44e3-b3e8-843eeaf2eb03"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Beban penyusutan
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="612" y="18" width="27" height="40" uuid="2ba16dc0-8f22-4fea-83b5-c47b4dbc6f1e"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Akumulasi tahun lalu
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="639" y="18" width="27" height="40" uuid="1e674153-2852-4723-81d4-1945cbd09c66"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Akumulasi penyusutan tahun berjalan
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="666" y="0" width="27" height="58" uuid="ebcd30b4-8618-4002-ab0a-70e911e091f4"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Akumulasi penyusutan [xtahun]
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="693" y="0" width="27" height="58" uuid="84d2ed84-347d-49aa-b2e6-cba184810715"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Nilai Buku
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="720" y="0" width="27" height="58" uuid="726730be-683b-4045-b907-ec1d1aef296e"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Peningkatan Nilai
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="747" y="0" width="27" height="58" uuid="7e2911d1-2d96-4543-b989-136965ae3b5a"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Tanggal Transaksi
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="774" y="0" width="27" height="58" uuid="ee8b8723-debf-4e16-b797-b7845bc0526c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Keterangan
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="531" y="0" width="81" height="18" uuid="c356eaff-3b3d-4e32-9e39-21ee41709826"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Penambahan semester [xsemester]]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="612" y="0" width="54" height="18" uuid="5949a76a-b3a7-4b0a-8f46-7cd28b6e0c11"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="5"/>
+				</textElement>
+				<text><![CDATA[Pengurangan semester [xsemester]
+]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
