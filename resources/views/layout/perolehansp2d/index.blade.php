@@ -338,6 +338,7 @@
         window.foto = null;
         window.state = 'add'
         window.sp2d = 0;
+        window.persentaseSp2d = [];
 
         function resetBa() {
             $('#ba-form').find('input, textarea').removeAttr('disabled');
@@ -737,7 +738,7 @@
                     `${validateElement}`);
             }
             elementValidate.map((index, element) => {
-                if ($(element).val() == "" || $(element).val() == null) {
+                if ($(element).val() == "" || $(element).val() == null || $(element).hasClass('is-invalid')) {
                     $(element).addClass('is-invalid');
                     if (type == 'ba') {
                         $(element).siblings(`${addOnElement}`).addClass('border-1 border-danger')
@@ -875,6 +876,50 @@
             return imageArray
         }
 
+        function hitungPersentase() {
+            window.persentaseSp2d = $(document).find('.pilih-sp2d').map((index, element) => {
+                if (element.checked == true) {
+                    let data = $(element).parents('tr').data('sp2d');
+                    return ({
+                        persentase: data.nilai / window.sp2d * 100,
+                        id: `${data.nosp2d}_${data.tglsp2d}`
+                    })
+                }
+            });
+            window.persentaseSp2d = window.persentaseSp2d.toArray();
+        }
+
+        function minusNilaiSp2d(nilai) {
+            $(document).find('.pilih-sp2d').map((index, element) => {
+                if (element.checked == true) {
+                    let data = $(element).parents('tr').data('sp2d');
+                    persentase = window.persentaseSp2d[index];
+                    window.persentaseSp2d[index].nilai = parseFloat((persentase.id ==
+                            `${data.nosp2d}_${data.tglsp2d}`) ? (persentase.persentase / 100) * nilai :
+                        0).toFixed(2)
+                    $(element).parents('tr').find('td:nth-child(3)').html(
+                        numberFormat(parseFloat(data.nilai) - parseFloat((persentase.id ==
+                                `${data.nosp2d}_${data.tglsp2d}`) ? (persentase.persentase / 100) * nilai :
+                            0).toFixed(2)))
+                }
+            });
+        }
+
+        function resetElementRekening() {
+            $(document).find('.pilih-sp2d').map((index, element) => {
+                if (element.checked == true) {
+                    console.log(currencyToNumberFormat($(element).parents('tr').find('td:nth-child(3)').html()))
+                    if (currencyToNumberFormat($(element).parents('tr').find('td:nth-child(3)').html()) ==
+                        '000') {
+                        $(element).prop('checked', false).attr('disabled', true);
+                        $(element).parents('tr').addClass('bg-warning')
+                    } else {
+                        $(element).prop('checked', false);
+                    }
+                }
+            });
+        }
+
         function elementRekning(data) {
             let html = ``;
             data.forEach(element => {
@@ -890,9 +935,7 @@
                 let data = $(this).parents('tr').data('sp2d');
                 if (window.sp2d == 0) {
                     if (this.checked == true) {
-                        window.sp2d = parseInt(data.nilai);
-                        console.log($('[name=nilaibarang]')
-                            .siblings('.form-text'))
+                        window.sp2d = parseFloat(data.nilai);
                         if ($('[name=nilaibarang]')
                             .siblings('.form-text').length == 0) {
                             $('[name=nilaibarang]')
@@ -903,15 +946,18 @@
                         } else {
                             $('[name=nilaibarang]')
                                 .siblings('.form-text')
-                                .html(`Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
+                                .html(
+                                    `Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
                         }
                     }
+                    hitungPersentase()
                 } else {
                     if (this.checked == true) {
-                        window.sp2d += parseInt(data.nilai);
+                        window.sp2d += parseFloat(data.nilai);
                     } else {
-                        window.sp2d -= parseInt(data.nilai);
+                        window.sp2d -= parseFloat(data.nilai);
                     }
+                    hitungPersentase()
                     $('[name=nilaibarang]')
                         .siblings('.form-text')
                         .html(`Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
@@ -920,6 +966,7 @@
                     if (window.sp2d > 0 && parseInt(currencyToNumberFormat(` ${this.value}`)) <= window
                         .sp2d) {
                         $(this).removeClass('is-invalid');
+                        minusNilaiSp2d(parseInt(currencyToNumberFormat(` ${this.value}`)))
                     } else {
                         $(this).addClass('is-invalid');
                     }
@@ -1177,6 +1224,7 @@
                     let data = serializeObject($(`#${$(this)[0].id} .modal-body`).find('form'));
                     data.jumlah = data.jumlah ?? 1;
                     data.qrcode_foto = window.foto;
+                    data.sp2d = window.persentaseSp2d;
                     if (window.iddetail == null) {
                         data.iddetail = window.countDetailAsset;
                         generateListDetailAsset(data);
@@ -1186,7 +1234,9 @@
                     }
                     $('.alert-da').remove();
                     $('#save-ba').removeClass('disabled');
-                    window.iddetail = null
+                    window.iddetail = null;
+                    window.persentaseSp2d = [];
+                    resetElementRekening();
                 }
             });
         });
