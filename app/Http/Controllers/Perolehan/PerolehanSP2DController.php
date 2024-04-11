@@ -38,13 +38,31 @@ class PerolehanSP2DController extends Controller
     }
     public function getRekening($idProgram)
     {
-        $dataRekeningSP2D = DB::table('sp2d')->select(
-            'nosp2d',
-            'tglsp2d',
-            'kdper',
-            'nmper',
-            'nilai',
-            'keperluan'
+        $dataRekeningSP2D = DB::table('sp2d')->selectRaw(
+            'nosp2d,
+            tglsp2d,
+            kdper,
+            nmper,
+            (nilai - (case when (select
+	count(0)
+from
+	kib as k
+join kibsp2d as ks on
+	k.kodekib = ks.kodekib
+where
+	ks.nosp2d = nosp2d
+	and ks.tglsp2d = tglsp2d
+	and ks.kdper = kdper) > 0 then (select
+	count(0)
+from
+	kib as k
+join kibsp2d as ks on
+	k.kodekib = ks.kodekib
+where
+	ks.nosp2d = nosp2d
+	and ks.tglsp2d = tglsp2d
+	and ks.kdper = kdper) else 0 end)) as nilai,
+            keperluan'
         )
             ->where('nukegunit', $idProgram)
             ->where('nmunit', session('organisasi')->organisasi)
