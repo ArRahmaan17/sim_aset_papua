@@ -522,7 +522,7 @@
                                         }
                                     })
                                 });
-                                // $(element).remove()
+                                $(element).remove()
                             }
                         });
                         ($("#container-detail-asset").find('li').length == 0) ? $("#save-ba").addClass(
