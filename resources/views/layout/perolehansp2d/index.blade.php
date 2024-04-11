@@ -252,7 +252,7 @@
                     <div class="row">
                         <div class="col-12" style="height: 200px; overflow-y: scroll;">
                             <div class="table-responsive">
-                                <table class="table table-striped">
+                                <table class="table">
                                     <thead>
                                         <tr>
                                             <th>NO SP2D</th>
@@ -491,7 +491,38 @@
                         }, toast, 'button');
                         $("#container-detail-asset").find('li').map((index, element) => {
                             if ($(element).data('id') == id) {
-                                $(element).remove()
+                                $(element).data('master').sp2d.map((sp2d) => {
+                                    let id = sp2d.id.split('_');
+                                    $(document).find('.pilih-sp2d').map((index,
+                                        container_sp2d) => {
+                                        let datasp2d = $(container_sp2d).parents(
+                                            'tr').data('sp2d');
+                                        if (id[0] == datasp2d.nosp2d &&
+                                            id[1] == datasp2d.tglsp2d && datasp2d
+                                            .keperluan == sp2d.keperluan) {
+                                            let nilai = parseInt(
+                                                currencyToNumberFormat(
+                                                    $(container_sp2d)
+                                                    .parents('tr')
+                                                    .find('td:nth-child(3)')
+                                                    .html()))
+                                            nilai += parseInt(sp2d.nilai);
+                                            $(container_sp2d)
+                                                .parents('tr')
+                                                .find('td:nth-child(3)')
+                                                .html(numberFormat(nilai));
+                                            if ($(container_sp2d).prop(
+                                                    'disabled') == true) {
+                                                $(container_sp2d).prop('disabled',
+                                                    false);
+                                                $(container_sp2d)
+                                                    .parents('tr').removeClass(
+                                                        'bg-warning text-white')
+                                            }
+                                        }
+                                    })
+                                });
+                                // $(element).remove()
                             }
                         });
                         ($("#container-detail-asset").find('li').length == 0) ? $("#save-ba").addClass(
@@ -877,42 +908,38 @@
         }
 
         function hitungPersentase() {
-            window.persentaseSp2d = $(document).find('.pilih-sp2d').map((index, element) => {
-                if (element.checked == true) {
-                    let data = $(element).parents('tr').data('sp2d');
-                    return ({
-                        persentase: data.nilai / window.sp2d * 100,
-                        id: `${data.nosp2d}_${data.tglsp2d}`
-                    })
-                }
+            window.persentaseSp2d = $(document).find('.pilih-sp2d:checked').map((index, element) => {
+                let data = $(element).parents('tr').data('sp2d');
+                return ({
+                    persentase: data.nilai / window.sp2d * 100,
+                    id: `${data.nosp2d}_${data.tglsp2d}`,
+                    keperluan: `${data.keperluan}`,
+                })
             });
             window.persentaseSp2d = window.persentaseSp2d.toArray();
         }
 
         function minusNilaiSp2d(nilai) {
-            $(document).find('.pilih-sp2d').map((index, element) => {
-                if (element.checked == true) {
-                    let data = $(element).parents('tr').data('sp2d');
-                    persentase = window.persentaseSp2d[index];
-                    window.persentaseSp2d[index].nilai = parseFloat((persentase.id ==
+            $(document).find('.pilih-sp2d:checked').map((index, element) => {
+                let data = $(element).parents('tr').data('sp2d');
+                persentase = window.persentaseSp2d[index];
+                window.persentaseSp2d[index].nilai = parseFloat((persentase.id ==
+                        `${data.nosp2d}_${data.tglsp2d}`) ? (persentase.persentase / 100) * nilai :
+                    0).toFixed(2)
+                $(element).parents('tr').find('td:nth-child(3)').html(
+                    numberFormat(parseFloat(data.nilai) - parseFloat((persentase.id ==
                             `${data.nosp2d}_${data.tglsp2d}`) ? (persentase.persentase / 100) * nilai :
-                        0).toFixed(2)
-                    $(element).parents('tr').find('td:nth-child(3)').html(
-                        numberFormat(parseFloat(data.nilai) - parseFloat((persentase.id ==
-                                `${data.nosp2d}_${data.tglsp2d}`) ? (persentase.persentase / 100) * nilai :
-                            0).toFixed(2)))
-                }
+                        0).toFixed(2)))
             });
         }
 
         function resetElementRekening() {
             $(document).find('.pilih-sp2d').map((index, element) => {
                 if (element.checked == true) {
-                    console.log(currencyToNumberFormat($(element).parents('tr').find('td:nth-child(3)').html()))
                     if (currencyToNumberFormat($(element).parents('tr').find('td:nth-child(3)').html()) ==
                         '000') {
+                        $(element).parents('tr').addClass('bg-warning text-white')
                         $(element).prop('checked', false).attr('disabled', true);
-                        $(element).parents('tr').addClass('bg-warning')
                     } else {
                         $(element).prop('checked', false);
                     }
@@ -923,7 +950,7 @@
         function elementRekning(data) {
             let html = ``;
             data.forEach(element => {
-                html += `<tr data-sp2d='${JSON.stringify(element)}'>
+                html += `<tr class='' data-sp2d='${JSON.stringify(element)}'>
                             <td>${element.nosp2d}</td>
                             <td>${element.tglsp2d}</td>
                             <td>${numberFormat(element.nilai)}</td>
@@ -931,6 +958,10 @@
                         </tr>`;
             });
             $("#modalDetailAsset").find('table > tbody').html(html);
+            pilihSP2D();
+        }
+
+        function pilihSP2D() {
             $('.pilih-sp2d').click(function() {
                 let data = $(this).parents('tr').data('sp2d');
                 if (window.sp2d == 0) {
@@ -1236,6 +1267,7 @@
                     $('#save-ba').removeClass('disabled');
                     window.iddetail = null;
                     window.persentaseSp2d = [];
+                    window.sp2d = 0;
                     resetElementRekening();
                 }
             });
