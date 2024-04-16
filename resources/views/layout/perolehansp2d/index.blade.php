@@ -441,7 +441,7 @@
                 let name = $(element).attr('name');
                 if (data.hasOwnProperty(name)) {
                     let value = data[name];
-                    if (typeof(value) == 'string' && value.split('.00').length > 1) {
+                    if (typeof(value) == 'string' && value.split('.00').length > 1 && value.split('.00') == '') {
                         value = value.split('.00').join('');
                     }
                     $(`[name=${name}]`).val(value).trigger("change")
@@ -451,8 +451,41 @@
 
         function editDetailAsset(element) {
             var data = $($(element).parent()).parent().data('master');
-            window.iddetail = data.iddetail
+            window.iddetail = data.iddetail;
             renderFormDetailAsset(data, 'edit');
+            $("#container-detail-asset").find('li').map((index, element) => {
+                if ($(element).data('id') == window.iddetail) {
+                    $(element).data('master').sp2d.map((sp2d) => {
+                        let id = sp2d.id.split('_');
+                        $(document).find('.pilih-sp2d').map((index,
+                            container_sp2d) => {
+                            let datasp2d = $(container_sp2d).parents(
+                                'tr').data('sp2d');
+                            if (id[0] == datasp2d.nosp2d &&
+                                id[1] == datasp2d.tglsp2d && datasp2d
+                                .keperluan == sp2d.keperluan && datasp2d
+                                .kdper == sp2d.kdper) {
+                                let nilai = parseFloat(
+                                    currencyToNumberFormat(
+                                        $(container_sp2d)
+                                        .parents('tr')
+                                        .find('td:nth-child(3)')
+                                        .html())) / 100;
+                                nilai += parseFloat(sp2d.nilai);
+                                $(container_sp2d).trigger('click');
+                                if ($(container_sp2d).prop(
+                                        'disabled') == true) {
+                                    $(container_sp2d).prop('disabled',
+                                        false);
+                                    $(container_sp2d)
+                                        .parents('tr').removeClass(
+                                            'bg-warning text-white')
+                                }
+                            }
+                        })
+                    });
+                }
+            });
             setTimeout(() => {
                 dataToValueElement(data);
             }, 500);
@@ -499,14 +532,15 @@
                                             'tr').data('sp2d');
                                         if (id[0] == datasp2d.nosp2d &&
                                             id[1] == datasp2d.tglsp2d && datasp2d
-                                            .keperluan == sp2d.keperluan) {
-                                            let nilai = parseInt(
+                                            .keperluan == sp2d.keperluan && datasp2d
+                                            .kdper == sp2d.kdper) {
+                                            let nilai = parseFloat(
                                                 currencyToNumberFormat(
                                                     $(container_sp2d)
                                                     .parents('tr')
                                                     .find('td:nth-child(3)')
-                                                    .html()))
-                                            nilai += parseInt(sp2d.nilai);
+                                                    .html())) / 100;
+                                            nilai += parseFloat(sp2d.nilai);
                                             $(container_sp2d)
                                                 .parents('tr')
                                                 .find('td:nth-child(3)')
@@ -793,7 +827,7 @@
             data._token = `{{ csrf_token() }}`;
             $.ajax({
                 type: "POST",
-                url: "{{ route('perolehan.store') }}",
+                url: "{{ route('perolehan-sp2d.store') }}",
                 data: data,
                 dataType: "json",
                 success: function(response) {
@@ -911,9 +945,10 @@
             window.persentaseSp2d = $(document).find('.pilih-sp2d:checked').map((index, element) => {
                 let data = $(element).parents('tr').data('sp2d');
                 return ({
-                    persentase: data.nilai / window.sp2d * 100,
+                    persentase: data.sisa_nilai / window.sp2d * 100,
                     id: `${data.nosp2d}_${data.tglsp2d}`,
                     keperluan: `${data.keperluan}`,
+                    kdper: `${data.kdper}`,
                 })
             });
             window.persentaseSp2d = window.persentaseSp2d.toArray();
@@ -927,9 +962,9 @@
                         `${data.nosp2d}_${data.tglsp2d}`) ? (persentase.persentase / 100) * nilai :
                     0).toFixed(2)
                 $(element).parents('tr').find('td:nth-child(3)').html(
-                    numberFormat(parseFloat(data.nilai) - parseFloat((persentase.id ==
-                            `${data.nosp2d}_${data.tglsp2d}`) ? (persentase.persentase / 100) * nilai :
-                        0).toFixed(2)))
+                    numberFormat(parseFloat(data.sisa_nilai == data.nilai ? data.nilai : data.sisa_nilai) -
+                        parseFloat((persentase.id == `${data.nosp2d}_${data.tglsp2d}`) ? (persentase
+                            .persentase / 100) * nilai : 0).toFixed(2)))
             });
         }
 
@@ -947,9 +982,10 @@
             });
         }
 
-        function elementRekning(data) {
+        function elementRekening(data) {
             let html = ``;
             data.forEach(element => {
+                element.sisa_nilai = element.nilai;
                 html += `<tr class='' data-sp2d='${JSON.stringify(element)}'>
                             <td>${element.nosp2d}</td>
                             <td>${element.tglsp2d}</td>
@@ -966,7 +1002,7 @@
                 let data = $(this).parents('tr').data('sp2d');
                 if (window.sp2d == 0) {
                     if (this.checked == true) {
-                        window.sp2d = parseFloat(data.nilai);
+                        window.sp2d = parseFloat(data.sisa_nilai == data.nilai ? data.nilai : data.sisa_nilai);
                         if ($('[name=nilaibarang]')
                             .siblings('.form-text').length == 0) {
                             $('[name=nilaibarang]')
@@ -984,9 +1020,9 @@
                     hitungPersentase()
                 } else {
                     if (this.checked == true) {
-                        window.sp2d += parseFloat(data.nilai);
+                        window.sp2d += parseFloat(data.sisa_nilai == data.nilai ? data.nilai : data.sisa_nilai);
                     } else {
-                        window.sp2d -= parseFloat(data.nilai);
+                        window.sp2d -= parseFloat(data.sisa_nilai == data.nilai ? data.nilai : data.sisa_nilai);
                     }
                     hitungPersentase()
                     $('[name=nilaibarang]')
@@ -1051,11 +1087,10 @@
                     url: "{{ route('perolehan-sp2d.get-rekening') }}/" + this.value,
                     dataType: "json",
                     success: function(response) {
-                        elementRekning(response.data);
+                        elementRekening(response.data);
                     }
                 });
             });
-
             $('.formated').blur(function() {
                 if (this.value == "") {
                     $(this).focus();
@@ -1173,7 +1208,7 @@
                     id: 'ba-konfirmasi',
                     zindex: 9999,
                     title: 'Konfirmasi',
-                    message: 'Apakah anda yakin akan menambahkan bap dan list asset ini?',
+                    message: 'Apakah anda yakin akan menambahkan bap dan list aset ini?',
                     position: 'center',
                     buttons: [
                         ['<button><b>IYA</b></button>', function(instance, toast) {
@@ -1199,7 +1234,7 @@
                     id: 'update-konfirmasi',
                     zindex: 9999,
                     title: 'Konfirmasi',
-                    message: 'Apakah anda yakin akan merubah bap dan list asset ini?',
+                    message: 'Apakah anda yakin akan merubah bap dan list aset ini?',
                     position: 'center',
                     buttons: [
                         ['<button><b>IYA</b></button>', function(instance, toast) {
@@ -1256,6 +1291,23 @@
                     data.jumlah = data.jumlah ?? 1;
                     data.qrcode_foto = window.foto;
                     data.sp2d = window.persentaseSp2d;
+                    window.persentaseSp2d.map((sp2d) => {
+                        $(document).find('.pilih-sp2d').map((index, container_sp2d) => {
+                            let datasp2d = $(container_sp2d)
+                                .parents('tr').data('sp2d');
+                            let id = sp2d.id.split('_');
+                            if (id[0] == datasp2d.nosp2d &&
+                                id[1] == datasp2d.tglsp2d && datasp2d
+                                .keperluan == sp2d.keperluan && datasp2d
+                                .kdper == sp2d.kdper) {
+                                datasp2d.sisa_nilai = (parseFloat(
+                                        datasp2d.nilai) - parseFloat(sp2d.nilai))
+                                    .toString() + '.00';
+                                $(container_sp2d)
+                                    .parents('tr').data('sp2d', datasp2d);
+                            }
+                        })
+                    });
                     if (window.iddetail == null) {
                         data.iddetail = window.countDetailAsset;
                         generateListDetailAsset(data);

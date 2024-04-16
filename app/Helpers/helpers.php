@@ -79,6 +79,15 @@ function convertStringToNumber($string)
 {
     return implode('', explode('.', $string));
 }
+function getkdunit($sp2d)
+{
+    return  DB::table('sp2d')
+        ->where([
+            'kdper' => $sp2d['kdper'],
+            'nosp2d' => $sp2d['nosp2d'],
+            'tglsp2d' => $sp2d['tglsp2d'],
+        ])->first()->kdunit;
+}
 if (!function_exists('convertAlphabeticalToNumberDate')) {
     function convertAlphabeticalToNumberDate($stringDate)
     {
