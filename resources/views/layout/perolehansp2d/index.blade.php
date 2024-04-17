@@ -141,7 +141,8 @@
                                             <h3>SP2D</h3>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="program">Program</label>
+                                            <label class="form-label" for="program">Program <i
+                                                    class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
                                             <div class="input-group input-group-merge">
                                                 <span id="programicon" class="input-group-text"><i
                                                         class='bx bx-calendar-check'></i></span>
@@ -156,7 +157,8 @@
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="kegiatan">Kegiatan</label>
+                                            <label class="form-label" for="kegiatan">Kegiatan <i
+                                                    class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
                                             <div class="input-group input-group-merge">
                                                 <span id="kegiatanicon" class="input-group-text"><i
                                                         class='bx bx-calendar-check'></i></span>
@@ -370,7 +372,7 @@
             let data = $(element).parents('tr').data('bap');
             $.ajax({
                 type: "get",
-                url: `{{ route('perolehan.bap.show') }}/${data.idbap}`,
+                url: `{{ route('perolehan-sp2d.bap.show') }}/${data.idbap}`,
                 dataType: "json",
                 success: function(response) {
                     $('#container-detail-asset').html('');
@@ -380,6 +382,12 @@
                         window.countDetailAsset = kib.iddetail;
                         generateListDetailAsset(kib);
                     });
+                    $("#program").val(response.data.sp2d.program).trigger('change');
+                    setTimeout(() => {
+                        $("#kegiatan").val(response.data.sp2d.kegiatan).trigger('change');
+                        $('#program').attr('disabled', true);
+                        $('#kegiatan').attr('disabled', true);
+                    }, 500);
                     $("#update-ba").removeClass('disabled d-none');
                     $("#cancel-ba").removeClass('disabled d-none');
                     $("#save-ba").addClass('disabled d-none');
@@ -441,7 +449,7 @@
                 let name = $(element).attr('name');
                 if (data.hasOwnProperty(name)) {
                     let value = data[name];
-                    if (typeof(value) == 'string' && value.split('.00').length > 1 && value.split('.00') == '') {
+                    if (typeof(value) == 'string' && value.split('.00').length > 1 && value.split('.00')[1] == '') {
                         value = value.split('.00').join('');
                     }
                     $(`[name=${name}]`).val(value).trigger("change")
@@ -452,9 +460,11 @@
         function editDetailAsset(element) {
             var data = $($(element).parent()).parent().data('master');
             window.iddetail = data.iddetail;
-            renderFormDetailAsset(data, 'edit');
             $("#container-detail-asset").find('li').map((index, element) => {
                 if ($(element).data('id') == window.iddetail) {
+                    if (typeof($(element).data('master').sp2d) == 'string') {
+                        $(element).data('master').sp2d = JSON.parse($(element).data('master').sp2d);
+                    }
                     $(element).data('master').sp2d.map((sp2d) => {
                         let id = sp2d.id.split('_');
                         $(document).find('.pilih-sp2d').map((index,
@@ -472,7 +482,13 @@
                                         .find('td:nth-child(3)')
                                         .html())) / 100;
                                 nilai += parseFloat(sp2d.nilai);
-                                $(container_sp2d).trigger('click');
+                                if (window.state != 'update') {
+                                    $(container_sp2d).trigger('click');
+                                } else {
+                                    setTimeout(() => {
+                                        $(container_sp2d).trigger('click');
+                                    }, 2000);
+                                }
                                 if ($(container_sp2d).prop(
                                         'disabled') == true) {
                                     $(container_sp2d).prop('disabled',
@@ -486,6 +502,7 @@
                     });
                 }
             });
+            renderFormDetailAsset(data, 'edit');
             setTimeout(() => {
                 dataToValueElement(data);
             }, 500);
@@ -524,6 +541,10 @@
                         }, toast, 'button');
                         $("#container-detail-asset").find('li').map((index, element) => {
                             if ($(element).data('id') == id) {
+                                if (typeof($(element).data('master').sp2d) == 'string') {
+                                    $(element).data('master').sp2d = JSON.parse($(element).data(
+                                        'master').sp2d);
+                                }
                                 $(element).data('master').sp2d.map((sp2d) => {
                                     let id = sp2d.id.split('_');
                                     $(document).find('.pilih-sp2d').map((index,
@@ -782,7 +803,7 @@
             });
             $("#qrcode_foto").change(function() {
                 window.foto = handleFileFoto();
-            })
+            });
         }
 
         function validateElement(
@@ -791,7 +812,7 @@
             contextElement = 'label',
             contextClass = '.bxs-star',
             validateElementParent = '.input-group',
-            validateElement = 'input',
+            validateElement = 'input,select,textarea',
             addOnElement = 'span',
         ) {
             var error = [];
@@ -803,7 +824,8 @@
                     `${validateElement}`);
             }
             elementValidate.map((index, element) => {
-                if ($(element).val() == "" || $(element).val() == null || $(element).hasClass('is-invalid')) {
+                if ($(element).val() == "" || $(element).val() == null || ($(element).val() == "" || $(element)
+                        .val() == null && $(element).hasClass('is-invalid'))) {
                     $(element).addClass('is-invalid');
                     if (type == 'ba') {
                         $(element).siblings(`${addOnElement}`).addClass('border-1 border-danger')
@@ -818,6 +840,8 @@
         }
 
         function savePerolehan() {
+            $('#kegiatan').attr('disabled', false);
+            $('#program').attr('disabled', false);
             let data = serializeObject($('#ba-form'));
             let detailData = [];
             $('#container-detail-asset').find('li').map((index, element) => {
@@ -945,7 +969,8 @@
             window.persentaseSp2d = $(document).find('.pilih-sp2d:checked').map((index, element) => {
                 let data = $(element).parents('tr').data('sp2d');
                 return ({
-                    persentase: data.sisa_nilai / window.sp2d * 100,
+                    persentase: parseFloat(parseFloat(data.sisa_nilai) == 0.00 ? data.nilai : data
+                        .sisa_nilai) / window.sp2d * 100,
                     id: `${data.nosp2d}_${data.tglsp2d}`,
                     keperluan: `${data.keperluan}`,
                     kdper: `${data.kdper}`,
@@ -960,11 +985,14 @@
                 persentase = window.persentaseSp2d[index];
                 window.persentaseSp2d[index].nilai = parseFloat((persentase.id ==
                         `${data.nosp2d}_${data.tglsp2d}`) ? (persentase.persentase / 100) * nilai :
-                    0).toFixed(2)
+                    0).toFixed(2);
                 $(element).parents('tr').find('td:nth-child(3)').html(
-                    numberFormat(parseFloat(data.sisa_nilai == data.nilai ? data.nilai : data.sisa_nilai) -
+                    numberFormat(parseFloat(parseFloat(data.sisa_nilai) < parseFloat(data.nilai) && parseFloat(
+                                data.sisa_nilai) != 0.00 ? data
+                            .sisa_nilai : data.nilai) -
                         parseFloat((persentase.id == `${data.nosp2d}_${data.tglsp2d}`) ? (persentase
-                            .persentase / 100) * nilai : 0).toFixed(2)))
+                            .persentase / 100) * nilai : 0).toFixed(2))
+                )
             });
         }
 
@@ -985,11 +1013,10 @@
         function elementRekening(data) {
             let html = ``;
             data.forEach(element => {
-                element.sisa_nilai = element.nilai;
-                html += `<tr class='' data-sp2d='${JSON.stringify(element)}'>
+                html += `<tr ${(element.sisa_nilai != '0.00') ? 'class=""' : "class='bg-warning text-white'"} data-sp2d='${JSON.stringify(element)}' >
                             <td>${element.nosp2d}</td>
                             <td>${element.tglsp2d}</td>
-                            <td>${numberFormat(element.nilai)}</td>
+                            <td>${numberFormat((element.nilai == element.sisa_nilai) ? element.nilai : element.sisa_nilai)}</td>
                             <td><input type="checkbox" class='form-check-input pilih-sp2d'></td>
                         </tr>`;
             });
@@ -1002,7 +1029,12 @@
                 let data = $(this).parents('tr').data('sp2d');
                 if (window.sp2d == 0) {
                     if (this.checked == true) {
-                        window.sp2d = parseFloat(data.sisa_nilai == data.nilai ? data.nilai : data.sisa_nilai);
+                        window.sp2d = (window.state == 'update') ? parseInt(currencyToNumberFormat(` ${$(
+                                '[name=nilaibarang]')
+                            .val()}`)) : parseFloat(data
+                            .sisa_nilai) < parseFloat(data.nilai) && parseFloat(data
+                            .sisa_nilai) == 0.00 ? parseFloat(data
+                            .nilai) : parseFloat(data.sisa_nilai);
                         if ($('[name=nilaibarang]')
                             .siblings('.form-text').length == 0) {
                             $('[name=nilaibarang]')
@@ -1322,6 +1354,8 @@
                     window.sp2d = 0;
                     resetElementRekening();
                 }
+                $('#program').attr('disabled', true);
+                $('#kegiatan').attr('disabled', true);
             });
         });
     </script>

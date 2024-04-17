@@ -21,7 +21,7 @@ class PerolehanSP2DController extends Controller
                 'nmprgrm'
             )
             ->get();
-        $dataBap = Bap::getAllOrganizationBaps();
+        $dataBap = Bap::getAllOrganizationBapsSp2d();
         return view('layout.perolehansp2d.index', compact('dataMaster', 'dataBap', 'dataPerogramSP2D'));
     }
 
@@ -42,30 +42,7 @@ class PerolehanSP2DController extends Controller
     public function getRekening($idProgram)
     {
         $dataRekeningSP2D = DB::table('sp2d')->selectRaw(
-            'nosp2d,
-            tglsp2d,
-            kdper,
-            nmper,
-            (nilai - (case when (select
-                    count(0)
-                from
-                    kib as k
-                join kibsp2d as ks on
-                    k.kodekib = ks.kodekib
-                where
-                    ks.nosp2d = nosp2d
-                    and ks.tglsp2d = tglsp2d
-                    and ks.kdper = kdper) > 0 then (select
-                    count(0)
-                from
-                    kib as k
-                join kibsp2d as ks on
-                    k.kodekib = ks.kodekib
-                where
-                    ks.nosp2d = nosp2d
-                    and ks.tglsp2d = tglsp2d
-                    and ks.kdper = kdper) else 0 end)) as nilai,
-            keperluan'
+            'nosp2d, tglsp2d, kdper, nmper, sp2d.nilai as nilai, (sp2d.nilai - (case when (select count(0) from kib as k join kibsp2d as ks on k.kodekib = ks.kodekib where ks.nosp2d = sp2d.nosp2d and ks.tglsp2d = sp2d.tglsp2d and ks.kdper = sp2d.kdper) > 0 then (select sum(ks.nilai) from kib as k join kibsp2d as ks on k.kodekib = ks.kodekib where ks.nosp2d = sp2d.nosp2d and ks.tglsp2d = sp2d.tglsp2d and ks.kdper = sp2d.kdper) else 0 end)) as sisa_nilai,keperluan'
         )
             ->where('nukegunit', $idProgram)
             ->where('nmunit', session('organisasi')->organisasi)
@@ -79,6 +56,19 @@ class PerolehanSP2DController extends Controller
             )
             ->get();
         return response()->json(['message' => 'Semua Data Rekening', 'data' => $dataRekeningSP2D]);
+    }
+    public function getDetailBap($kodebap)
+    {
+        $data = Bap::getDetailBapSp2d($kodebap);
+        $data['dataKib'] = collect(array_values($data['dataKib']))->flatten()->all();
+        if (count($data['dataKibTransaksi']) > 0 || count($data['dataKib']) > 0) {
+            $response = ['message' => 'Detail Bap berhasil ditemukan', 'data' => $data];
+            $status = 200;
+        } else {
+            $response = ['message' => 'Detail Bap gagal ditemukan', 'data' => $data];
+            $status = 404;
+        }
+        return response()->json($response, $status);
     }
     public function store(Request $request)
     {
@@ -173,18 +163,24 @@ class PerolehanSP2DController extends Controller
                         $data_sp2d[$index]['kdper'] = $datasp2d['kdper'];
                         $data_sp2d[$index]['kodekib'] = $kodekib;
                         $data_sp2d[$index]['tahun'] = env('TAHUN_APLIKASI');
-                        $data_sp2d[$index]['nilai'] = convertStringToNumber($datasp2d['nilai']);
+                        $data_sp2d[$index]['nilai'] = intval(convertStringToNumber($datasp2d['nilai'])) / 100;
                         $data_sp2d[$index]['nuprgrm'] = $sp2d->program;
                         $data_sp2d[$index]['kdkegunit'] = $sp2d->kegiatan;
+                        $data_sp2d[$index]['persentase'] = $datasp2d['persentase'];
                         $data_sp2d[$index]['kdunit'] = getkdunit($data_sp2d[$index]);
                     }
                     DB::table('kibsp2d')->insert($data_sp2d);
                 }
             }
+            DB::commit();
+            $response = ['message' => 'berhasil menyimpan perolehan sp2d'];
+            $status = 200;
         } catch (\Throwable $th) {
             dd($th);
-            //throw $th;
+            DB::rollBack();
+            $response = ['message' => 'gagal menyimpan perolehan sp2d'];
+            $status = 422;
         }
-        return response()->json(['message' => 'sucess'], 200);
+        return response()->json($response, $status);
     }
 }
