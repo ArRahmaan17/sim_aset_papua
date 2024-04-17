@@ -105,6 +105,7 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
     Route::get('/perolehan-sp2d', [PerolehanSP2DController::class, 'index'])->name('perolehan-sp2d');
     Route::post('/perolehan-sp2d/store', [PerolehanSP2DController::class, 'store'])->name('perolehan-sp2d.store');
     Route::get('/perolehan-sp2d/all-kegiatan/{idprogram?}', [PerolehanSP2DController::class, 'getKegiatan'])->name('perolehan-sp2d.get-kegiatan');
+    Route::get('/perolehan-sp2d/bap/detail/{id?}', [PerolehanSP2DController::class, 'getDetailBap'])->name('perolehan-sp2d.bap.show');
     Route::get('/perolehan-sp2d/all-rekening/{idkegiatan?}', [PerolehanSP2DController::class, 'getRekening'])->name('perolehan-sp2d.get-rekening');
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan');
     Route::post('/perolehan/store', [PerolehanController::class, 'store'])->name('perolehan.store');
