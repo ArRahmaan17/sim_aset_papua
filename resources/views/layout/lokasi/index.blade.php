@@ -217,7 +217,7 @@
                 window.state = 'add';
                 $('.multiple').removeClass('d-none');
                 $('#modalFormMasterLokasi').modal('show');
-                $('#modalFormMasterLokasi').find('.modal-title').html('Edit Master Lokasi');
+                $('#modalFormMasterLokasi').find('.modal-title').html('Tambah Master Lokasi');
                 $("#form-lokasi")[0].reset()
             });
 

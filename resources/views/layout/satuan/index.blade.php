@@ -213,7 +213,7 @@
                 window.state = 'add';
                 $('.multiple').removeClass('d-none');
                 $('#modalFormMasterSatuan').modal('show');
-                $('#modalFormMasterSatuan').find('.modal-title').html('Edit Master Satuan');
+                $('#modalFormMasterSatuan').find('.modal-title').html('Tambah Master Satuan');
                 $("#form-satuan")[0].reset()
             });
             $('.single').click(function() {

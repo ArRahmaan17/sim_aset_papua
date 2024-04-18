@@ -70,4 +70,21 @@ class OrganisasiController extends Controller
 
         return response()->json($message, $status);
     }
+
+    public function useable()
+    {
+        $data = DB::table('masterorganisasi')->select(
+            DB::raw("CONCAT(kodeurusan, '.', kodesuburusan, '.', kodesubsuburusan, '.', kodeorganisasi, '.', kodesuborganisasi, '.', kodeunit, '.', kodesubunit, '.', kodesubsubunit) as id"),
+            DB::raw("CONCAT(kodeurusan, '.', kodesuburusan, '.', kodesubsuburusan, '.', kodeorganisasi, '.', kodesuborganisasi, '.', kodeunit, '.', kodesubunit, '.', kodesubsubunit, ' ', organisasi) as name"),
+        )->where('kodeorganisasi', '<>', 0)->get()->toArray();
+        if (count($data) == 0) {
+            $message = ['message' => 'Master Organisasi tidak ditemukan', 'data' => $data];
+            $status = 404;
+        } else {
+            $status = 200;
+            $message = ['message' => 'Master Organisasi ditemukan', 'data' => dataToOption($data)];
+        }
+
+        return response()->json($message, $status);
+    }
 }

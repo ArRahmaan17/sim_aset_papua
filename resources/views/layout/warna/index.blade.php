@@ -214,7 +214,7 @@
                 window.state = 'add';
                 $('.multiple').removeClass('d-none');
                 $('#modalFormMasterWarna').modal('show');
-                $('#modalFormMasterWarna').find('.modal-title').html('Edit Master Warna');
+                $('#modalFormMasterWarna').find('.modal-title').html('Tambah Master Warna');
                 $("#form-warna")[0].reset()
             });
             $('.single').click(function() {
