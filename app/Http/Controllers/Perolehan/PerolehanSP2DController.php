@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Perolehan;
 use App\Http\Controllers\Controller;
 use App\Models\Bap;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -182,5 +183,264 @@ class PerolehanSP2DController extends Controller
             $status = 422;
         }
         return response()->json($response, $status);
+    }
+
+    public function update(Request $request, $ba)
+    {
+        $kibs = $request->only('detail');
+        DB::beginTransaction();
+        try {
+            $bap = DB::table('bap')->where('kodebap', $ba)->first();
+            $copied = clone (session('organisasi'));
+            $must['kodeurusan'] = $copied->kodeurusan;
+            $must['kodesuburusan'] = $copied->kodesuburusan;
+            $must['kodesubsuburusan'] = $copied->kodesubsuburusan;
+            $must['kodeorganisasi'] = $copied->kodeorganisasi;
+            $must['kodesuborganisasi'] = $copied->kodesuborganisasi;
+            $must['kodeunit'] = $copied->kodeunit;
+            $must['kodesubunit'] = $copied->kodesubunit;
+            $must['kodesubsubunit'] = $copied->kodesubsubunit;
+            $must['tahunorganisasi'] = $copied->tahunorganisasi;
+            $sp2d = clone (object) ($request->only('program', 'kegiatan'));
+            $datakib = DB::table('bap as b')->select('kt.kodekib')
+                ->join('kibtransaksi as kt', 'kt.kodebap', '=', 'b.idbap')
+                ->leftJoin('penyusutan as p', 'p.kodekib', '=', 'kt.kodekib')
+                ->where('b.kodebap', $bap->kodebap)->get()->map(function ($kodekib) {
+                    return $kodekib->kodekib;
+                })->toArray();
+            $requestdatakib = array_map(function ($requestkib) {
+                return intval($requestkib['kodekib']);
+            }, $kibs['detail']);
+            $removerequest = array_merge(array_diff($datakib, $requestdatakib), array_diff($requestdatakib, $datakib));
+            foreach ($kibs['detail'] as $index => $kib) {
+                $kib_sp2d = clone (object)($kib['sp2d']);
+                if (gettype($kib_sp2d) == 'object' && isset($kib_sp2d->scalar)) {
+                    $kib_sp2d = json_decode($kib_sp2d->scalar);
+                }
+                $data = DB::table('kibtransaksi as kt')
+                    ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
+                    ->where([
+                        'kt.kodebap' => $bap->idbap,
+                        'k.uraiorganisasi' => $kib['uraiorganisasi'] ?? getOrganisasi(),
+                        'k.uraibarang' => $kib['uraibarang'] ?? '',
+                        'k.tahunperolehan' => $kib['tahunperolehan'] ?? 0,
+                        'k.tanggalperolehan' => $kib['tanggalperolehan'] ?? now('Asia/Jakarta'),
+                    ])
+                    ->get()
+                    ->toArray();
+                if (count($data) > 0) {
+                    $copied = (array)(clone (object)$kib);
+                    unset($copied['kodekib'], $copied['select-asal-usul-barang-perolehan-aset'], $copied['jumlah'], $copied['iddetail'], $copied['kodemasterbarang'], $copied['urai'], $copied['kodekib']);
+                    $kodekib = array_map(function ($obj) {
+                        return $obj->kodekib;
+                    }, $data);
+                    $kodekibtransaksi = array_map(function ($obj) {
+                        return $obj->kodekibtransaksi;
+                    }, $data);
+                    unset($copied['sp2d']);
+                    $copied['nilaibarang'] =  intval(convertStringToNumber($copied['nilaibarang'])) / 100;
+                    $updatekib = DB::table('kib')
+                        ->whereIn('kodekib', $kodekib)
+                        ->update($copied);
+                    unset(
+                        $copied['deskripsibarang'],
+                        $copied['nilaibarang'],
+                        $copied['luas'],
+                        $copied['tahunperolehan'],
+                        $copied['kodeasalusul'],
+                        $copied['qrcode_foto'],
+                        $copied['kodepemilik'],
+                        $copied['kodekondisi'],
+                        $copied['tahunpembuatan'],
+                        $copied['kodegolonganbarang'],
+                        $copied['kodewarna'],
+                        $copied['bahan'],
+                        $copied['nopabrik'],
+                        $copied['norangka'],
+                        $copied['nomesin'],
+                        $copied['nobpkb'],
+                        $copied['nopolisi'],
+                        $copied['kodesatuan'],
+                        $copied['merktype'],
+                        $copied['ukuran'],
+                        $copied['alamat'],
+                        $copied['noimb'],
+                        $copied['tglimb'],
+                        $copied['kodestatustanah'],
+                        $copied['luaslantai'],
+                        $copied['kodehak'],
+                        $copied['konstruksi'],
+                        $copied['panjang'],
+                        $copied['lebar'],
+                        $copied['nilaihibahtotal'],
+                        $copied['judul'],
+                        $copied['pencipta'],
+                        $copied['asaldaerah'],
+                        $copied['jenis'],
+                        $copied['nosensus'],
+                        $copied['nolokasi'],
+                        $copied['nodokumen'],
+                        $copied['kodekibtanah'],
+                        $copied['tgldok'],
+                        $copied['tglmulai'],
+                        $copied['nosertifikat'],
+                        $copied['tglsertifikat'],
+                        $copied['penggunaan'],
+                        $copied['bertingkat'],
+                        $copied['beton'],
+                        $copied['penerbit'],
+                        $copied['spesifikasi'],
+                        $copied['statusdata'],
+                        $copied['koderuang'],
+                        $copied['asalusul_u'],
+                        $copied['saldoawal'],
+                        $copied['kodejenisbangunan'],
+                        $copied['kodekibtanah_u'],
+                        $copied['nilaiakumulasibarang'],
+                        $copied['lokasi'],
+                        $copied['qrcode'],
+                        $copied['kodedigunakan'],
+                        $copied['kodeeksis'],
+                        $copied['kodejelaseksis'],
+                        $copied['jelaseksis'],
+                        $copied['kode17'],
+                        $copied['isperolehanatribusi'],
+                        $copied['mutasi_apbd'],
+                        $copied['penyedia_atb'],
+                        $copied['spesifikasi_atb'],
+                        $copied['alamat_penyedia_atb'],
+                        $copied['dokumen_pendukung_lainnya'],
+                        $copied['bentuk_fisik'],
+                        $copied['sumber_bast'],
+                        $copied['pengguna_atb'],
+                        $copied['bidang_penanggungjawab_atb'],
+                        $copied['tahunpenilaian'],
+                        $copied['koderegister_sipkd'],
+                        $copied['tahun_sipkd'],
+                        $copied['bermasalah'],
+                        $copied['keterangan_lokasi'],
+                        $copied['detail_lokasi'],
+                        $copied['jumlahlantai'],
+                        $copied['tanggalperolehan'],
+                        $copied['sp2d'],
+                    );
+                    DB::table('kibtransaksi')
+                        ->whereIn('kodekibtransaksi', $kodekibtransaksi)
+                        ->update($copied);
+                    $data_sp2d = [];
+                    DB::table('kibsp2d')->whereIn('kodekib', $kodekib)->delete();
+                    foreach ($kib_sp2d as $index => $datasp2d) {
+                        $datasp2d = (array) $datasp2d;
+                        list($data_sp2d[$index]['nosp2d'], $data_sp2d[$index]['tglsp2d']) = explode('_', $datasp2d['id']);
+                        $data_sp2d[$index]['kdper'] = $datasp2d['kdper'];
+                        $data_sp2d[$index]['kodekib'] = $kodekib[0];
+                        $data_sp2d[$index]['tahun'] = env('TAHUN_APLIKASI');
+                        $data_sp2d[$index]['nilai'] = intval(convertStringToNumber($datasp2d['nilai']));
+                        $data_sp2d[$index]['nuprgrm'] = $sp2d->program;
+                        $data_sp2d[$index]['kdkegunit'] = $sp2d->kegiatan;
+                        $data_sp2d[$index]['persentase'] = $datasp2d['persentase'];
+                        $data_sp2d[$index]['kdunit'] = getkdunit($data_sp2d[$index]);
+                    }
+                    DB::table('kibsp2d')->insert($data_sp2d);
+                } else {
+                    $jumlah = $kib['jumlah'];
+                    for ($i = 0; $i < (int)$jumlah; $i++) {
+                        $copied = array_merge($kib, $must);
+                        $copied['nilaibarang'] = convertStringToNumber($kib['nilaibarang']);
+
+                        if (isset($kib['tglimb'])) {
+                            $copied['tglimb'] = convertAlphabeticalToNumberDate($kib['tglimb']);
+                        }
+                        $copied['uraibarang'] = $kib['urai'];
+                        $copied['tahunperolehan'] = env('TAHUN_APLIKASI');
+                        $copied['tanggalperolehan'] = now('Asia/Jakarta');
+                        $copied['kodepemilik'] = 34;
+                        $copied['uraiorganisasi'] = getOrganisasi();
+                        $copied['kodeklasifikasi'] = ($copied['nilaibarang'] >= intval(classificationType($copied)->nilai)) ? 1 : 2;
+                        $copied['kodeklasifikasi_u'] = ($copied['nilaibarang'] >= intval(classificationType($copied)->nilai)) ? 1 : 2;
+                        $copied['koderegister'] = getKoderegister($copied);
+                        $kib_sp2d = clone (object) $kib['sp2d'];
+                        unset($copied['sp2d'], $copied['kodekib'], $copied['select-asal-usul-barang-perolehan-aset'], $copied['jumlah'], $copied['iddetail'], $copied['kodemasterbarang'], $copied['urai']);
+                        $kodekib = DB::table('kib')->insertGetId($copied, 'kodekib');
+                        unset(
+                            $copied['deskripsibarang'],
+                            $copied['nilaibarang'],
+                            $copied['luas'],
+                            $copied['tahunperolehan'],
+                            $copied['kodeasalusul'],
+                            $copied['qrcode_foto'],
+                            $copied['kodepemilik'],
+                            $copied['kodekondisi'],
+                            $copied['tahunpembuatan'],
+                            $copied['kodegolonganbarang'],
+                            $copied['kodewarna'],
+                            $copied['bahan'],
+                            $copied['nopabrik'],
+                            $copied['norangka'],
+                            $copied['nomesin'],
+                            $copied['nobpkb'],
+                            $copied['kodesatuan'],
+                            $copied['merktype'],
+                            $copied['ukuran'],
+                            $copied['alamat'],
+                            $copied['noimb'],
+                            $copied['tglimb'],
+                            $copied['kodestatustanah'],
+                            $copied['luaslantai'],
+                            $copied['kodehak'],
+                            $copied['konstruksi'],
+                            $copied['panjang'],
+                            $copied['lebar'],
+                            $copied['nilaihibahtotal'],
+                            $copied['judul'],
+                            $copied['pencipta'],
+                            $copied['asaldaerah'],
+                            $copied['jenis'],
+                            $copied['tanggalperolehan'],
+                        );
+                        $copied['nilaitransaksi'] = convertStringToNumber($kib['nilaibarang']);
+                        $copied['kodekib'] = $kodekib;
+                        $copied['kodebap'] = $bap->idbap;
+                        $copied['kodejenistransaksi'] = 101;
+                        $copied['kodejurnal'] = 0;
+                        $copied['tanggaltransaksi'] = convertAlphabeticalToNumberDate($request->tanggalbap);
+                        $copied['tanggalpenyusutan'] = convertAlphabeticalToNumberDate($request->tanggalbap);
+                        DB::table('kibtransaksi')->insert($copied);
+                    }
+                    $data_sp2d = [];
+                    DB::table('kibsp2d')->where('kodekib', $kodekib)->delete();
+                    foreach ($kib_sp2d as $index => $datasp2d) {
+                        list($data_sp2d[$index]['nosp2d'], $data_sp2d[$index]['tglsp2d']) = explode('_', $datasp2d['id']);
+                        $data_sp2d[$index]['kdper'] = $datasp2d['kdper'];
+                        $data_sp2d[$index]['kodekib'] = $kodekib;
+                        $data_sp2d[$index]['tahun'] = env('TAHUN_APLIKASI');
+                        $data_sp2d[$index]['nilai'] = intval(convertStringToNumber($datasp2d['nilai'])) / 100;
+                        $data_sp2d[$index]['nuprgrm'] = $sp2d->program;
+                        $data_sp2d[$index]['kdkegunit'] = $sp2d->kegiatan;
+                        $data_sp2d[$index]['persentase'] = $datasp2d['persentase'];
+                        $data_sp2d[$index]['kdunit'] = getkdunit($data_sp2d[$index]);
+                    }
+                    DB::table('kibsp2d')->insert($data_sp2d);
+                }
+            }
+            if (DB::table('penyusutan')->whereIn('kodekib', $removerequest)->count() > 1) {
+                throw new Exception('detail aset yang telah di susut tidak dapat di hapus', 422);
+            } else {
+                DB::table('kibtransaksi')->whereIn('kodekib', $removerequest)->delete();
+                DB::table('kibsp2d')->whereIn('kodekib', $removerequest)->delete();
+                DB::table('kib')->whereIn('kodekib', $removerequest)->delete();
+            }
+            DB::commit();
+            $status = 200;
+            $message = ['message' => 'Berhasil melakukan perubahan perolehan sp2d'];
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 422;
+            $message = ['message' => 'Gagal melakukan perubahan perolehan sp2d'];
+            if ($th->getCode() == 422) {
+                $message = ['message' => $th->getMessage()];
+            }
+        }
+        return response()->json($message, $status);
     }
 }
