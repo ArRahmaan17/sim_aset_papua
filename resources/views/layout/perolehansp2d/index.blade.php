@@ -356,6 +356,10 @@
             window.detailAsset = [];
             window.iddetail = null;
             window.foto = null;
+            window.sp2d = 0;
+            window.persentaseSp2d = [];
+            $('#program').attr('disabled', false);
+            $('#kegiatan').attr('disabled', false);
             $("#modalListBap").find(`button.btn-outline-success`)
                 .removeClass('disabled')
                 .html(`<i class='bx bxs-pencil'></i> Gunakan`);
@@ -890,7 +894,7 @@
         }
 
         function updatePerolehan() {
-            $('#ba-form').find('input, textarea').removeAttr('disabled');
+            $('#ba-form').find('input, textarea, select').removeAttr('disabled');
             let data = serializeObject($('#ba-form'));
             let detailData = [];
             $('#container-detail-asset').find('li').map((index, element) => {
@@ -900,7 +904,7 @@
             data._token = `{{ csrf_token() }}`;
             $.ajax({
                 type: "PUT",
-                url: "{{ route('perolehan.update') }}/" + data.kodebap,
+                url: "{{ route('perolehan-sp2d.update') }}/" + data.kodebap,
                 data: data,
                 dataType: "json",
                 success: function(response) {
@@ -929,6 +933,7 @@
                     }, 1500);
                     window.bastatus = false;
                     window.tempAsset = null;
+                    window.state = 'add';
                     window.countDetailAsset = 0;
                     window.detailAsset = [];
                     window.iddetail = null;
@@ -1029,12 +1034,10 @@
                 let data = $(this).parents('tr').data('sp2d');
                 if (window.sp2d == 0) {
                     if (this.checked == true) {
-                        window.sp2d = (window.state == 'update') ? parseInt(currencyToNumberFormat(` ${$(
-                                '[name=nilaibarang]')
-                            .val()}`)) : parseFloat(data
-                            .sisa_nilai) < parseFloat(data.nilai) && parseFloat(data
-                            .sisa_nilai) == 0.00 ? parseFloat(data
-                            .nilai) : parseFloat(data.sisa_nilai);
+                        window.sp2d = (window.state == 'update' && window.iddetail !== null) ? parseInt(
+                                currencyToNumberFormat(` ${$('[name=nilaibarang]').val()}`)) : parseFloat(data
+                                .sisa_nilai) < parseFloat(data.nilai) && parseFloat(data.sisa_nilai) == 0.00 ?
+                            parseFloat(data.nilai) : parseFloat(data.sisa_nilai);
                         if ($('[name=nilaibarang]')
                             .siblings('.form-text').length == 0) {
                             $('[name=nilaibarang]')
@@ -1345,7 +1348,7 @@
                         generateListDetailAsset(data);
                     } else {
                         data.iddetail = window.iddetail;
-                        updateListData(data)
+                        updateListData(data);
                     }
                     $('.alert-da').remove();
                     $('#save-ba').removeClass('disabled');
