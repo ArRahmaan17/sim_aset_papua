@@ -164,10 +164,10 @@ class RehabController extends Controller
                             ['mr.kodesubsub', 'mb.kodesubsub'],
                         ]
                     )->where([
-                    ['mb.kodesub', 0],
-                    ['mb.kodekelompok', '<>', 0],
-                    ['mb.urai', 'like', '%'.$request['search']['value'].'%'],
-                ])->get();
+                        ['mb.kodesub', 0],
+                        ['mb.kodekelompok', '<>', 0],
+                        ['mb.urai', 'like', '%'.$request['search']['value'].'%'],
+                    ])->get();
             if (isset($request['order'][0]['column'])) {
                 $totalData = $totalData->sortBy('urai', SORT_REGULAR, $request['order'][0]['column'] == 'desc' ? true : false)->values()->all();
             }
