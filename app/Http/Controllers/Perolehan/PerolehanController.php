@@ -14,6 +14,7 @@ class PerolehanController extends Controller
     {
         $dataMaster = DB::table('masterbarang')->where('kodesubsub', '<>', 0)->get();
         $dataBap = Bap::getAllOrganizationBaps();
+
         return view('layout.perolehan.index', compact('dataMaster', 'dataBap'));
     }
 
@@ -26,7 +27,7 @@ class PerolehanController extends Controller
         $bap['tanggalkontrak'] = isset($request->tanggalkontrak) ? convertAlphabeticalToNumberDate($request->tanggalkontrak) : null;
         $bap['tanggalbaterima'] = isset($request->tanggalbapterima) ? convertAlphabeticalToNumberDate($request->tanggalbaterima) : null;
         $bap['tanggalkuitansi'] = isset($request->tanggalkuitansi) ? convertAlphabeticalToNumberDate($request->tanggalkuitansi) : null;
-        $copied = clone (session('organisasi'));
+        $copied = clone session('organisasi');
         $bap['kodeurusan'] = $must['kodeurusan'] = $copied->kodeurusan;
         $bap['kodesuburusan'] = $must['kodesuburusan'] = $copied->kodesuburusan;
         $bap['kodesubsuburusan'] = $must['kodesubsuburusan'] = $copied->kodesubsuburusan;
@@ -39,7 +40,7 @@ class PerolehanController extends Controller
         $kodebap = DB::table('bap')->insertGetId($bap, 'kodebap');
         foreach ($kibs['detail'] as $index => $kib) {
             $jumlah = $kib['jumlah'];
-            for ($i = 0; $i < (int)$jumlah; $i++) {
+            for ($i = 0; $i < (int) $jumlah; $i++) {
                 $copied = array_merge($kib, $must);
                 $copied['nilaibarang'] = convertStringToNumber($kib['nilaibarang']);
                 if (isset($kib['tglimb'])) {
@@ -101,6 +102,7 @@ class PerolehanController extends Controller
                 DB::table('kibtransaksi')->insert($copied);
             }
         }
+
         return response()->json(['message' => 'berhasil menambahkan perolehan']);
     }
 
@@ -110,7 +112,7 @@ class PerolehanController extends Controller
         DB::beginTransaction();
         try {
             $bap = DB::table('bap')->where('kodebap', $ba)->first();
-            $copied = clone (session('organisasi'));
+            $copied = clone session('organisasi');
             $must['kodeurusan'] = $copied->kodeurusan;
             $must['kodesuburusan'] = $copied->kodesuburusan;
             $must['kodesubsuburusan'] = $copied->kodesubsuburusan;
@@ -133,7 +135,7 @@ class PerolehanController extends Controller
                     ->get()
                     ->toArray();
                 if (count($data) > 0) {
-                    $copied = (array)(clone (object)$kib);
+                    $copied = (array) (clone (object) $kib);
                     unset($copied['kodekib'], $copied['select-asal-usul-barang-perolehan-aset'], $copied['jumlah'], $copied['iddetail'], $copied['kodemasterbarang'], $copied['urai'], $copied['kodekib']);
                     $kodekib = array_map(function ($obj) {
                         return $obj->kodekib;
@@ -230,7 +232,7 @@ class PerolehanController extends Controller
                         ->update($copied);
                 } else {
                     $jumlah = $kib['jumlah'];
-                    for ($i = 0; $i < (int)$jumlah; $i++) {
+                    for ($i = 0; $i < (int) $jumlah; $i++) {
                         $copied = array_merge($kib, $must);
                         $copied['nilaibarang'] = convertStringToNumber($kib['nilaibarang']);
                         if (isset($kib['tglimb'])) {
@@ -301,6 +303,7 @@ class PerolehanController extends Controller
             $status = 422;
             $message = ['message' => 'Gagal melakukan perubahan'];
         }
+
         return response()->json($message, $status);
     }
 
@@ -308,11 +311,12 @@ class PerolehanController extends Controller
     {
         if (DB::table('bap')->where($column, $ba)->count() == 0) {
             $status = 200;
-            $message = ['message' => $column . ' dapat di gunakan'];
+            $message = ['message' => $column.' dapat di gunakan'];
         } else {
-            $message = ['message' => $column . ' telah di gunakan'];
+            $message = ['message' => $column.' telah di gunakan'];
             $status = 409;
         }
+
         return response()->json($message, $status);
     }
 
@@ -327,6 +331,7 @@ class PerolehanController extends Controller
             $response = ['message' => 'Detail Bap gagal ditemukan', 'data' => $data];
             $status = 404;
         }
+
         return response()->json($response, $status);
     }
 
@@ -340,6 +345,7 @@ class PerolehanController extends Controller
             $response = ['message' => 'Data Bap Di temukan', 'data' => $data];
             $status = 200;
         }
+
         return response()->json($response, $status);
     }
 }

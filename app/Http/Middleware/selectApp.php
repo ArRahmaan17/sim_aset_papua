@@ -15,7 +15,7 @@ class selectApp
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!session('app')) {
+        if (! session('app')) {
             return $next($request);
         } else {
             return redirect()->to('home');

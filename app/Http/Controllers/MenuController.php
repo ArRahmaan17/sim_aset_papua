@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
-use PHPUnit\Event\Code\Throwable;
+use Illuminate\Support\Facades\Route;
 
 class MenuController extends Controller
 {
@@ -17,8 +16,10 @@ class MenuController extends Controller
     {
         $routes = Route::getRoutes();
         $roles = DB::table('role')->where('idrole', '<>', 1)->get();
+
         return view('layout.menu.index', compact('roles', 'routes'));
     }
+
     public function showDetail($id)
     {
         $data = DB::table('menu')
@@ -33,8 +34,10 @@ class MenuController extends Controller
             $status = 200;
             $message = ['message' => 'detail menu berhasil di buat', 'data' => buildTree($data)];
         }
+
         return response()->json($message, $status);
     }
+
     public function all()
     {
         $menuSideBar = DB::table('menu')
@@ -55,6 +58,7 @@ class MenuController extends Controller
             $response = ['message' => 'Data Menu Gagal Di buat', 'data' => ['menu_sidebar' => $treeMenuSideBar, 'menu_profile' => $treeMenuProfile]];
             $status = 200;
         }
+
         return response()->json($response, $status);
     }
 
@@ -67,13 +71,14 @@ class MenuController extends Controller
             unset($menu['text'], $menu['id']);
             DB::table('menu')->where('idmenu', $id)->update($menu);
             DB::commit();
-            $response = ['message' => "menu updated successfully"];
+            $response = ['message' => 'menu updated successfully'];
             $status = 200;
         } catch (\Throwable $th) {
             DB::rollback();
-            $response = ['message' => "failed update menu"];
+            $response = ['message' => 'failed update menu'];
             $status = 501;
         }
+
         return response()->json($response, $status);
     }
 
@@ -98,7 +103,7 @@ class MenuController extends Controller
                         'idrole' => $role,
                         'idmenu' => $idmenu,
                         'created_at' => now('Asia/Jakarta'),
-                        'updated_at' => now('Asia/Jakarta')
+                        'updated_at' => now('Asia/Jakarta'),
                     ];
                 }
             }
@@ -106,7 +111,7 @@ class MenuController extends Controller
                 'idrole' => 1,
                 'idmenu' => $idmenu,
                 'created_at' => now('Asia/Jakarta'),
-                'updated_at' => now('Asia/Jakarta')
+                'updated_at' => now('Asia/Jakarta'),
             ];
             DB::table('role_menu')->insert($data_role);
             DB::commit();
@@ -117,6 +122,7 @@ class MenuController extends Controller
             $data = ['message' => 'menu gagal di buat', 'data' => []];
             $status = 400;
         }
+
         return response()->json($data, $status);
     }
 
@@ -138,6 +144,7 @@ class MenuController extends Controller
             $data = ['message' => 'data menu gagal di dapatkan', 'data' => []];
             $status = 404;
         }
+
         return response()->json($data, $status);
     }
 
@@ -161,7 +168,7 @@ class MenuController extends Controller
                         'idrole' => $role,
                         'idmenu' => $id,
                         'created_at' => now('Asia/Jakarta'),
-                        'updated_at' => now('Asia/Jakarta')
+                        'updated_at' => now('Asia/Jakarta'),
                     ];
                 }
             }
@@ -169,7 +176,7 @@ class MenuController extends Controller
                 'idrole' => 1,
                 'idmenu' => $id,
                 'created_at' => now('Asia/Jakarta'),
-                'updated_at' => now('Asia/Jakarta')
+                'updated_at' => now('Asia/Jakarta'),
             ];
             DB::table('role_menu')->insert($data_role);
             $status = 200;
@@ -180,6 +187,7 @@ class MenuController extends Controller
             $message = ['message' => 'Data menu gagal di ubah', 'data' => []];
             $status = 422;
         }
+
         return response()->json($message, $status);
     }
 
@@ -192,7 +200,7 @@ class MenuController extends Controller
         try {
             $parent = DB::table('menu')->where('parents', $id)->count();
             if ($parent != 0) {
-                throw new Exception("cant delete parent menu", 422);
+                throw new Exception('cant delete parent menu', 422);
             }
             DB::table('menu')->where('idmenu', $id)->delete();
             DB::table('role_menu')->where('idmenu', $id)->delete();
@@ -207,6 +215,7 @@ class MenuController extends Controller
             }
             $status = 422;
         }
+
         return response()->json($message, $status);
     }
 }

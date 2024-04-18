@@ -54,7 +54,7 @@ class BarangController extends Controller
                                     end) as parent"
                 )
             )
-            ->orderByRaw(" kodegolongan, kodebidang, kodekelompok, kodesub, kodesubsub")
+            ->orderByRaw(' kodegolongan, kodebidang, kodekelompok, kodesub, kodesubsub')
             ->get()
             ->toArray();
         $data = buildTreeMenu($data_barang);
@@ -65,9 +65,9 @@ class BarangController extends Controller
             $status = 200;
             $message = ['message' => 'master barang berhasil dibuat', 'data' => $data];
         }
+
         return response()->json($message, $status);
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -83,12 +83,14 @@ class BarangController extends Controller
                 'kodekelompok' => $kodebarang[2],
                 'kodesub' => $kodebarang[3],
                 'kodesubsub' => $kodebarang[4],
-                'urai' => $request->urai
+                'urai' => $request->urai,
             ]);
             DB::commit();
+
             return response()->json(['message' => 'Input master barang berhasil'], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
+
             return response()->json(['message' => 'Input master barang gagal'], 422);
         }
     }
@@ -117,6 +119,7 @@ class BarangController extends Controller
             $status = 404;
             $message = ['message' => 'detail data master barang tidak ditemukan', 'data' => $data];
         }
+
         return response()->json($message, $status);
     }
 
@@ -133,14 +136,16 @@ class BarangController extends Controller
                 'kodebidang' => $kodebarang[1],
                 'kodekelompok' => $kodebarang[2],
                 'kodesub' => $kodebarang[3],
-                'kodesubsub' => $kodebarang[4]
+                'kodesubsub' => $kodebarang[4],
             ])->update([
-                'urai' => $request->urai
+                'urai' => $request->urai,
             ]);
             DB::commit();
+
             return response()->json(['message' => 'Ubah master barang berhasil'], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
+
             return response()->json(['message' => 'Ubah master barang gagal'], 422);
         }
     }
@@ -158,10 +163,10 @@ class BarangController extends Controller
                 'kodebidang' => $kodebarang[1],
                 'kodekelompok' => $kodebarang[2],
                 'kodesub' => $kodebarang[3],
-                'kodesubsub' => $kodebarang[4]
+                'kodesubsub' => $kodebarang[4],
             ])->count();
             if ($count_already_use != 0) {
-                throw new Exception("master barang telah di gunakan pada perolehan", 422);
+                throw new Exception('master barang telah di gunakan pada perolehan', 422);
             }
             DB::table('masterbarang')
                 ->where([
@@ -169,14 +174,16 @@ class BarangController extends Controller
                     'kodebidang' => $kodebarang[1],
                     'kodekelompok' => $kodebarang[2],
                     'kodesub' => $kodebarang[3],
-                    'kodesubsub' => $kodebarang[4]
+                    'kodesubsub' => $kodebarang[4],
                 ])->delete();
+
             return response()->json(['message' => 'Hapus master barang berhasil'], 200);
         } catch (Exception $th) {
             DB::rollBack();
             if ($th->getCode() == 422) {
                 return response()->json(['message' => $th->getMessage()], 422);
             }
+
             return response()->json(['message' => 'Hapus master barang gagal'], 422);
         }
     }

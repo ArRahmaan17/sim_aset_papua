@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-
     public function index()
     {
         if (session('app') == 'aset') {
@@ -27,17 +26,19 @@ class HomeController extends Controller
                 unset($copied->wajibsusut, $copied->organisasi, $copied->tahunorganisasi);
                 $copied->tahunorganisasi = env('TAHUN_APLIKASI');
                 $countBaNow = DB::table('bap')
-                    ->where((array)$copied)->groupByRAW('MONTH(tanggalbap)')->count();
+                    ->where((array) $copied)->groupByRAW('MONTH(tanggalbap)')->count();
                 $copied->tahunorganisasi = intval(env('TAHUN_APLIKASI')) - 1;
                 $countBaPast = DB::table('bap')
-                    ->where((array)$copied)->groupByRAW('MONTH(tanggalbap)')->count();
+                    ->where((array) $copied)->groupByRAW('MONTH(tanggalbap)')->count();
             } else {
                 $countBaNow = 0;
                 $countBaPast = 0;
             }
+
             return view('layout.home', compact('organisasi', 'countBaNow', 'countBaPast'));
-        } else  if (session('app') == 'ssh') {
+        } elseif (session('app') == 'ssh') {
             session()->forget('app');
+
             return view('layout.under-maintenance');
         } else {
             return redirect()->route('select-application');
@@ -52,6 +53,7 @@ class HomeController extends Controller
     public function chooseApplication(Request $request)
     {
         $request->session()->put('app', $request->app);
+
         return redirect()->route('home');
     }
 }

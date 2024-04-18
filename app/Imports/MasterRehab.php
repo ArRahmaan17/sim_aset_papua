@@ -8,22 +8,19 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 
 class MasterRehab implements ToCollection
 {
-    /**
-     * @param Collection $collection
-     */
     public function collection(Collection $collection)
     {
         foreach ($collection as $index => $row) {
             if ($index > 18) {
                 $code = explode('.', $row[0]);
-                $kodegolongan = "" . $code[0];
-                if (!isset($code[1])) {
-                    $kodegolongan .= "0";
+                $kodegolongan = ''.$code[0];
+                if (! isset($code[1])) {
+                    $kodegolongan .= '0';
                 } else {
                     $kodegolongan .= $code[1];
                 }
-                if (!isset($code[2])) {
-                    $kodegolongan .= "0";
+                if (! isset($code[2])) {
+                    $kodegolongan .= '0';
                 } else {
                     $kodegolongan .= $code[2];
                 }

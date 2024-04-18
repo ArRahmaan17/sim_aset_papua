@@ -1,5 +1,6 @@
 <?php
-include "main.php";
+
+include 'main.php';
 
 use simitsdk\phpjasperxml\PHPJasperXML;
 
@@ -8,14 +9,14 @@ if (isset($_GET['type']) && isset($_GET['file'])) {
     $filedir = $_GET['file'];
 
     // File path
-    $filename = __DIR__ . '/templates/' . $filedir;
+    $filename = __DIR__.'/templates/'.$filedir;
 
     // $config = parse_ini_file('konfig.ini');
     $config = [
         'driver' => 'array',
         'data' => [
-            ['user_id' => 0, 'fullname' => 'name1', 'email' => 'email1@a.com', 'gender' => 'M']
-        ]
+            ['user_id' => 0, 'fullname' => 'name1', 'email' => 'email1@a.com', 'gender' => 'M'],
+        ],
     ];
 
     // Generate report
@@ -31,9 +32,9 @@ if (isset($_GET['type']) && isset($_GET['file'])) {
     }
 
     // Set additional parameter
-    $report->setParameter(['reporttitle' => 'Database Report With Driver : ' . $config['driver']])
+    $report->setParameter(['reporttitle' => 'Database Report With Driver : '.$config['driver']])
         ->setDataSource($config)
         ->export($type);
 } else {
-    echo "Type or file parameter is missing.";
+    echo 'Type or file parameter is missing.';
 }

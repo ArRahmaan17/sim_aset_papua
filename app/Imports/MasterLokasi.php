@@ -8,9 +8,6 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 
 class MasterLokasi implements ToCollection
 {
-    /**
-     * @param Collection $collection
-     */
     public function collection(Collection $collection)
     {
         foreach ($collection as $index => $row) {
@@ -18,7 +15,7 @@ class MasterLokasi implements ToCollection
                 $code = explode('.', $row[0]);
                 DB::insert('INSERT INTO masterlokasi values(?,?)', [
                     $row[0],
-                    "" . $row[1],
+                    ''.$row[1],
                 ]);
             }
         }

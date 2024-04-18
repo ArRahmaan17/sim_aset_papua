@@ -31,14 +31,14 @@ class WarnaController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('warna ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('warna '.$request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('masterwarna')->select('*')
-                ->where('warna', 'like', '%' . $request['search']['value'] . '%');
+                ->where('warna', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('warna ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('warna '.$request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -47,9 +47,9 @@ class WarnaController extends Controller
             $assets = $assets->get();
 
             $totalFiltered = DB::table('masterwarna')->select('*')
-                ->where('warna', 'like', '%' . $request['search']['value'] . '%');
+                ->where('warna', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('warna ' . $request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('warna '.$request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -66,11 +66,12 @@ class WarnaController extends Controller
             'draw' => $request['draw'],
             'recordsFiltered' => $totalFiltered,
             'recordsTotal' => count($dataFiltered),
-            'aaData' => $dataFiltered
+            'aaData' => $dataFiltered,
         ];
 
         return Response()->json($response, 200);
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -98,6 +99,7 @@ class WarnaController extends Controller
             $status = 422;
             DB::rollBack();
         }
+
         return response()->json($message, $status);
     }
 
@@ -109,11 +111,12 @@ class WarnaController extends Controller
         $data = DB::table('masterwarna')->where('kodewarna', $id)->first();
         if ($data) {
             $status = 200;
-            $message = ['message' => "data master warna berhasil di temukan", 'data' => $data];
+            $message = ['message' => 'data master warna berhasil di temukan', 'data' => $data];
         } else {
             $status = 404;
-            $message = ['message' => "data master warna gagal di temukan", 'data' => $data];
+            $message = ['message' => 'data master warna gagal di temukan', 'data' => $data];
         }
+
         return response()->json($message, $status);
     }
 
@@ -144,6 +147,7 @@ class WarnaController extends Controller
             $status = 422;
             DB::rollBack();
         }
+
         return response()->json($message, $status);
     }
 
@@ -170,6 +174,7 @@ class WarnaController extends Controller
             }
             $status = 422;
         }
+
         return response()->json($message, $status);
     }
 }

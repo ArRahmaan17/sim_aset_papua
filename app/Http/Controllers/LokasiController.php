@@ -16,7 +16,6 @@ class LokasiController extends Controller
         return view('layout.lokasi.index');
     }
 
-
     public function dataTable(Request $request)
     {
         $totalData = DB::table('masterlokasi')
@@ -31,14 +30,14 @@ class LokasiController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('nama ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('nama '.$request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('masterlokasi')->select('*')
-                ->where('nama', 'like', '%' . $request['search']['value'] . '%');
+                ->where('nama', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('nama ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('nama '.$request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -48,9 +47,9 @@ class LokasiController extends Controller
 
             $totalFiltered = DB::table('masterlokasi')
                 ->select('*')
-                ->where('nama', 'like', '%' . $request['search']['value'] . '%');
+                ->where('nama', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('nama ' . $request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('nama '.$request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -58,7 +57,7 @@ class LokasiController extends Controller
         foreach ($assets as $index => $item) {
             $row = [];
             $row[] = $request['start'] + ($index + 1);
-            $row[] = "" . $item->nama;
+            $row[] = ''.$item->nama;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
             $row[] = $item->kodelokasi;
             $dataFiltered[] = $row;
@@ -67,7 +66,7 @@ class LokasiController extends Controller
             'draw' => $request['draw'],
             'recordsFiltered' => $totalFiltered,
             'recordsTotal' => count($dataFiltered),
-            'aaData' => $dataFiltered
+            'aaData' => $dataFiltered,
         ];
 
         return Response()->json($response, 200);
@@ -99,6 +98,7 @@ class LokasiController extends Controller
             $status = 422;
             DB::rollBack();
         }
+
         return response()->json($message, $status);
     }
 
@@ -110,11 +110,12 @@ class LokasiController extends Controller
         $data = DB::table('masterlokasi')->where('kodelokasi', $id)->first();
         if ($data) {
             $status = 200;
-            $message = ['message' => "data master lokasi berhasil di temukan", 'data' => $data];
+            $message = ['message' => 'data master lokasi berhasil di temukan', 'data' => $data];
         } else {
             $status = 404;
-            $message = ['message' => "data master lokasi gagal di temukan", 'data' => $data];
+            $message = ['message' => 'data master lokasi gagal di temukan', 'data' => $data];
         }
+
         return response()->json($message, $status);
     }
 
@@ -145,6 +146,7 @@ class LokasiController extends Controller
             $status = 422;
             DB::rollBack();
         }
+
         return response()->json($message, $status);
     }
 
@@ -178,6 +180,7 @@ class LokasiController extends Controller
             }
             $status = 422;
         }
+
         return response()->json($message, $status);
     }
 }

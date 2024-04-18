@@ -15,6 +15,7 @@ class SatuanController extends Controller
     {
         return view('layout.satuan.index');
     }
+
     public function dataTable(Request $request)
     {
         $totalData = DB::table('mastersatuan')
@@ -30,14 +31,14 @@ class SatuanController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('satuan ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('satuan '.$request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('mastersatuan')->select('*')
-                ->where('satuan', 'like', '%' . $request['search']['value'] . '%');
+                ->where('satuan', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('satuan ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('satuan '.$request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -46,9 +47,9 @@ class SatuanController extends Controller
             $assets = $assets->get();
 
             $totalFiltered = DB::table('mastersatuan')->select('*')
-                ->where('satuan', 'like', '%' . $request['search']['value'] . '%');
+                ->where('satuan', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('satuan ' . $request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('satuan '.$request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -65,7 +66,7 @@ class SatuanController extends Controller
             'draw' => $request['draw'],
             'recordsFiltered' => $totalFiltered,
             'recordsTotal' => count($dataFiltered),
-            'aaData' => $dataFiltered
+            'aaData' => $dataFiltered,
         ];
 
         return Response()->json($response, 200);
@@ -97,6 +98,7 @@ class SatuanController extends Controller
             $status = 422;
             DB::rollBack();
         }
+
         return response()->json($message, $status);
     }
 
@@ -110,11 +112,12 @@ class SatuanController extends Controller
             ->first();
         if ($data) {
             $status = 200;
-            $message = ['message' => "data master tanah berhasil di temukan", 'data' => $data];
+            $message = ['message' => 'data master tanah berhasil di temukan', 'data' => $data];
         } else {
             $status = 404;
-            $message = ['message' => "data master tanah gagal di temukan", 'data' => $data];
+            $message = ['message' => 'data master tanah gagal di temukan', 'data' => $data];
         }
+
         return response()->json($message, $status);
     }
 
@@ -127,8 +130,8 @@ class SatuanController extends Controller
         DB::beginTransaction();
         try {
             $unique = DB::table('mastersatuan')
-                ->where('satuan',   $request->satuan)
-                ->where('kodesatuan', '<>',   $id)
+                ->where('satuan', $request->satuan)
+                ->where('kodesatuan', '<>', $id)
                 ->count();
             if ($unique != 0) {
                 throw new Exception('gagal melakukan simpan data satuan, terdapat duplikasi data satuan', 422);
@@ -147,6 +150,7 @@ class SatuanController extends Controller
             $status = 422;
             DB::rollBack();
         }
+
         return response()->json($message, $status);
     }
 
@@ -173,6 +177,7 @@ class SatuanController extends Controller
             }
             $status = 422;
         }
+
         return response()->json($message, $status);
     }
 }

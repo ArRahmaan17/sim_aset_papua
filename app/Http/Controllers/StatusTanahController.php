@@ -34,14 +34,14 @@ class StatusTanahController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('statustanah ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('statustanah '.$request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('masterstatustanah')->select('*')
-                ->where('statustanah', 'like', '%' . $request['search']['value'] . '%');
+                ->where('statustanah', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('statustanah ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('statustanah '.$request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -50,9 +50,9 @@ class StatusTanahController extends Controller
             $assets = $assets->get();
 
             $totalFiltered = DB::table('masterstatustanah')->select('*')
-                ->where('statustanah', 'like', '%' . $request['search']['value'] . '%');
+                ->where('statustanah', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('statustanah ' . $request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('statustanah '.$request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -69,7 +69,7 @@ class StatusTanahController extends Controller
             'draw' => $request['draw'],
             'recordsFiltered' => $totalFiltered,
             'recordsTotal' => count($dataFiltered),
-            'aaData' => $dataFiltered
+            'aaData' => $dataFiltered,
         ];
 
         return Response()->json($response, 200);
@@ -101,6 +101,7 @@ class StatusTanahController extends Controller
             $status = 422;
             DB::rollBack();
         }
+
         return response()->json($message, $status);
     }
 
@@ -114,11 +115,12 @@ class StatusTanahController extends Controller
             ->first();
         if ($data) {
             $status = 200;
-            $message = ['message' => "data master status tanah berhasil di temukan", 'data' => $data];
+            $message = ['message' => 'data master status tanah berhasil di temukan', 'data' => $data];
         } else {
             $status = 404;
-            $message = ['message' => "data master status tanah gagal di temukan", 'data' => $data];
+            $message = ['message' => 'data master status tanah gagal di temukan', 'data' => $data];
         }
+
         return response()->json($message, $status);
     }
 
@@ -131,8 +133,8 @@ class StatusTanahController extends Controller
         DB::beginTransaction();
         try {
             $unique = DB::table('masterstatustanah')
-                ->where('statustanah',   $request->statustanah)
-                ->where('kodestatustanah', '<>',   $id)
+                ->where('statustanah', $request->statustanah)
+                ->where('kodestatustanah', '<>', $id)
                 ->count();
             if ($unique != 0) {
                 throw new Exception('gagal melakukan simpan data status tanah, terdapat duplikasi data status tanah', 422);
@@ -151,6 +153,7 @@ class StatusTanahController extends Controller
             $status = 422;
             DB::rollBack();
         }
+
         return response()->json($message, $status);
     }
 
@@ -177,6 +180,7 @@ class StatusTanahController extends Controller
             }
             $status = 422;
         }
+
         return response()->json($message, $status);
     }
 }

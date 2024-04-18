@@ -15,7 +15,7 @@ class haveOrganisasi
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (session('organisasi') == null && !$request->routeIs('home')) {
+        if (session('organisasi') == null && ! $request->routeIs('home')) {
             return redirect()->route('home');
         } else {
             return $next($request);

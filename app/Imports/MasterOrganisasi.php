@@ -8,9 +8,6 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 
 class MasterOrganisasi implements ToCollection
 {
-    /**
-     * @param Collection $collection
-     */
     public function collection(Collection $collection)
     {
         foreach ($collection as $index => $row) {
@@ -26,7 +23,7 @@ class MasterOrganisasi implements ToCollection
                     isset($code[6]) ? $code[6] : 0,
                     isset($code[7]) ? $code[7] : 0,
                     2024,
-                    "" . $row[1],
+                    ''.$row[1],
                     0,
                 ]);
             }

@@ -25,7 +25,7 @@ class GolonganBarangController extends Controller
         DB::beginTransaction();
         try {
             $unique = DB::table('mastergolonganbarang')
-                ->where('golonganbarang',   $request->golonganbarang)
+                ->where('golonganbarang', $request->golonganbarang)
                 ->count();
             if ($unique != 0) {
                 throw new Exception('gagal melakukan simpan data golongan barang, terdapat duplikasi data golongan barang', 422);
@@ -42,6 +42,7 @@ class GolonganBarangController extends Controller
             $status = 422;
             DB::rollBack();
         }
+
         return response()->json($message, $status);
     }
 
@@ -55,11 +56,12 @@ class GolonganBarangController extends Controller
             ->first();
         if ($data) {
             $status = 200;
-            $message = ['message' => "data master golongan barang berhasil di temukan", 'data' => $data];
+            $message = ['message' => 'data master golongan barang berhasil di temukan', 'data' => $data];
         } else {
             $status = 404;
-            $message = ['message' => "data master golongan barang gagal di temukan", 'data' => $data];
+            $message = ['message' => 'data master golongan barang gagal di temukan', 'data' => $data];
         }
+
         return response()->json($message, $status);
     }
 
@@ -81,14 +83,14 @@ class GolonganBarangController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('golonganbarang ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('golonganbarang '.$request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('mastergolonganbarang')->select('*')
-                ->where('golonganbarang', 'like', '%' . $request['search']['value'] . '%');
+                ->where('golonganbarang', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('golonganbarang ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('golonganbarang '.$request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -97,9 +99,9 @@ class GolonganBarangController extends Controller
             $assets = $assets->get();
 
             $totalFiltered = DB::table('mastergolonganbarang')->select('*')
-                ->where('golonganbarang', 'like', '%' . $request['search']['value'] . '%');
+                ->where('golonganbarang', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('golonganbarang ' . $request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('golonganbarang '.$request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -116,7 +118,7 @@ class GolonganBarangController extends Controller
             'draw' => $request['draw'],
             'recordsFiltered' => $totalFiltered,
             'recordsTotal' => count($dataFiltered),
-            'aaData' => $dataFiltered
+            'aaData' => $dataFiltered,
         ];
 
         return Response()->json($response, 200);
@@ -131,8 +133,8 @@ class GolonganBarangController extends Controller
         DB::beginTransaction();
         try {
             $unique = DB::table('mastergolonganbarang')
-                ->where('golonganbarang',   $request->golonganbarang)
-                ->where('kodegolonganbarang', '<>',   $id)
+                ->where('golonganbarang', $request->golonganbarang)
+                ->where('kodegolonganbarang', '<>', $id)
                 ->count();
             if ($unique != 0) {
                 throw new Exception('gagal melakukan simpan data golongan barang, terdapat duplikasi data golongan barang', 422);
@@ -151,6 +153,7 @@ class GolonganBarangController extends Controller
             $status = 422;
             DB::rollBack();
         }
+
         return response()->json($message, $status);
     }
 
@@ -178,6 +181,7 @@ class GolonganBarangController extends Controller
             }
             $status = 422;
         }
+
         return response()->json($message, $status);
     }
 }

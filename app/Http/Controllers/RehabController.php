@@ -15,6 +15,7 @@ class RehabController extends Controller
     {
         return view('layout.rehab.index');
     }
+
     public function dataTable(Request $request)
     {
         $totalData = DB::table('masterrehab')
@@ -31,15 +32,15 @@ class RehabController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('urai ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('urai '.$request['order'][0]['dir']);
             }
             $assets = $assets->groupByRaw('kodegolongan, kodebidang, kodekelompok, kodesub, kodesubsub, urai')->get();
         } else {
             $assets = DB::table('masterrehab')
                 ->select('kodegolongan', 'kodebidang', 'kodekelompok', 'kodesub', 'kodesubsub', 'urai')
-                ->where('urai', 'like', '%' . $request['search']['value'] . '%');
+                ->where('urai', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('urai ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('urai '.$request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -49,9 +50,9 @@ class RehabController extends Controller
 
             $totalFiltered = DB::table('masterrehab')
                 ->selectRaw('DISTINCT(urai)')
-                ->where('urai', 'like', '%' . $request['search']['value'] . '%');
+                ->where('urai', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('urai ' . $request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('urai '.$request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->groupByRaw('kodegolongan, kodebidang, kodekelompok, kodesub, kodesubsub, urai')->get()->count();
         }
@@ -60,9 +61,9 @@ class RehabController extends Controller
             $row = [];
             $row[] = null;
             $row[] = $request['start'] + ($index + 1);
-            $row[] = $item->kodegolongan . '.' . $item->kodebidang . '.' . $item->kodekelompok . '.' . $item->kodesub . '.' . $item->kodesubsub . ' ' . $item->urai;
+            $row[] = $item->kodegolongan.'.'.$item->kodebidang.'.'.$item->kodekelompok.'.'.$item->kodesub.'.'.$item->kodesubsub.' '.$item->urai;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
-            $row[] = $item->kodegolongan . '.' . $item->kodebidang . '.' . $item->kodekelompok . '.' . $item->kodesub . '.' . $item->kodesubsub;
+            $row[] = $item->kodegolongan.'.'.$item->kodebidang.'.'.$item->kodekelompok.'.'.$item->kodesub.'.'.$item->kodesubsub;
             $row[] = DB::table('masterrehab')->where([
                 'kodegolongan' => $item->kodegolongan,
                 'kodebidang' => $item->kodebidang,
@@ -76,10 +77,12 @@ class RehabController extends Controller
             'draw' => $request['draw'],
             'recordsFiltered' => $totalFiltered,
             'recordsTotal' => count($dataFiltered),
-            'aaData' => $dataFiltered
+            'aaData' => $dataFiltered,
         ];
+
         return Response()->json($response, 200);
     }
+
     public function listBarang(Request $request)
     {
         $totalData = DB::table('masterbarang as mb')->select('mb.kodegolongan', 'mb.kodebidang', 'mb.kodekelompok', 'mb.kodesub', 'mb.kodesubsub', 'mb.urai', 'mr.koderehab')
@@ -90,7 +93,7 @@ class RehabController extends Controller
                     ['mr.kodebidang', 'mb.kodebidang'],
                     ['mr.kodekelompok', 'mb.kodekelompok'],
                     ['mr.kodesub', 'mb.kodesub'],
-                    ['mr.kodesubsub', 'mb.kodesubsub']
+                    ['mr.kodesubsub', 'mb.kodesubsub'],
                 ]
             )
             ->where([
@@ -109,7 +112,7 @@ class RehabController extends Controller
                         ['mr.kodebidang', 'mb.kodebidang'],
                         ['mr.kodekelompok', 'mb.kodekelompok'],
                         ['mr.kodesub', 'mb.kodesub'],
-                        ['mr.kodesubsub', 'mb.kodesubsub']
+                        ['mr.kodesubsub', 'mb.kodesubsub'],
                     ]
                 )->where([
                     ['mb.kodesub', 0],
@@ -117,10 +120,10 @@ class RehabController extends Controller
                 ])->groupByRaw('kodegolongan, kodebidang, kodekelompok, kodesub, kodesubsub, urai, koderehab')->get();
             $assets = collect(array_values($assets->where('koderehab', null)->values()->all()));
             if ($request['length'] != '-1') {
-                $assets =  $assets->only(limitOffsetToArray($request['length'], ($request['start'] + 1)));
+                $assets = $assets->only(limitOffsetToArray($request['length'], ($request['start'] + 1)));
             }
             if (isset($request['order'][0]['column'])) {
-                $assets =   $assets->sortBy('urai', SORT_REGULAR, $request['order'][0]['column'] == 'desc' ? true : false)->values()->all();
+                $assets = $assets->sortBy('urai', SORT_REGULAR, $request['order'][0]['column'] == 'desc' ? true : false)->values()->all();
             }
             $assets = $assets;
         } else {
@@ -133,59 +136,61 @@ class RehabController extends Controller
                         ['mr.kodebidang', 'mb.kodebidang'],
                         ['mr.kodekelompok', 'mb.kodekelompok'],
                         ['mr.kodesub', 'mb.kodesub'],
-                        ['mr.kodesubsub', 'mb.kodesubsub']
+                        ['mr.kodesubsub', 'mb.kodesubsub'],
                     ]
                 )->where([
                     ['mb.kodesub', 0],
                     ['mb.kodekelompok', '<>', 0],
-                    ['mb.urai', 'like', "%" . $request['search']['value'] . "%"]
+                    ['mb.urai', 'like', '%'.$request['search']['value'].'%'],
                 ])->get();
             if (isset($request['order'][0]['column'])) {
-                $assets =   $assets->sortBy('urai', SORT_REGULAR, $request['order'][0]['column'] == 'desc' ? true : false)->values()->all();
+                $assets = $assets->sortBy('urai', SORT_REGULAR, $request['order'][0]['column'] == 'desc' ? true : false)->values()->all();
             }
             if ($request['length'] != '-1') {
                 // return json_encode([limitOffsetToArray($request['length'], ($request['start'] + 1)), $request['length'], $request['start']]);
-                $assets =  $assets->only(limitOffsetToArray($request['length'], ($request['start'] + 1)))->values()->all();
+                $assets = $assets->only(limitOffsetToArray($request['length'], ($request['start'] + 1)))->values()->all();
             }
 
             $totalData =
                 DB::table('masterbarang as mb')
-                ->select('mb.kodegolongan', 'mb.kodebidang', 'mb.kodekelompok', 'mb.kodesub', 'mb.kodesubsub', 'mb.urai', 'mr.koderehab')
-                ->leftJoin(
-                    'masterrehab as mr',
-                    [
-                        ['mr.kodegolongan', 'mb.kodegolongan'],
-                        ['mr.kodebidang', 'mb.kodebidang'],
-                        ['mr.kodekelompok', 'mb.kodekelompok'],
-                        ['mr.kodesub', 'mb.kodesub'],
-                        ['mr.kodesubsub', 'mb.kodesubsub']
-                    ]
-                )->where([
+                    ->select('mb.kodegolongan', 'mb.kodebidang', 'mb.kodekelompok', 'mb.kodesub', 'mb.kodesubsub', 'mb.urai', 'mr.koderehab')
+                    ->leftJoin(
+                        'masterrehab as mr',
+                        [
+                            ['mr.kodegolongan', 'mb.kodegolongan'],
+                            ['mr.kodebidang', 'mb.kodebidang'],
+                            ['mr.kodekelompok', 'mb.kodekelompok'],
+                            ['mr.kodesub', 'mb.kodesub'],
+                            ['mr.kodesubsub', 'mb.kodesubsub'],
+                        ]
+                    )->where([
                     ['mb.kodesub', 0],
                     ['mb.kodekelompok', '<>', 0],
-                    ['mb.urai', 'like', "%" . $request['search']['value'] . "%"]
+                    ['mb.urai', 'like', '%'.$request['search']['value'].'%'],
                 ])->get();
             if (isset($request['order'][0]['column'])) {
-                $totalData =   $totalData->sortBy('urai', SORT_REGULAR, $request['order'][0]['column'] == 'desc' ? true : false)->values()->all();
+                $totalData = $totalData->sortBy('urai', SORT_REGULAR, $request['order'][0]['column'] == 'desc' ? true : false)->values()->all();
             }
             $totalFiltered = $totalData->count();
         }
         $dataFiltered = [];
         foreach ($assets as $index => $item) {
             $row = [];
-            $row[] = $item->kodegolongan . '.' . $item->kodebidang . '.' . $item->kodekelompok . '.' . $item->kodesub . '.' . $item->kodesubsub . ' ' . $item->urai;
+            $row[] = $item->kodegolongan.'.'.$item->kodebidang.'.'.$item->kodekelompok.'.'.$item->kodesub.'.'.$item->kodesubsub.' '.$item->urai;
             $row[] = "<button class='btn btn-warning use' ><i class='bx bx-check'></i> Pakai</button>";
-            $row[] = $item->kodegolongan . '.' . $item->kodebidang . '.' . $item->kodekelompok . '.' . $item->kodesub . '.' . $item->kodesubsub;
+            $row[] = $item->kodegolongan.'.'.$item->kodebidang.'.'.$item->kodekelompok.'.'.$item->kodesub.'.'.$item->kodesubsub;
             $dataFiltered[] = $row;
         }
         $response = [
             'draw' => $request['draw'],
             'recordsFiltered' => $totalFiltered,
             'recordsTotal' => count($dataFiltered),
-            'aaData' => $dataFiltered
+            'aaData' => $dataFiltered,
         ];
+
         return Response()->json($response, 200);
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -215,6 +220,7 @@ class RehabController extends Controller
             DB::table('masterrehab')->insert($data);
             DB::commit();
             $response = ['message' => 'berhasil menambahkan data master rebah'];
+
             return response()->json($response, 200);
         } catch (Exception $th) {
             DB::rollBack();
@@ -222,6 +228,7 @@ class RehabController extends Controller
             if ($th->getCode() == 422) {
                 $response = ['message' => $th->getMessage()];
             }
+
             return response()->json($response, 422);
         }
     }
@@ -246,9 +253,9 @@ class RehabController extends Controller
             $status = 200;
             $response = ['message' => 'data master rehab tidak ditemukan', 'data' => $data];
         }
+
         return response()->json($response, $status);
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -299,7 +306,7 @@ class RehabController extends Controller
                     'b.kodejenistransaksi' => 113,
                 ])->count();
             if ($count_rehab > 0) {
-                throw new Exception("Data tidak dihapus dikarenakan digunakan oleh data lain, harap hapus terlebih dahulu data tersebut", 422);
+                throw new Exception('Data tidak dihapus dikarenakan digunakan oleh data lain, harap hapus terlebih dahulu data tersebut', 422);
             }
             DB::table('masterrehab')
                 ->where([
@@ -307,11 +314,12 @@ class RehabController extends Controller
                     'kodebidang' => $kodebarang[1],
                     'kodekelompok' => $kodebarang[2],
                     'kodesub' => $kodebarang[3],
-                    'kodesubsub' => $kodebarang[4]
+                    'kodesubsub' => $kodebarang[4],
                 ])
                 ->delete();
             $response = ['message' => 'data master rehab berhasil di hapus'];
             DB::commit();
+
             return response()->json($response, 200);
         } catch (Exception $th) {
             DB::rollBack();
@@ -319,6 +327,7 @@ class RehabController extends Controller
                 $response = ['message' => $th->getMessage()];
             }
             $response = ['message' => 'data master rehab gagal di hapus'];
+
             return response()->json($response, 422);
         }
     }

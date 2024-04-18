@@ -30,7 +30,7 @@ class penyusutan_aset extends Command
         try {
             $data = DB::table('kibtransaksi as k')
                 ->select('k.kodekib')
-                ->whereRaw('MONTH(tanggalpenyusutan) = MONTH(CURDATE()) and k.tahunorganisasi = (YEAR(CURDATE())-1) and k.tahunperolehan =' . env('TAHUN_APLIKASI'))
+                ->whereRaw('MONTH(tanggalpenyusutan) = MONTH(CURDATE()) and k.tahunorganisasi = (YEAR(CURDATE())-1) and k.tahunperolehan ='.env('TAHUN_APLIKASI'))
                 ->get()
                 ->toArray();
             $kodekib = array_column($data, 'kodekib');
@@ -64,14 +64,14 @@ class penyusutan_aset extends Command
                         ['m.kodebidang', 'k.kodebidang'],
                         ['m.kodekelompok', 'k.kodekelompok'],
                         ['m.kodesub', 'k.kodesub'],
-                        ['m.kodesubsub', 'k.kodesubsub']
+                        ['m.kodesubsub', 'k.kodesubsub'],
                     ]
                 )->leftJoin('penyusutan as p', 'k.kodekib', '=', 'p.kodekib')
                 ->whereIn('k.kodekib', $kodekib)
                 ->get()
                 ->toArray();
             $dataKibTelahSusut = array_map(function ($data) {
-                $data = (array)$data;
+                $data = (array) $data;
                 if ($data['tahun'] < intval(env('TAHUN_APLIKASI')) || $data['tahun'] == null) {
                     $data['akumulasi'] = $data['nilaiakumulasibarang'] - ($data['nilaiakumulasibarang'] / $data['masamanfaat']);
                     if ($data['manfaat'] != null) {
@@ -87,9 +87,10 @@ class penyusutan_aset extends Command
                     $data['susut'] = $data['nilaiakumulasibarang'] / $data['masamanfaat'];
                     $data['tahun'] = intval(env('TAHUN_APLIKASI'));
                     $data['nilai'] = $data['nilaiakumulasibarang'] / $data['masamanfaat'];
-                    $data['ket'] = "penyusutan tahun " . env('TAHUN_APLIKASI');
+                    $data['ket'] = 'penyusutan tahun '.env('TAHUN_APLIKASI');
                     $data['bulan'] = now('Asia/Jakarta')->month;
                     unset($data['nilaiakumulasibarang'], $data['masamanfaat']);
+
                     return $data;
                 }
             }, $dataKibAkanSusut);

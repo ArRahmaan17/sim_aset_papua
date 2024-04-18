@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class OrganisasiController extends Controller
@@ -62,12 +61,13 @@ class OrganisasiController extends Controller
                 end) as parent")
         )->get()->toArray();
         if (count($data) == 0) {
-            $message = ['message' => "Master Organisasi tidak ditemukan", 'data' => $data];
+            $message = ['message' => 'Master Organisasi tidak ditemukan', 'data' => $data];
             $status = 404;
         } else {
             $status = 200;
-            $message = ['message' => "Master Organisasi ditemukan", 'data' => buildTreeOrganisasi($data)];
+            $message = ['message' => 'Master Organisasi ditemukan', 'data' => buildTreeOrganisasi($data)];
         }
+
         return response()->json($message, $status);
     }
 }

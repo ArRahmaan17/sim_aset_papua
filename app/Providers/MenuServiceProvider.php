@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Http\Request;
 
 class MenuServiceProvider extends ServiceProvider
 {
@@ -35,7 +35,7 @@ class MenuServiceProvider extends ServiceProvider
         View::composer('*', function ($view) use ($menu_sidebar, $menu_profile) {
             $view->with([
                 'menu_sidebar' => $menu_sidebar,
-                'menu_profile' => $menu_profile
+                'menu_profile' => $menu_profile,
             ]);
         });
     }

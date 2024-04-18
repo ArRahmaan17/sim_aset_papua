@@ -23,6 +23,7 @@ class PerolehanSP2DController extends Controller
             )
             ->get();
         $dataBap = Bap::getAllOrganizationBapsSp2d();
+
         return view('layout.perolehansp2d.index', compact('dataMaster', 'dataBap', 'dataPerogramSP2D'));
     }
 
@@ -37,6 +38,7 @@ class PerolehanSP2DController extends Controller
             )
             ->get();
         $dataPerogramSP2D = dataToOption($dataPerogramSP2D);
+
         return response()->json(['message' => 'Semua Data Kegiatan', 'data' => $dataPerogramSP2D]);
     }
 
@@ -56,8 +58,10 @@ class PerolehanSP2DController extends Controller
                 'keperluan'
             )
             ->get();
+
         return response()->json(['message' => 'Semua Data Rekening', 'data' => $dataRekeningSP2D]);
     }
+
     public function getDetailBap($kodebap)
     {
         $data = Bap::getDetailBapSp2d($kodebap);
@@ -69,8 +73,10 @@ class PerolehanSP2DController extends Controller
             $response = ['message' => 'Detail Bap gagal ditemukan', 'data' => $data];
             $status = 404;
         }
+
         return response()->json($response, $status);
     }
+
     public function store(Request $request)
     {
         DB::beginTransaction();
@@ -82,7 +88,7 @@ class PerolehanSP2DController extends Controller
             $bap['tanggalkontrak'] = isset($request->tanggalkontrak) ? convertAlphabeticalToNumberDate($request->tanggalkontrak) : null;
             $bap['tanggalbaterima'] = isset($request->tanggalbapterima) ? convertAlphabeticalToNumberDate($request->tanggalbaterima) : null;
             $bap['tanggalkuitansi'] = isset($request->tanggalkuitansi) ? convertAlphabeticalToNumberDate($request->tanggalkuitansi) : null;
-            $copied = clone (session('organisasi'));
+            $copied = clone session('organisasi');
             $bap['kodeurusan'] = $must['kodeurusan'] = $copied->kodeurusan;
             $bap['kodesuburusan'] = $must['kodesuburusan'] = $copied->kodesuburusan;
             $bap['kodesubsuburusan'] = $must['kodesubsuburusan'] = $copied->kodesubsuburusan;
@@ -97,7 +103,7 @@ class PerolehanSP2DController extends Controller
             $kodebap = DB::table('bap')->insertGetId($bap, 'kodebap');
             foreach ($kibs['detail'] as $index => $kib) {
                 $jumlah = $kib['jumlah'];
-                for ($i = 0; $i < (int)$jumlah; $i++) {
+                for ($i = 0; $i < (int) $jumlah; $i++) {
                     $copied = array_merge($kib, $must);
                     $copied['nilaibarang'] = convertStringToNumber($kib['nilaibarang']);
                     if (isset($kib['tglimb'])) {
@@ -160,7 +166,7 @@ class PerolehanSP2DController extends Controller
                     DB::table('kibtransaksi')->insert($copied);
                     $data_sp2d = [];
                     foreach ($kib_sp2d as $index => $datasp2d) {
-                        list($data_sp2d[$index]['nosp2d'], $data_sp2d[$index]['tglsp2d']) = explode('_', $datasp2d['id']);
+                        [$data_sp2d[$index]['nosp2d'], $data_sp2d[$index]['tglsp2d']] = explode('_', $datasp2d['id']);
                         $data_sp2d[$index]['kdper'] = $datasp2d['kdper'];
                         $data_sp2d[$index]['kodekib'] = $kodekib;
                         $data_sp2d[$index]['tahun'] = env('TAHUN_APLIKASI');
@@ -182,6 +188,7 @@ class PerolehanSP2DController extends Controller
             $response = ['message' => 'gagal menyimpan perolehan sp2d'];
             $status = 422;
         }
+
         return response()->json($response, $status);
     }
 
@@ -191,7 +198,7 @@ class PerolehanSP2DController extends Controller
         DB::beginTransaction();
         try {
             $bap = DB::table('bap')->where('kodebap', $ba)->first();
-            $copied = clone (session('organisasi'));
+            $copied = clone session('organisasi');
             $must['kodeurusan'] = $copied->kodeurusan;
             $must['kodesuburusan'] = $copied->kodesuburusan;
             $must['kodesubsuburusan'] = $copied->kodesubsuburusan;
@@ -213,7 +220,7 @@ class PerolehanSP2DController extends Controller
             }, $kibs['detail']);
             $removerequest = array_merge(array_diff($datakib, $requestdatakib), array_diff($requestdatakib, $datakib));
             foreach ($kibs['detail'] as $index => $kib) {
-                $kib_sp2d = clone (object)($kib['sp2d']);
+                $kib_sp2d = clone (object) ($kib['sp2d']);
                 if (gettype($kib_sp2d) == 'object' && isset($kib_sp2d->scalar)) {
                     $kib_sp2d = json_decode($kib_sp2d->scalar);
                 }
@@ -229,7 +236,7 @@ class PerolehanSP2DController extends Controller
                     ->get()
                     ->toArray();
                 if (count($data) > 0) {
-                    $copied = (array)(clone (object)$kib);
+                    $copied = (array) (clone (object) $kib);
                     unset($copied['kodekib'], $copied['select-asal-usul-barang-perolehan-aset'], $copied['jumlah'], $copied['iddetail'], $copied['kodemasterbarang'], $copied['urai'], $copied['kodekib']);
                     $kodekib = array_map(function ($obj) {
                         return $obj->kodekib;
@@ -238,7 +245,7 @@ class PerolehanSP2DController extends Controller
                         return $obj->kodekibtransaksi;
                     }, $data);
                     unset($copied['sp2d']);
-                    $copied['nilaibarang'] =  intval(convertStringToNumber($copied['nilaibarang'])) / 100;
+                    $copied['nilaibarang'] = intval(convertStringToNumber($copied['nilaibarang'])) / 100;
                     $updatekib = DB::table('kib')
                         ->whereIn('kodekib', $kodekib)
                         ->update($copied);
@@ -331,7 +338,7 @@ class PerolehanSP2DController extends Controller
                     DB::table('kibsp2d')->whereIn('kodekib', $kodekib)->delete();
                     foreach ($kib_sp2d as $index => $datasp2d) {
                         $datasp2d = (array) $datasp2d;
-                        list($data_sp2d[$index]['nosp2d'], $data_sp2d[$index]['tglsp2d']) = explode('_', $datasp2d['id']);
+                        [$data_sp2d[$index]['nosp2d'], $data_sp2d[$index]['tglsp2d']] = explode('_', $datasp2d['id']);
                         $data_sp2d[$index]['kdper'] = $datasp2d['kdper'];
                         $data_sp2d[$index]['kodekib'] = $kodekib[0];
                         $data_sp2d[$index]['tahun'] = env('TAHUN_APLIKASI');
@@ -344,7 +351,7 @@ class PerolehanSP2DController extends Controller
                     DB::table('kibsp2d')->insert($data_sp2d);
                 } else {
                     $jumlah = $kib['jumlah'];
-                    for ($i = 0; $i < (int)$jumlah; $i++) {
+                    for ($i = 0; $i < (int) $jumlah; $i++) {
                         $copied = array_merge($kib, $must);
                         $copied['nilaibarang'] = convertStringToNumber($kib['nilaibarang']);
 
@@ -410,7 +417,7 @@ class PerolehanSP2DController extends Controller
                     $data_sp2d = [];
                     DB::table('kibsp2d')->where('kodekib', $kodekib)->delete();
                     foreach ($kib_sp2d as $index => $datasp2d) {
-                        list($data_sp2d[$index]['nosp2d'], $data_sp2d[$index]['tglsp2d']) = explode('_', $datasp2d['id']);
+                        [$data_sp2d[$index]['nosp2d'], $data_sp2d[$index]['tglsp2d']] = explode('_', $datasp2d['id']);
                         $data_sp2d[$index]['kdper'] = $datasp2d['kdper'];
                         $data_sp2d[$index]['kodekib'] = $kodekib;
                         $data_sp2d[$index]['tahun'] = env('TAHUN_APLIKASI');
@@ -441,6 +448,7 @@ class PerolehanSP2DController extends Controller
                 $message = ['message' => $th->getMessage()];
             }
         }
+
         return response()->json($message, $status);
     }
 }
