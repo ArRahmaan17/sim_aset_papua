@@ -215,7 +215,7 @@
                 $('.multiple').removeClass('d-none');
                 $('#modalFormMasterGolonganBarang').modal('show');
                 $('#modalFormMasterGolonganBarang').find('.modal-title').html(
-                    'Edit Master Golongan Barang');
+                    'Tambah Master Golongan Barang');
                 $("#form-golongan-barang")[0].reset()
             });
             $('.single').click(function() {

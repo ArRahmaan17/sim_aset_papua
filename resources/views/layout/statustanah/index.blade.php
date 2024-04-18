@@ -214,7 +214,7 @@
                 window.state = 'add';
                 $('.multiple').removeClass('d-none');
                 $('#modalFormMasterStatusTanah').modal('show');
-                $('#modalFormMasterStatusTanah').find('.modal-title').html('Edit Master Status Tanah');
+                $('#modalFormMasterStatusTanah').find('.modal-title').html('Tambah Master Status Tanah');
                 $("#form-status-tanah")[0].reset()
             });
             $('.single').click(function() {

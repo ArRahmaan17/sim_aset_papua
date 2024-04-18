@@ -65,6 +65,7 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::delete('/master/masamanfaat/delete/{id?}', [MasaManfaatController::class, 'destroy'])->name('masamanfaat.delete');
         Route::get('/master/organisasi', [OrganisasiController::class, 'index'])->name('organisasi');
         Route::get('/master/organisasi/all', [OrganisasiController::class, 'all'])->name('organisasi.all');
+        Route::get('/master/organisasi/useable', [OrganisasiController::class, 'useable'])->name('organisasi.useable');
         Route::get('/master/warna', [WarnaController::class, 'index'])->name('warna');
         Route::get('/master/warna/data-table', [WarnaController::class, 'dataTable'])->name('warna.data-table');
         Route::get('/master/warna/{id?}', [WarnaController::class, 'show'])->name('warna.show');

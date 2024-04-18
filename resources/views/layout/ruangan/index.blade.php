@@ -45,6 +45,11 @@
                 <div class="modal-body">
                     <form id="form-ruangan" action="">
                         <input type="hidden" name="koderuangan">
+                        <div class="mb-3">
+                            <select class="form-control select2" name="kodeorganisasi">
+                                <option value="0.0.0.0.0.0.0">Pilih Organisasi</option>
+                            </select>
+                        </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon11"><i class='bx bxs-door-open'></i></span>
                             <input type="text" class="form-control" name="ruang" placeholder="Ruang Hakim">
@@ -217,9 +222,27 @@
                 window.state = 'add';
                 $('.multiple').removeClass('d-none');
                 $('#modalFormMasterRuangan').modal('show');
-                $('#modalFormMasterRuangan').find('.modal-title').html('Edit Master Ruangan');
-                $("#form-ruangan")[0].reset()
+                $('#modalFormMasterRuangan').find('.modal-title').html('Tambah Master Ruangan');
+                $("#form-ruangan")[0].reset();
+                setTimeout(() => {
+                    $('.select2').select2({
+                        dropdownParent: $("#modalFormMasterRuangan")
+                    });
+                }, 600);
             });
+            $.ajax({
+                type: "get",
+                url: `{{ route('master.organisasi.useable') }}`,
+                dataType: "json",
+                success: function(response) {
+                    $('[name=kodeorganisasi]').html(response.data);
+                }
+            });
+            setTimeout(() => {
+                $('.select2').select2({
+                    dropdownParent: $("#modalFormMasterRuangan")
+                });
+            }, 600);
 
             $('.single').click(function() {
                 if (window.state == 'add') {
