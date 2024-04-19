@@ -17,7 +17,22 @@ class Bap extends Model
         $copied = clone session('organisasi');
         unset($copied->organisasi, $copied->wajibsusut);
 
-        return self::where((array) $copied)->where(['kodejenistransaksi' => '101', 'tahunorganisasi' => env('APP_YEAR')])->orderBy('idbap', 'ASC')->get();
+        return self::select('bap.*')->join('kibtransaksi as kt', 'kt.kodebap', '=', 'bap.idbap')
+            ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
+            ->join('kibsp2d as kd', 'k.kodekib', '!=', 'kd.kodekib')
+            ->where([
+                'bap.kodejenistransaksi' => '101',
+                'bap.tahunorganisasi' => env('APP_YEAR'),
+                'bap.kodeurusan' => $copied->kodeurusan,
+                'bap.kodesuburusan' => $copied->kodesuburusan,
+                'bap.kodesubsuburusan' => $copied->kodesubsuburusan,
+                'bap.kodeorganisasi' => $copied->kodeorganisasi,
+                'bap.kodesuborganisasi' => $copied->kodesuborganisasi,
+                'bap.kodeunit' => $copied->kodeunit,
+                'bap.kodesubunit' => $copied->kodesubunit,
+                'bap.kodesubsubunit' => $copied->kodesubsubunit,
+            ])->whereRaw('NOT EXISTS (select kodekib from kibsp2d kd)')->orderBy('bap.idbap', 'ASC')
+            ->groupBy('bap.kodebap')->get();
     }
 
     public static function getAllOrganizationBapsSp2d()
@@ -51,7 +66,7 @@ class Bap extends Model
             return $obj->kodekib;
         }, $dataKibTransaksi);
         $dataKib = DB::table('kib')
-            ->selectRaw('kib.*, kodekib as iddetail, uraibarang as urai, (select kategori from masterasalusul where kodeasalusul = kib.kodeasalusul) as "select-asal-usul-barang-perolehan-aset", (select count(kodekib) from kibtransaksi where kodebap = '.$kodebap.' and uraibarang = kib.uraibarang group by uraibarang) as jumlah')
+            ->selectRaw('kib.*, kodekib as iddetail, uraibarang as urai, (select kategori from masterasalusul where kodeasalusul = kib.kodeasalusul) as "select-asal-usul-barang-perolehan-aset", (select count(kodekib) from kibtransaksi where kodebap = ' . $kodebap . ' and uraibarang = kib.uraibarang group by uraibarang) as jumlah')
             ->whereIn('kodekib', $kodekib)
             ->get()
             ->unique('uraibarang')

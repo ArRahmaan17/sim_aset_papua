@@ -47,7 +47,10 @@
                         <input type="hidden" name="koderuangan">
                         <div class="mb-3">
                             <select class="form-control select2" name="kodeorganisasi">
-                                <option value="0.0.0.0.0.0.0">Pilih Organisasi</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <select class="form-control select2" name="kodegedung">
                             </select>
                         </div>
                         <div class="input-group mb-3">
@@ -224,11 +227,6 @@
                 $('#modalFormMasterRuangan').modal('show');
                 $('#modalFormMasterRuangan').find('.modal-title').html('Tambah Master Ruangan');
                 $("#form-ruangan")[0].reset();
-                setTimeout(() => {
-                    $('.select2').select2({
-                        dropdownParent: $("#modalFormMasterRuangan")
-                    });
-                }, 600);
             });
             $.ajax({
                 type: "get",
@@ -238,11 +236,13 @@
                     $('[name=kodeorganisasi]').html(response.data);
                 }
             });
-            setTimeout(() => {
-                $('.select2').select2({
-                    dropdownParent: $("#modalFormMasterRuangan")
-                });
-            }, 600);
+            $("#modalFormMasterRuangan").on('shown.bs.modal', function() {
+                setTimeout(() => {
+                    $('.select2').select2({
+                        dropdownParent: $("#modalFormMasterRuangan")
+                    });
+                }, 100);
+            })
 
             $('.single').click(function() {
                 if (window.state == 'add') {
