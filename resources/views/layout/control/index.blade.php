@@ -76,23 +76,31 @@
                 <!-- /Account -->
             </div>
             <div class="card">
-                <h5 class="card-header">Delete Account</h5>
+                <h5 class="card-header">Change Password</h5>
                 <div class="card-body">
                     <div class="mb-3 col-12 mb-0">
                         <div class="alert alert-warning">
-                            <h6 class="alert-heading fw-bold mb-1">Are you sure you want to delete your account?</h6>
-                            <p class="mb-0">Once you delete your account, there is no going back. Please be certain.
+                            <h6 class="alert-heading fw-bold mb-1">Are you sure you want to change your password?</h6>
+                            <p class="mb-0">Once you change your password, there is no going back. Please be certain.
                             </p>
                         </div>
                     </div>
                     <form id="formAccountDeactivation" onsubmit="return false">
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" name="accountActivation"
-                                id="accountActivation" />
-                            <label class="form-check-label" for="accountActivation">I confirm my account
-                                deactivation</label>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="password">Password Saat Ini</label>
+                                <input class="form-control" type="password" name="password" id="password" />
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label" for="newpassword">Password Baru</label>
+                                <input class="form-control"type="password" name="newpassword" id="newpassword" />
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" name="confirm" id="confirm" />
+                            <label class="form-check-label" for="confirm">Konfirmasi Perubahan Password</label>
+                        </div>
+                        <button type="submit" class="btn btn-danger deactivate-account">Change Password</button>
                     </form>
                 </div>
             </div>
