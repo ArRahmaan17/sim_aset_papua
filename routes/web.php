@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AsalUsulController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\GolonganBarangController;
@@ -106,6 +107,13 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::post('/master/jurnal/store', [JurnalController::class, 'store'])->name('jurnal.store');
         Route::put('/master/jurnal/update/{id?}', [JurnalController::class, 'update'])->name('jurnal.update');
         Route::delete('/master/jurnal/delete/{id?}', [JurnalController::class, 'destroy'])->name('jurnal.delete');
+        Route::get('/master/asal-usul', [AsalUsulController::class, 'index'])->name('asal-usul');
+        Route::get('/master/asal-usul/useable', [AsalUsulController::class, 'useable'])->name('asal-usul.useable');
+        Route::get('/master/asal-usul/data-table', [AsalUsulController::class, 'dataTable'])->name('asal-usul.data-table');
+        Route::get('/master/asal-usul/show/{id?}', [AsalUsulController::class, 'show'])->name('asal-usul.show');
+        Route::post('/master/asal-usul/store', [AsalUsulController::class, 'store'])->name('asal-usul.store');
+        Route::put('/master/asal-usul/update/{id?}', [AsalUsulController::class, 'update'])->name('asal-usul.update');
+        Route::delete('/master/asal-usul/delete/{id?}', [AsalUsulController::class, 'destroy'])->name('asal-usul.delete');
         Route::get('/master/satuan', [SatuanController::class, 'index'])->name('satuan');
         Route::post('/master/satuan/store', [SatuanController::class, 'store'])->name('satuan.store');
         Route::get('/master/satuan/data-table', [SatuanController::class, 'dataTable'])->name('satuan.data-table');
