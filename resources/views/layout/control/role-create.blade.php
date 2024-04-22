@@ -85,6 +85,8 @@
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
     <script>
+        window.datatable_role = null;
+
         function updateRoleUser() {
             data = serializeObject($('#form-role'));
             $.ajax({
@@ -96,7 +98,7 @@
                 },
                 dataType: "json",
                 success: function(response) {
-                    window.datatable_warna.ajax.reload();
+                    window.datatable_role.ajax.reload();
                 }
             });
         }
@@ -112,7 +114,7 @@
                 },
                 dataType: "json",
                 success: function(response) {
-                    window.datatable_warna.ajax.reload();
+                    window.datatable_role.ajax.reload();
                 }
             });
         }
