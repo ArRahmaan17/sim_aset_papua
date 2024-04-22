@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Throwable;
 
 class RuanganController extends Controller
 {
@@ -30,14 +29,14 @@ class RuanganController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('ruang ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('ruang '.$request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('masterruang')->select('*')
-                ->where('ruang', 'like', '%' . $request['search']['value'] . '%');
+                ->where('ruang', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('ruang ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('ruang '.$request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -47,9 +46,9 @@ class RuanganController extends Controller
 
             $totalFiltered = DB::table('masterruang')
                 ->select('*')
-                ->where('ruang', 'like', '%' . $request['search']['value'] . '%');
+                ->where('ruang', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('ruang ' . $request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('ruang '.$request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -57,7 +56,7 @@ class RuanganController extends Controller
         foreach ($assets as $index => $item) {
             $row = [];
             $row[] = $request['start'] + ($index + 1);
-            $row[] = '' . $item->ruang;
+            $row[] = ''.$item->ruang;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
             $row[] = $item->koderuang;
             $dataFiltered[] = $row;
@@ -206,6 +205,7 @@ class RuanganController extends Controller
             $status = 404;
             $message = ['message' => 'data master ruang gagal di hapus'];
         }
+
         return response()->json($message, $status);
     }
 
