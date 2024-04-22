@@ -1,6 +1,6 @@
 @extends('template.parent')
 @push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/iziToast.min.css') }}">
 @endpush
 @section('content')
     <div class="row">
@@ -86,23 +86,25 @@
                             </p>
                         </div>
                     </div>
-                    <form id="formAccountDeactivation" onsubmit="return false">
+                    <form id="formPasswordChange">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="password">Password Saat Ini</label>
-                                <input class="form-control" type="password" name="password" id="password" />
+                                <input class="form-control" type="password" name="password" id="password" required />
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="newpassword">Password Baru</label>
-                                <input class="form-control"type="password" name="newpassword" id="newpassword" />
+                                <input class="form-control"type="password" name="newpassword" id="newpassword"
+                                    required />
                             </div>
                         </div>
                         <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" name="confirm" id="confirm" />
+                            <input class="form-check-input" required type="checkbox" name="confirm" id="confirm" />
                             <label class="form-check-label" for="confirm">Konfirmasi Perubahan Password</label>
                         </div>
-                        <button type="submit" class="btn btn-danger deactivate-account">Change Password</button>
+                        <button type="submit" class="btn btn-danger deactivate-account"><i class='bx bxs-key'></i>
+                            Change Password</button>
                     </form>
                 </div>
             </div>
@@ -111,7 +113,7 @@
 @endsection
 @push('js')
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('assets/js/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
     <script>
         window.profile = null;
         $(function() {
@@ -150,7 +152,30 @@
                     data: data,
                     dataType: "json",
                     success: function(response) {
-
+                        iziToast.success({
+                            title: 'SUCCESS',
+                            message: response.message,
+                        });
+                        $("#formAccountSettings")[0].reset();
+                    }
+                });
+            });
+            $("#formPasswordChange").submit(function(e) {
+                e.preventDefault();
+                let data = serializeObject($("#formPasswordChange"));
+                $.ajax({
+                    type: "POST",
+                    url: `{{ route('control.user.change-password') }}`,
+                    data: {
+                        ...data
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        iziToast.success({
+                            title: 'SUCCESS',
+                            message: response.message,
+                        });
+                        $("#formPasswordChange")[0].reset();
                     }
                 });
             });

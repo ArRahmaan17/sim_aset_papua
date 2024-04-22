@@ -174,6 +174,7 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
     Route::name('control.')->group(function () {
         Route::get('/control-user', [UserControlController::class, 'index'])->name('user');
         Route::post('/control-user', [UserControlController::class, 'profileChange'])->name('user');
+        Route::post('/control-user/change-password', [UserControlController::class, 'passwordChange'])->name('user.change-password');
         Route::get('/control-user/user-role', [UserControlController::class, 'dataTable'])->name('user-role.data-table');
         Route::get('/control-user/role', [UserControlController::class, 'roleCreate'])->name('role.create');
         Route::post('/control-user/role', [UserControlController::class, 'roleStore'])->name('role.store');

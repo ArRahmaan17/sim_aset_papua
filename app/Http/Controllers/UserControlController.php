@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Throwable;
 
 class UserControlController extends Controller
@@ -28,14 +29,14 @@ class UserControlController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('role '.$request['order'][0]['dir']);
+                $assets->orderByRaw('role ' . $request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('role')->select('*')
-                ->where('role', 'like', '%'.$request['search']['value'].'%');
+                ->where('role', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('role '.$request['order'][0]['dir']);
+                $assets->orderByRaw('role ' . $request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -45,9 +46,9 @@ class UserControlController extends Controller
 
             $totalFiltered = DB::table('role')
                 ->select('*')
-                ->where('role', 'like', '%'.$request['search']['value'].'%');
+                ->where('role', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('role '.$request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('role ' . $request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -55,7 +56,7 @@ class UserControlController extends Controller
         foreach ($assets as $index => $item) {
             $row = [];
             $row[] = $request['start'] + ($index + 1);
-            $row[] = ''.$item->role;
+            $row[] = '' . $item->role;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
             $row[] = $item->idrole;
             $dataFiltered[] = $row;
@@ -74,13 +75,15 @@ class UserControlController extends Controller
     {
         DB::beginTransaction();
         try {
-            if (is_dir(public_path('assets/profile/')) == false) {
-                mkdir(public_path('assets/profile/'));
-            }
-            $filename = 'assets/profile/'.session('user')->idusers.'.jpg';
-            file_put_contents(public_path($filename), file_get_contents($_FILES['foto']['tmp_name']));
             $data = $request->except('_token');
-            $data['foto'] = $filename;
+            if ($request->file('foto')) {
+                if (is_dir(public_path('assets/profile/')) == false) {
+                    mkdir(public_path('assets/profile/'));
+                }
+                $filename = 'assets/profile/' . session('user')->idusers . '.jpg';
+                file_put_contents(public_path($filename), file_get_contents($_FILES['foto']['tmp_name']));
+                $data['foto'] = $filename;
+            }
             $id = session('user')->idusers;
             DB::table('users')
                 ->where('idusers', $id)
@@ -96,6 +99,35 @@ class UserControlController extends Controller
             DB::rollBack();
             $status = 422;
             $message = ['message' => 'Profile user gagal di ubah'];
+        }
+
+        return response()->json($message, $status);
+    }
+
+    public function passwordChange(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $id = session('user')->idusers;
+            if ($request->newpassword == $request->password && $request->confirm == 'on') {
+                DB::table('users')
+                    ->where('idusers', $id)
+                    ->update(['password' => Hash::make($request->password)]);
+            } else if ($request->newpassword != $request->password) {
+                throw new Exception('password saat ini dan password baru tidak sama', 422);
+            } else {
+                throw new Exception('mohon untuk melakukan konfirmasi perubahan password', 422);
+            }
+            DB::commit();
+            $status = 200;
+            $message = ['message' => 'password user berhasil di ubah'];
+        } catch (Throwable $th) {
+            DB::rollBack();
+            $status = 422;
+            $message = ['message' => 'password user gagal di ubah'];
+            if ($th->getCode() == 422) {
+                $message = ['message' => $th->getMessage()];
+            }
         }
 
         return response()->json($message, $status);
