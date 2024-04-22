@@ -5,38 +5,38 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class KondisiController extends Controller
+class KlasifikasiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('layout.kondisi.index');
+        return view('layout.klasifikasi.index');
     }
 
     public function dataTable(Request $request)
     {
-        $totalData = DB::table('masterkondisi')
+        $totalData = DB::table('masterklasifikasi')
             ->orderBy('kodelokasi', 'asc')
             ->count();
         $totalFiltered = $totalData;
         if (empty($request['search']['value'])) {
-            $assets = DB::table('masterkondisi')
+            $assets = DB::table('masterklasifikasi')
                 ->select('*');
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('kondisi '.$request['order'][0]['dir']);
+                $assets->orderByRaw('klasifikasi ' . $request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
-            $assets = DB::table('masterkondisi')->select('*')
-                ->where('kondisi', 'like', '%'.$request['search']['value'].'%');
+            $assets = DB::table('masterklasifikasi')->select('*')
+                ->where('klasifikasi', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('kondisi '.$request['order'][0]['dir']);
+                $assets->orderByRaw('klasifikasi ' . $request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -44,11 +44,11 @@ class KondisiController extends Controller
             }
             $assets = $assets->get();
 
-            $totalFiltered = DB::table('masterkondisi')
+            $totalFiltered = DB::table('masterklasifikasi')
                 ->select('*')
-                ->where('kondisi', 'like', '%'.$request['search']['value'].'%');
+                ->where('klasifikasi', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('kondisi '.$request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('klasifikasi ' . $request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -56,9 +56,9 @@ class KondisiController extends Controller
         foreach ($assets as $index => $item) {
             $row = [];
             $row[] = $request['start'] + ($index + 1);
-            $row[] = ''.$item->kondisi;
+            $row[] = '' . $item->klasifikasi;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
-            $row[] = $item->kodekondisi;
+            $row[] = $item->kodeklasifikasi;
             $dataFiltered[] = $row;
         }
         $response = [
@@ -78,14 +78,14 @@ class KondisiController extends Controller
     {
         DB::beginTransaction();
         try {
-            DB::table('masterkondisi')->insert($request->except('_token'));
+            DB::table('masterklasifikasi')->insert($request->except('_token'));
             DB::commit();
             $statuscode = 200;
-            $response = ['message' => 'master kondisi berhasil di tambahkan'];
+            $response = ['message' => 'master klasifikasi berhasil di tambahkan'];
         } catch (\Throwable $th) {
             DB::rollBack();
             $statuscode = 422;
-            $response = ['message' => 'master kondisi gagal di tambahkan'];
+            $response = ['message' => 'master klasifikasi gagal di tambahkan'];
         }
 
         return response()->json($response, $statuscode);
@@ -96,13 +96,13 @@ class KondisiController extends Controller
      */
     public function show(string $id)
     {
-        $data = DB::table('masterkondisi')->where('kodekondisi', $id)->first();
+        $data = DB::table('masterklasifikasi')->where('kodeklasifikasi', $id)->first();
         if ($data) {
             $status = 200;
-            $message = ['message' => 'data master kondisi berhasil di temukan', 'data' => $data];
+            $message = ['message' => 'data master klasifikasi berhasil di temukan', 'data' => $data];
         } else {
             $status = 404;
-            $message = ['message' => 'data master kondisi gagal di temukan', 'data' => $data];
+            $message = ['message' => 'data master klasifikasi gagal di temukan', 'data' => $data];
         }
 
         return response()->json($message, $status);
@@ -115,19 +115,18 @@ class KondisiController extends Controller
     {
         DB::beginTransaction();
         try {
-            DB::table('masterkondisi')->where('kodekondisi', $id)->update($request->except('_token'));
+            DB::table('masterklasifikasi')->where('kodeklasifikasi', $id)->update($request->except('_token'));
             DB::commit();
             $statuscode = 200;
-            $response = ['message' => 'master kondisi berhasil di ubah'];
+            $response = ['message' => 'master klasifikasi berhasil di ubah'];
         } catch (\Throwable $th) {
             DB::rollBack();
             $statuscode = 422;
-            $response = ['message' => 'master kondisi gagal di ubah'];
+            $response = ['message' => 'master klasifikasi gagal di ubah'];
         }
 
         return response()->json($response, $statuscode);
     }
-
     /**
      * Remove the specified resource from storage.
      */
@@ -135,15 +134,15 @@ class KondisiController extends Controller
     {
         DB::beginTransaction();
         try {
-            DB::table('masterkondisi')
-                ->where('kodekondisi', $id)->delete();
+            DB::table('masterklasifikasi')
+                ->where('kodeklasifikasi', $id)->delete();
             $status = 200;
-            $message = ['message' => 'data master kondisi berhasil di hapus'];
+            $message = ['message' => 'data master klasifikasi berhasil di hapus'];
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
             $status = 404;
-            $message = ['message' => 'data master kondisi gagal di hapus'];
+            $message = ['message' => 'data master klasifikasi gagal di hapus'];
         }
 
         return response()->json($message, $status);
