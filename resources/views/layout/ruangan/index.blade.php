@@ -46,16 +46,32 @@
                     <form id="form-ruangan" action="">
                         <input type="hidden" name="koderuangan">
                         <div class="mb-3">
+                            <label class="form-label">Organisasi/Bidang</label>
                             <select class="form-control select2" name="kodeorganisasi">
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <select class="form-control select2" name="kodegedung">
-                            </select>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class='bx bx-door-open'></i></span>
+                            <input type="text" class="form-control" readonly name="noruang" placeholder="Nomer Ruang">
                         </div>
                         <div class="input-group mb-3">
-                            <span class="input-group-text" id="basic-addon11"><i class='bx bxs-door-open'></i></span>
-                            <input type="text" class="form-control" name="ruang" placeholder="Ruang Hakim">
+                            <span class="input-group-text"><i class='bx bxs-door-open'></i></span>
+                            <input type="text" class="form-control" name="ruang" placeholder="Nama Ruang">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class='bx bxs-user-detail'></i></span>
+                            <input type="text" class="form-control" name="penanggungjawab_jabatan"
+                                placeholder="Jabatan Penanggung Jawab">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class='bx bxs-user-check'></i></span>
+                            <input type="text" class="form-control" name="penanggungjawab_nama"
+                                placeholder="Nama Penanggung Jawab">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class='bx bx-id-card'></i></span>
+                            <input type="text" class="form-control" name="penanggungjawab_nip"
+                                placeholder="NIP Penanggung Jawab">
                         </div>
                     </form>
                 </div>
@@ -95,6 +111,21 @@
                     success: function(response) {
                         $("#form-ruangan").find('[name=koderuangan]')
                             .val(response.data.koderuang);
+                        if (response.data.organisasi == '0.0.0.0.0.0.0.0') {
+                            $("#form-ruangan").find('[name=kodeorganisasi]')
+                                .val('');
+                        } else {
+                            $("#form-ruangan").find('[name=kodeorganisasi]')
+                                .val(response.data.organisasi);
+                        }
+                        $("#form-ruangan").find('[name=noruang]')
+                            .val(response.data.noruang);
+                        $("#form-ruangan").find('[name=penanggungjawab_jabatan]')
+                            .val(response.data.penanggungjawab_jabatan);
+                        $("#form-ruangan").find('[name=penanggungjawab_nama]')
+                            .val(response.data.penanggungjawab_nama);
+                        $("#form-ruangan").find('[name=penanggungjawab_nip]')
+                            .val(response.data.penanggungjawab_nip);
                         $("#form-ruangan").find('[name=ruang]')
                             .val(response.data.ruang);
                     }
@@ -227,6 +258,20 @@
                 $('#modalFormMasterRuangan').modal('show');
                 $('#modalFormMasterRuangan').find('.modal-title').html('Tambah Master Ruangan');
                 $("#form-ruangan")[0].reset();
+                $('[name=kodeorganisasi]').change(function() {
+                    let organsasi = (this.value == '') ? '0.0.0.0.0.0.0.0' : this.value;
+                    $.ajax({
+                        type: "get",
+                        url: `{{ route('master.ruangan.last-room-number') }}/${organsasi}`,
+                        dataType: "json",
+                        success: function(response) {
+                            $('[name=noruang]').val(response.data.noruang + 1);
+                        },
+                        error: function(error) {
+                            $('[name=noruang]').val(1);
+                        }
+                    });
+                })
             });
             $.ajax({
                 type: "get",

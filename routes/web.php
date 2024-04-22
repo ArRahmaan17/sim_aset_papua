@@ -80,6 +80,7 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::delete('/master/lokasi/delete/{id?}', [LokasiController::class, 'destroy'])->name('lokasi.delete');
         Route::get('/master/ruangan', [RuanganController::class, 'index'])->name('ruangan');
         Route::get('/master/ruangan/data-table', [RuanganController::class, 'dataTable'])->name('ruangan.data-table');
+        Route::get('/master/ruangan/last-room-number/{organisasi?}', [RuanganController::class, 'lastRoomNumber'])->name('ruangan.last-room-number');
         Route::get('/master/ruangan/show/{id?}', [RuanganController::class, 'show'])->name('ruangan.show');
         Route::post('/master/ruangan/store', [RuanganController::class, 'store'])->name('ruangan.store');
         Route::put('/master/ruangan/update/{id?}', [RuanganController::class, 'update'])->name('ruangan.update');
