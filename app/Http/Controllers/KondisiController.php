@@ -29,14 +29,14 @@ class KondisiController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('kondisi ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('kondisi '.$request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('masterkondisi')->select('*')
-                ->where('kondisi', 'like', '%' . $request['search']['value'] . '%');
+                ->where('kondisi', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('kondisi ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('kondisi '.$request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -46,9 +46,9 @@ class KondisiController extends Controller
 
             $totalFiltered = DB::table('masterkondisi')
                 ->select('*')
-                ->where('kondisi', 'like', '%' . $request['search']['value'] . '%');
+                ->where('kondisi', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('kondisi ' . $request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('kondisi '.$request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -56,7 +56,7 @@ class KondisiController extends Controller
         foreach ($assets as $index => $item) {
             $row = [];
             $row[] = $request['start'] + ($index + 1);
-            $row[] = '' . $item->kondisi;
+            $row[] = ''.$item->kondisi;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
             $row[] = $item->kodekondisi;
             $dataFiltered[] = $row;
