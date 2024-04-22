@@ -18,7 +18,7 @@ class KlasifikasiController extends Controller
     public function dataTable(Request $request)
     {
         $totalData = DB::table('masterklasifikasi')
-            ->orderBy('kodelokasi', 'asc')
+            ->orderBy('kodeklasifikasi', 'asc')
             ->count();
         $totalFiltered = $totalData;
         if (empty($request['search']['value'])) {
@@ -29,14 +29,14 @@ class KlasifikasiController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('klasifikasi '.$request['order'][0]['dir']);
+                $assets->orderByRaw('klasifikasi ' . $request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('masterklasifikasi')->select('*')
-                ->where('klasifikasi', 'like', '%'.$request['search']['value'].'%');
+                ->where('klasifikasi', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('klasifikasi '.$request['order'][0]['dir']);
+                $assets->orderByRaw('klasifikasi ' . $request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -46,9 +46,9 @@ class KlasifikasiController extends Controller
 
             $totalFiltered = DB::table('masterklasifikasi')
                 ->select('*')
-                ->where('klasifikasi', 'like', '%'.$request['search']['value'].'%');
+                ->where('klasifikasi', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('klasifikasi '.$request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('klasifikasi ' . $request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -56,7 +56,7 @@ class KlasifikasiController extends Controller
         foreach ($assets as $index => $item) {
             $row = [];
             $row[] = $request['start'] + ($index + 1);
-            $row[] = ''.$item->klasifikasi;
+            $row[] = '' . $item->klasifikasi;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
             $row[] = $item->kodeklasifikasi;
             $dataFiltered[] = $row;

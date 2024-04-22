@@ -32,7 +32,7 @@ class AsalUsulController extends Controller
     public function dataTable(Request $request)
     {
         $totalData = DB::table('masterasalusul')
-            ->orderBy('kodelokasi', 'asc')
+            ->orderBy('kodeasalusul', 'asc')
             ->count();
         $totalFiltered = $totalData;
         if (empty($request['search']['value'])) {
@@ -43,14 +43,14 @@ class AsalUsulController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('asalusul '.$request['order'][0]['dir']);
+                $assets->orderByRaw('asalusul ' . $request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('masterasalusul')->select('*')
-                ->where('asalusul', 'like', '%'.$request['search']['value'].'%');
+                ->where('asalusul', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('asalusul '.$request['order'][0]['dir']);
+                $assets->orderByRaw('asalusul ' . $request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -60,9 +60,9 @@ class AsalUsulController extends Controller
 
             $totalFiltered = DB::table('masterasalusul')
                 ->select('*')
-                ->where('asalusul', 'like', '%'.$request['search']['value'].'%');
+                ->where('asalusul', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('asalusul '.$request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('asalusul ' . $request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -70,8 +70,8 @@ class AsalUsulController extends Controller
         foreach ($assets as $index => $item) {
             $row = [];
             $row[] = $request['start'] + ($index + 1);
-            $row[] = ''.$item->kategori;
-            $row[] = ''.$item->asalusul;
+            $row[] = '' . $item->kategori;
+            $row[] = '' . $item->asalusul;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
             $row[] = $item->kodeasalusul;
             $dataFiltered[] = $row;
