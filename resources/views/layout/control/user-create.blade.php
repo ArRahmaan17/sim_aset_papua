@@ -103,43 +103,50 @@
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <script>
-        window.accountUserImage = null;
+        window.profile = null;
         $(function() {
             const deactivateAcc = document.querySelector('#formAccountDeactivation');
 
             // Update/reset user image of account page
-            window.accountUserImage = document.getElementById('uploadedAvatar');
+            let accountUserImage = document.getElementById('uploadedAvatar');
             const fileInput = document.querySelector('.account-file-input'),
                 resetFileInput = document.querySelector('.account-image-reset');
 
-            if (window.accountUserImage) {
-                const resetImage = window.accountUserImage.src;
+            if (accountUserImage) {
+                const resetImage = accountUserImage.src;
                 fileInput.onchange = () => {
                     if (fileInput.files[0]) {
-                        window.accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
+                        window.profile = fileInput.files[0];
+                        accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
                     }
                 };
                 resetFileInput.onclick = () => {
                     fileInput.value = '';
-                    window.accountUserImage.src = resetImage;
+                    window.profile = null
+                    accountUserImage.src = resetImage;
                 };
             }
-        });
-        $("#formAccountSettings").submit(function(e) {
-            e.preventDefault();
-            let data = serializeObject($("#formAccountSettings"))
-            data.foto = window.accountUserImage.src
-            $.ajax({
-                type: "POST",
-                url: `{{ route('control.user') }}`,
-                data: {
-                    _token: `{{ csrf_token() }}`,
-                    ...data
-                },
-                dataType: "json",
-                success: function(response) {
-
+            $("#formAccountSettings").submit(function(e) {
+                e.preventDefault();
+                console.log(window.profile)
+                let data = new FormData($("#formAccountSettings"));
+                if (window.profile != null) {
+                    data.append('foto', window.profile);
                 }
+                $.ajax({
+                    type: "POST",
+                    url: `{{ route('control.user') }}`,
+                    processData: false,
+                    contentType: true,
+                    data: {
+                        _token: `{{ csrf_token() }}`,
+                        ...data
+                    },
+                    dataType: "json",
+                    success: function(response) {
+
+                    }
+                });
             });
         });
     </script>

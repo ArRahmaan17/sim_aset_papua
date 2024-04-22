@@ -29,8 +29,8 @@
                 <!-- Account -->
                 <div class="card-body">
                     <div class="d-flex align-items-start align-items-sm-center gap-4">
-                        <img src="../assets/img/avatars/1.png" alt="user-avatar" class="d-block rounded" height="100"
-                            width="100" id="uploadedAvatar" />
+                        <img src="{{ session('user')->foto !== null ? asset(session('user')->foto) : '../assets/img/avatars/1.png' }}"
+                            alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
                         <div class="button-wrapper">
                             <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                                 <span class="d-none d-sm-block"><i class='bx bx-cloud-upload'></i> Upload new photo</span>
@@ -50,6 +50,7 @@
                 <hr class="my-0" />
                 <div class="card-body">
                     <form id="formAccountSettings" autocomplete="off">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label for="username" class="form-label">NIK</label>
@@ -86,6 +87,7 @@
                         </div>
                     </div>
                     <form id="formAccountDeactivation" onsubmit="return false">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label class="form-label" for="password">Password Saat Ini</label>
@@ -111,43 +113,46 @@
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <script>
-        window.accountUserImage = null;
+        window.profile = null;
         $(function() {
             const deactivateAcc = document.querySelector('#formAccountDeactivation');
 
             // Update/reset user image of account page
-            window.accountUserImage = document.getElementById('uploadedAvatar');
+            let accountUserImage = document.getElementById('uploadedAvatar');
             const fileInput = document.querySelector('.account-file-input'),
                 resetFileInput = document.querySelector('.account-image-reset');
 
-            if (window.accountUserImage) {
-                const resetImage = window.accountUserImage.src;
+            if (accountUserImage) {
+                const resetImage = accountUserImage.src;
                 fileInput.onchange = () => {
                     if (fileInput.files[0]) {
-                        window.accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
+                        window.profile = fileInput.files[0];
+                        accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
                     }
                 };
                 resetFileInput.onclick = () => {
                     fileInput.value = '';
-                    window.accountUserImage.src = resetImage;
+                    window.profile = null
+                    accountUserImage.src = resetImage;
                 };
             }
-        });
-        $("#formAccountSettings").submit(function(e) {
-            e.preventDefault();
-            let data = serializeObject($("#formAccountSettings"))
-            data.foto = window.accountUserImage.src
-            $.ajax({
-                type: "POST",
-                url: `{{ route('control.user') }}`,
-                data: {
-                    _token: `{{ csrf_token() }}`,
-                    ...data
-                },
-                dataType: "json",
-                success: function(response) {
-
+            $("#formAccountSettings").submit(function(e) {
+                e.preventDefault();
+                let data = new FormData($(this)[0]);
+                if (window.profile != null) {
+                    data.append('foto', window.profile);
                 }
+                $.ajax({
+                    type: "POST",
+                    url: `{{ route('control.user') }}`,
+                    processData: false,
+                    contentType: false,
+                    data: data,
+                    dataType: "json",
+                    success: function(response) {
+
+                    }
+                });
             });
         });
     </script>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class UserControlController extends Controller
 {
@@ -71,7 +72,30 @@ class UserControlController extends Controller
 
     public function profileChange(Request $request)
     {
-        dd($request);
+        DB::beginTransaction();
+        try {
+            if (is_dir(public_path('assets/profile/')) == false) mkdir(public_path('assets/profile/'));
+            $filename =  "assets/profile/" . session('user')->idusers . '.jpg';
+            file_put_contents(public_path($filename), file_get_contents($_FILES['foto']['tmp_name']));
+            $data = $request->except('_token');
+            $data['foto'] = $filename;
+            $id = session('user')->idusers;
+            DB::table('users')
+                ->where('idusers', $id)
+                ->update($data);
+            DB::commit();
+            $status = 200;
+            $message = ['message' => 'Profile user berhasil di ubah'];
+            $data = DB::table('users')->where('idusers', $id)->first();
+            session()->forget('user');
+            session()->put('user', $data);
+        } catch (Throwable $th) {
+            dd($th);
+            DB::rollBack();
+            $status = 422;
+            $message = ['message' => 'Profile user gagal di ubah'];
+        }
+        return response()->json($message, $status);
     }
 
     public function roleStore(Request $request)
