@@ -182,6 +182,7 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::put('/control-user/role/{id?}', [UserControlController::class, 'roleUpdate'])->name('role.update');
         Route::delete('/control-user/role/{id?}', [UserControlController::class, 'roleDestroy'])->name('role.delete');
         Route::get('/control-user/create', [UserControlController::class, 'userCreate'])->name('create-user');
+        Route::post('/control-user/create', [UserControlController::class, 'userStore'])->name('create-user');
     });
 });
 Route::middleware(['throttle:application', 'authenticated'])->group(function () {

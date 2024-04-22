@@ -1,6 +1,7 @@
 @extends('template.parent')
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/iziToast.min.css') }}">
 @endpush
 @section('content')
     <div class="row">
@@ -25,74 +26,61 @@
                 @endif
             </ul>
             <div class="card mb-4">
-                <h5 class="card-header">Profile Details</h5>
-                <!-- Account -->
+                <h5 class="card-header">Tambah User Aplikasi</h5>
                 <div class="card-body">
-                    <div class="d-flex align-items-start align-items-sm-center gap-4">
-                        <img src="../assets/img/avatars/1.png" alt="user-avatar" class="d-block rounded" height="100"
-                            width="100" id="uploadedAvatar" />
-                        <div class="button-wrapper">
-                            <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
-                                <span class="d-none d-sm-block"><i class='bx bx-cloud-upload'></i> Upload new photo</span>
-                                <i class="bx bx-upload d-block d-sm-none"></i>
-                                <input type="file" id="upload" class="account-file-input" hidden
-                                    accept="image/png, image/jpeg" />
-                            </label>
-                            <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
-                                <i class="bx bx-reset d-block d-sm-none"></i>
-                                <span class="d-none d-sm-block">Reset</span>
-                            </button>
-
-                            <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
-                        </div>
-                    </div>
-                </div>
-                <hr class="my-0" />
-                <div class="card-body">
-                    <form id="formAccountSettings" autocomplete="off">
+                    <form id="formCreateUser" autocomplete="off">
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label for="username" class="form-label">NIK</label>
                                 <input class="form-control" type="text" id="username" name="username"
-                                    placeholder="Kristanto" value="{{ session('user')->username }}" autofocus />
+                                    placeholder="31831******" autofocus />
+                            </div>
+                            <div class="mb-3 form-password-toggle col-md-6">
+                                <label class="form-label" for="password">Password</label>
+                                <div class="input-group input-group-merge">
+                                    <input type="password" id="password" class="form-control" name="password"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password" />
+                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                </div>
+                                <div class="form-text">
+                                    Default password <em class="text-warning">"papuabaratdaya"</em>
+                                </div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="nohp" class="form-label">Nomer Handphone</label>
                                 <input class="form-control" type="text" name="nohp" id="nohp"
-                                    placeholder="012312223123" value="{{ session('user')->nohp }}" />
+                                    placeholder="012312223123" />
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="displayname" class="form-label">Display Name</label>
                                 <input class="form-control" type="text" id="displayname" name="displayname"
-                                    placeholder="User Pusat" value="{{ session('user')->displayname }}" />
+                                    placeholder="User Pusat" />
+                            </div>
+                            <div class="mb-3 col-md-12">
+                                <label for="">Role User</label>
+                                <div class="d-flex flex-column flex-sm-row p-2 align-content-conter flex-wrap">
+                                    @foreach ($roles as $role)
+                                        <div class="form-check">
+                                            <input type="radio" name="idrole" id="role{{ $role->idrole }}"
+                                                value="{{ $role->idrole }}">
+                                            <label for="role{{ $role->idrole }}"
+                                                class="form-check-label">{{ $role->role }}</label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-12 d-none">
+                                <label for="">Organisasi</label>
+                                <select class="form-control select2" name="useropd" disabled>
+                                    {!! $semuaorganisasi !!}
+                                </select>
                             </div>
                         </div>
                         <div class="mt-2">
-                            <button type="submit" class="btn btn-primary me-2"><i class='bx bxs-save'></i> Save
-                                changes</button>
+                            <button type="submit" class="btn btn-primary me-2"><i class='bx bxs-save'></i> Tambah
+                                User</button>
                         </div>
-                    </form>
-                </div>
-                <!-- /Account -->
-            </div>
-            <div class="card">
-                <h5 class="card-header">Delete Account</h5>
-                <div class="card-body">
-                    <div class="mb-3 col-12 mb-0">
-                        <div class="alert alert-warning">
-                            <h6 class="alert-heading fw-bold mb-1">Are you sure you want to delete your account?</h6>
-                            <p class="mb-0">Once you delete your account, there is no going back. Please be certain.
-                            </p>
-                        </div>
-                    </div>
-                    <form id="formAccountDeactivation" onsubmit="return false">
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" name="accountActivation"
-                                id="accountActivation" />
-                            <label class="form-check-label" for="accountActivation">I confirm my account
-                                deactivation</label>
-                        </div>
-                        <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
                     </form>
                 </div>
             </div>
@@ -102,49 +90,38 @@
 @push('js')
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
     <script>
-        window.profile = null;
         $(function() {
-            const deactivateAcc = document.querySelector('#formAccountDeactivation');
-
-            // Update/reset user image of account page
-            let accountUserImage = document.getElementById('uploadedAvatar');
-            const fileInput = document.querySelector('.account-file-input'),
-                resetFileInput = document.querySelector('.account-image-reset');
-
-            if (accountUserImage) {
-                const resetImage = accountUserImage.src;
-                fileInput.onchange = () => {
-                    if (fileInput.files[0]) {
-                        window.profile = fileInput.files[0];
-                        accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
-                    }
-                };
-                resetFileInput.onclick = () => {
-                    fileInput.value = '';
-                    window.profile = null
-                    accountUserImage.src = resetImage;
-                };
-            }
-            $("#formAccountSettings").submit(function(e) {
-                e.preventDefault();
-                console.log(window.profile)
-                let data = new FormData($("#formAccountSettings"));
-                if (window.profile != null) {
-                    data.append('foto', window.profile);
+            $('[name=idrole]').click(function() {
+                if (this.value == '9') {
+                    $('.d-none').removeClass('d-none');
+                    $('.select2').prop('disabled', false);
+                    $('.select2').select2();
                 }
+            });
+            $("#formCreateUser").submit(function(e) {
+                e.preventDefault();
+                let data = serializeObject($("#formCreateUser"));
                 $.ajax({
                     type: "POST",
-                    url: `{{ route('control.user') }}`,
-                    processData: false,
-                    contentType: true,
+                    url: `{{ route('control.create-user') }}`,
                     data: {
                         _token: `{{ csrf_token() }}`,
                         ...data
                     },
                     dataType: "json",
                     success: function(response) {
-
+                        iziToast.success({
+                            title: 'Success',
+                            message: response.message,
+                        });
+                    },
+                    error: function(error) {
+                        iziToast.error({
+                            title: 'Error',
+                            message: error.responseJSON.message,
+                        });
                     }
                 });
             });

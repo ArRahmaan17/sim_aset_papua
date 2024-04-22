@@ -25,7 +25,7 @@
                 @endif
             </ul>
             <div class="card mb-4">
-                <h5 class="card-header">Profile Details</h5>
+                <h5 class="card-header">Profile User</h5>
                 <!-- Account -->
                 <div class="card-body">
                     <div class="d-flex align-items-start align-items-sm-center gap-4">
@@ -55,7 +55,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="username" class="form-label">NIK</label>
                                 <input class="form-control" type="text" id="username" name="username"
-                                    placeholder="Kristanto" value="{{ session('user')->username }}" autofocus />
+                                    placeholder="31831******" value="{{ session('user')->username }}" autofocus />
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="nohp" class="form-label">Nomer Handphone</label>
@@ -89,14 +89,23 @@
                     <form id="formPasswordChange">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="row">
-                            <div class="col-6 mb-3">
-                                <label class="form-label" for="password">Password Saat Ini</label>
-                                <input class="form-control" type="password" name="password" id="password" required />
+                            <div class="mb-3 form-password-toggle col-md-6">
+                                <label class="form-label" for="password">Password</label>
+                                <div class="input-group input-group-merge">
+                                    <input type="password" id="password" class="form-control" name="password"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password" />
+                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                </div>
                             </div>
-                            <div class="col-6 mb-3">
-                                <label class="form-label" for="newpassword">Password Baru</label>
-                                <input class="form-control"type="password" name="newpassword" id="newpassword"
-                                    required />
+                            <div class="mb-3 form-password-toggle col-md-6">
+                                <label class="form-label" for="password">Password</label>
+                                <div class="input-group input-group-merge">
+                                    <input type="password" id="newpassword" class="form-control" name="newpassword"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password" />
+                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-check mb-3">

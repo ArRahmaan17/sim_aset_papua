@@ -98,6 +98,10 @@
                 },
                 dataType: "json",
                 success: function(response) {
+                    iziToast.success({
+                        title: 'SUCCESS',
+                        message: response.message,
+                    });
                     window.datatable_role.ajax.reload();
                 }
             });
@@ -114,6 +118,10 @@
                 },
                 dataType: "json",
                 success: function(response) {
+                    iziToast.success({
+                        title: 'SUCCESS',
+                        message: response.message,
+                    });
                     window.datatable_role.ajax.reload();
                 }
             });
@@ -134,6 +142,10 @@
                     url: "{{ route('control.role.show') }}/" + data[3],
                     dataType: "json",
                     success: function(response) {
+                        iziToast.success({
+                            title: 'SUCCESS',
+                            message: response.message,
+                        });
                         $("#form-role").find('[name=idrole]')
                             .val(response.data.idrole);
                         $("#form-role").find('[name=role]')
@@ -174,6 +186,10 @@
                                 },
                                 dataType: "json",
                                 success: function(response) {
+                                    iziToast.success({
+                                        title: 'SUCCESS',
+                                        message: response.message,
+                                    });
                                     window.datatable_role.ajax.reload()
                                 }
                             });

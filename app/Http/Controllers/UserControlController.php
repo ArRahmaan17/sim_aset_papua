@@ -207,6 +207,57 @@ class UserControlController extends Controller
 
     public function userCreate()
     {
-        return view('layout.control.user-create');
+        $roles = DB::table('role')->where('idrole', '>=', session('user')->idrole)->get();
+        $semuaorganisasi = (new OrganisasiController)->useable()->getData()->data;
+        return view('layout.control.user-create', compact('roles', 'semuaorganisasi'));
+    }
+    public function userStore(Request $request)
+    {
+        $request->validate([
+            'username' => 'required',
+            'idrole' => 'required',
+        ], [
+            'username.required' => 'nik user mohon di isi',
+            'idrole.required' => 'role user mohon di isi',
+        ]);
+        DB::beginTransaction();
+        try {
+            $data = $request->except('_token');
+            $data['password'] = Hash::make((!$request->exists('password')) ? 'papuabaratdaya' : $request->password);
+            $data['displayname'] = (!$request->exists('displayname')) ? $data['username'] : $request->displayname;
+            if ($request->idrole == '9') {
+                $user_opd = (array)clone (session('organisasi'));
+                unset($user_opd['wajibsusut']);
+                if ($data['useropd']) {
+                    unset($user_opd['organisasi']);
+                    [
+                        $user_opd['kodeurusan'],
+                        $user_opd['kodesuburusan'],
+                        $user_opd['kodesubsuburusan'],
+                        $user_opd['kodeorganisasi'],
+                        $user_opd['kodesuborganisasi'],
+                        $user_opd['kodeunit'],
+                        $user_opd['kodesubunit'],
+                        $user_opd['kodesubsubunit'],
+                    ] = explode('.', $data['useropd']);
+                    $user_opd['organisasi'] = DB::table('masterorganisasi')->where($user_opd)->first()->organisasi;
+                    unset($user_opd['wajibsusut'], $data['useropd']);
+                }
+            }
+            $id = DB::table('users')->insertGetId($data);
+            if ($request->idrole == '9') {
+                $user_opd['idusers'] = $id;
+                DB::table('users_opd')->insert($user_opd);
+            }
+            $status = 200;
+            $response = ['message' => 'Tambah user berhasil'];
+            DB::commit();
+        } catch (\Throwable $th) {
+            dd($th);
+            DB::rollBack();
+            $status = 422;
+            $response = ['message' => 'Tambah user gagal'];
+        }
+        return response()->json($response, $status);
     }
 }
