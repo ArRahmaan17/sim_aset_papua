@@ -28,14 +28,14 @@ class UserControlController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('role ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('role '.$request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('role')->select('*')
-                ->where('role', 'like', '%' . $request['search']['value'] . '%');
+                ->where('role', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('role ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('role '.$request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -45,9 +45,9 @@ class UserControlController extends Controller
 
             $totalFiltered = DB::table('role')
                 ->select('*')
-                ->where('role', 'like', '%' . $request['search']['value'] . '%');
+                ->where('role', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('role ' . $request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('role '.$request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -55,7 +55,7 @@ class UserControlController extends Controller
         foreach ($assets as $index => $item) {
             $row = [];
             $row[] = $request['start'] + ($index + 1);
-            $row[] = '' . $item->role;
+            $row[] = ''.$item->role;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
             $row[] = $item->idrole;
             $dataFiltered[] = $row;
@@ -74,8 +74,10 @@ class UserControlController extends Controller
     {
         DB::beginTransaction();
         try {
-            if (is_dir(public_path('assets/profile/')) == false) mkdir(public_path('assets/profile/'));
-            $filename =  "assets/profile/" . session('user')->idusers . '.jpg';
+            if (is_dir(public_path('assets/profile/')) == false) {
+                mkdir(public_path('assets/profile/'));
+            }
+            $filename = 'assets/profile/'.session('user')->idusers.'.jpg';
             file_put_contents(public_path($filename), file_get_contents($_FILES['foto']['tmp_name']));
             $data = $request->except('_token');
             $data['foto'] = $filename;
@@ -95,6 +97,7 @@ class UserControlController extends Controller
             $status = 422;
             $message = ['message' => 'Profile user gagal di ubah'];
         }
+
         return response()->json($message, $status);
     }
 
@@ -114,6 +117,7 @@ class UserControlController extends Controller
 
         return response()->json($message, $status);
     }
+
     public function roleShow(string $id)
     {
         $data = DB::table('role')->where('idrole', $id)->first();
@@ -127,6 +131,7 @@ class UserControlController extends Controller
 
         return response()->json($message, $status);
     }
+
     public function roleUpdate(Request $request, $id)
     {
         DB::beginTransaction();
@@ -143,6 +148,7 @@ class UserControlController extends Controller
 
         return response()->json($message, $status);
     }
+
     public function roleDestroy(string $id)
     {
         DB::beginTransaction();
