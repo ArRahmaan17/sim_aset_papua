@@ -66,7 +66,7 @@ class Bap extends Model
             return $obj->kodekib;
         }, $dataKibTransaksi);
         $dataKib = DB::table('kib')
-            ->selectRaw('kib.*, kodekib as iddetail, uraibarang as urai, (select kategori from masterasalusul where kodeasalusul = kib.kodeasalusul) as "select-asal-usul-barang-perolehan-aset", (select count(kodekib) from kibtransaksi where kodebap = ' . $kodebap . ' and uraibarang = kib.uraibarang group by uraibarang) as jumlah')
+            ->selectRaw('kib.*, kodekib as iddetail, uraibarang as urai, (select kategori from masterasalusul where kodeasalusul = kib.kodeasalusul) as "select-asal-usul-barang-perolehan-aset", (select count(kodekib) from kibtransaksi where kodebap = '.$kodebap.' and uraibarang = kib.uraibarang group by uraibarang) as jumlah')
             ->whereIn('kodekib', $kodekib)
             ->get()
             ->unique('uraibarang')

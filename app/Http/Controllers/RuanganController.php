@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class RuanganController extends Controller
 {
@@ -71,12 +72,76 @@ class RuanganController extends Controller
         return Response()->json($response, 200);
     }
 
+    public function lastRoomNumber($organisasi)
+    {
+        [
+            $kodeurusan,
+            $kodesuburusan,
+            $kodesubsuburusan,
+            $kodeorganisasi,
+            $kodesuborganisasi,
+            $kodeunit,
+            $kodesubunit,
+            $kodesubsubunit
+        ] = explode('.', $organisasi);
+        $data = DB::table('masterruang')->select('noruang', 'uraiorganisasi')->where([
+            'kodeurusan' => $kodeurusan,
+            'kodesuburusan' => $kodesuburusan,
+            'kodesubsuburusan' => $kodesubsuburusan,
+            'kodeorganisasi' => $kodeorganisasi,
+            'kodesuborganisasi' => $kodesuborganisasi,
+            'kodeunit' => $kodeunit,
+            'kodesubunit' => $kodesubunit,
+            'kodesubsubunit' => $kodesubsubunit,
+        ])->orderBy('koderuang', 'desc')->first();
+        $statuscode = $data == null ? 404 : 200;
+        $response = ['message' => 'nomer ruang terakhir di organisasi', 'data' => $data == null ? ['noruang' => 1] : $data];
+
+        return response()->json($response, $statuscode);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+            [
+                $kodeurusan,
+                $kodesuburusan,
+                $kodesubsuburusan,
+                $kodeorganisasi,
+                $kodesuborganisasi,
+                $kodeunit,
+                $kodesubunit,
+                $kodesubsubunit
+            ] = explode('.', $request->kodeorganisasi ?? '0.0.0.0.0.0.0.0');
+            DB::table('masterruang')->insert([
+                'kodeurusan' => $kodeurusan,
+                'kodesuburusan' => $kodesuburusan,
+                'kodesubsuburusan' => $kodesubsuburusan,
+                'kodeorganisasi' => $kodeorganisasi,
+                'kodesuborganisasi' => $kodesuborganisasi,
+                'kodeunit' => $kodeunit,
+                'kodesubunit' => $kodesubunit,
+                'kodesubsubunit' => $kodesubsubunit,
+                'noruang' => $request->noruang,
+                'ruang' => $request->ruang,
+                'penanggungjawab_jabatan' => $request->penanggungjawab_jabatan,
+                'penanggungjawab_nama' => $request->penanggungjawab_nama,
+                'penanggungjawab_nip' => $request->penanggungjawab_nip,
+            ]);
+            DB::commit();
+            $statuscode = 200;
+            $response = ['message' => 'master ruang berhasil di tambahkan'];
+        } catch (\Throwable $th) {
+            $statuscode = 422;
+            $response = ['message' => 'master ruang gagal di tambahkan'];
+            DB::rollBack();
+        }
+
+        return response()->json($response, $statuscode);
     }
 
     /**
@@ -84,7 +149,11 @@ class RuanganController extends Controller
      */
     public function show(string $id)
     {
-        $data = DB::table('masterruang')->where('koderuang', $id)->first();
+        $data = DB::table('masterruang')
+            ->select(
+                DB::raw("CONCAT(kodeurusan, '.', kodesuburusan, '.', kodesubsuburusan, '.', kodeorganisasi, '.', kodesuborganisasi, '.', kodeunit, '.', kodesubunit, '.', kodesubsubunit) as organisasi"),
+                'masterruang.*',
+            )->where('koderuang', $id)->first();
         if ($data) {
             $status = 200;
             $message = ['message' => 'data master ruang berhasil di temukan', 'data' => $data];
@@ -97,19 +166,47 @@ class RuanganController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            [
+                $kodeurusan,
+                $kodesuburusan,
+                $kodesubsuburusan,
+                $kodeorganisasi,
+                $kodesuborganisasi,
+                $kodeunit,
+                $kodesubunit,
+                $kodesubsubunit
+            ] = explode('.', $request->kodeorganisasi ?? '0.0.0.0.0.0.0.0');
+            DB::table('masterruang')
+                ->where('koderuang', $id)->update([
+                    'kodeurusan' => $kodeurusan,
+                    'kodesuburusan' => $kodesuburusan,
+                    'kodesubsuburusan' => $kodesubsuburusan,
+                    'kodeorganisasi' => $kodeorganisasi,
+                    'kodesuborganisasi' => $kodesuborganisasi,
+                    'kodeunit' => $kodeunit,
+                    'kodesubunit' => $kodesubunit,
+                    'kodesubsubunit' => $kodesubsubunit,
+                    'noruang' => $request->noruang,
+                    'ruang' => $request->ruang,
+                    'penanggungjawab_jabatan' => $request->penanggungjawab_jabatan ?? null,
+                    'penanggungjawab_nama' => $request->penanggungjawab_nama ?? null,
+                    'penanggungjawab_nip' => $request->penanggungjawab_nip ?? null,
+                ]);
+            $status = 200;
+            $message = ['message' => 'data master ruang berhasil di hapus'];
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 404;
+            $message = ['message' => 'data master ruang gagal di hapus'];
+        }
+        return response()->json($message, $status);
     }
 
     /**
@@ -117,6 +214,19 @@ class RuanganController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            DB::table('masterruang')
+                ->where('koderuang', $id)->delete();
+            $status = 200;
+            $message = ['message' => 'data master ruang berhasil di hapus'];
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 404;
+            $message = ['message' => 'data master ruang gagal di hapus'];
+        }
+
+        return response()->json($message, $status);
     }
 }
