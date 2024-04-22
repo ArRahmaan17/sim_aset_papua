@@ -289,7 +289,7 @@ function buildMenu(array &$elements, $place = 'sidebar')
             }
         } elseif ($place == 'profile') {
             $html .= '<li>
-                        <a class="dropdown-item" href="'.route($element['link']).'">
+                        <a class="dropdown-item '.(app('request')->route()->named($element['link']) ? 'active' : '').'" href="'.route($element['link']).'">
                             <span class="d-flex align-items-center align-middle">
                                 <i class="flex-shrink-0 me-2 '.$element['icons'].'"></i>
                                 <span class="flex-grow-1 align-middle">'.$element['nama'].'</span>

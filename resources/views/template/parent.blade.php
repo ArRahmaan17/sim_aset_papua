@@ -141,7 +141,7 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <span
-                                                        class="fw-semibold d-block">{{ session('user')->username }}</span>
+                                                        class="fw-semibold d-block">{{ session('user')->displayname }}</span>
                                                     <small class="text-muted">{{ getRole() }}</small>
                                                 </div>
                                             </div>
