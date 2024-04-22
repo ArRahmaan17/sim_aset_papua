@@ -22,6 +22,7 @@ use App\Http\Controllers\RehabController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\StatusTanahController;
+use App\Http\Controllers\UserControlController;
 use App\Http\Controllers\WarnaController;
 use App\Imports\MasterImport;
 use Illuminate\Support\Facades\Route;
@@ -170,6 +171,17 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
     Route::get('/penyusutan', [PenyusutanController::class, 'index'])->name('penyusutan');
     Route::get('/auth/app/logout', [AuthController::class, 'logout'])->name('logout.application');
     Route::get('/auth/system/logout', [AuthController::class, 'logout_system'])->name('logout.system');
+    Route::name('control.')->group(function () {
+        Route::get('/control-user', [UserControlController::class, 'index'])->name('user');
+        Route::post('/control-user', [UserControlController::class, 'profileChange'])->name('user');
+        Route::get('/control-user/user-role', [UserControlController::class, 'dataTable'])->name('user-role.data-table');
+        Route::get('/control-user/role', [UserControlController::class, 'roleCreate'])->name('role.create');
+        Route::post('/control-user/role', [UserControlController::class, 'roleStore'])->name('role.store');
+        Route::get('/control-user/role/{id?}', [UserControlController::class, 'roleShow'])->name('role.show');
+        Route::put('/control-user/role/{id?}', [UserControlController::class, 'roleUpdate'])->name('role.update');
+        Route::delete('/control-user/role/{id?}', [UserControlController::class, 'roleDestroy'])->name('role.delete');
+        Route::get('/control-user/create', [UserControlController::class, 'userCreate'])->name('create-user');
+    });
 });
 Route::middleware(['throttle:application', 'authenticated'])->group(function () {
     Route::post('/set-organisasi', [AuthController::class, 'setOrganisasi'])->name('set-organisasi');
