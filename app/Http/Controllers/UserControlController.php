@@ -225,7 +225,7 @@ class UserControlController extends Controller
             $data = $request->except('_token');
             $data['password'] = Hash::make((!$request->exists('password')) ? 'papuabaratdaya' : $request->password);
             $data['displayname'] = (!$request->exists('displayname')) ? $data['username'] : $request->displayname;
-            if ($request->idrole == '9') {
+            if (intval($request->idrole) > 3) {
                 $user_opd = (array)clone (session('organisasi'));
                 unset($user_opd['wajibsusut']);
                 if ($data['useropd']) {
@@ -245,15 +245,20 @@ class UserControlController extends Controller
                 }
             }
             $id = DB::table('users')->insertGetId($data);
-            if ($request->idrole == '9') {
+            if (intval($request->idrole) > 3) {
                 $user_opd['idusers'] = $id;
                 DB::table('users_opd')->insert($user_opd);
+                DB::table('role_menu')->insert([
+                    'idrole' => $request->idrole,
+                    'idmenu' => 1,
+                    'created_at' => now('Asia/Jakarta'),
+                    'updated_at' => now('Asia/Jakarta'),
+                ]);
             }
             $status = 200;
             $response = ['message' => 'Tambah user berhasil'];
             DB::commit();
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollBack();
             $status = 422;
             $response = ['message' => 'Tambah user gagal'];

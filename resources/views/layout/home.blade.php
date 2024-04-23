@@ -10,6 +10,18 @@
                     Halaman akan di refresh dalam 5 detik
                 </div>
                 <div class="row row-bordered g-0">
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            <div class="row justify-content-start align-items-center">
+                                <div class="col-1">
+                                    <i class='bx bxs-error-alt bx-lg'></i>
+                                </div>
+                                <div class="col-11 fw-bold">
+                                    <span>{{ session('error') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     <div class="col-md-8">
                         <h5 class="card-header m-0 me-2 pb-3">Jumlah BA Organisasi
                             {{ session('organisasi') !== null ? getOrganisasi() : '' }}</h5>
