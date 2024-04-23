@@ -126,7 +126,7 @@
                             method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label for="email" class="form-label">Username</label>
+                                <label for="email" class="form-label">NIK</label>
                                 <input type="text" class="form-control" id="email" name="username"
                                     value="{{ old('username') }}" placeholder="Enter your username" autofocus />
                             </div>

@@ -25,9 +25,9 @@ function dataToOption($allData, $attr = false)
     $html = "<option value=''>Mohon Pilih</option>";
     foreach ($allData as $index => $data) {
         if ($attr) {
-            $html .= "<option data-attr='".$data->attribute."' value='".(isset($data->id) ? $data->id : $data->name)."'>".$data->name.' ( Tersedia di '.$data->attribute.')</option>';
+            $html .= "<option data-attr='" . $data->attribute . "' value='" . (isset($data->id) ? $data->id : $data->name) . "'>" . $data->name . ' ( Tersedia di ' . $data->attribute . ')</option>';
         } else {
-            $html .= "<option value='".(isset($data->id) ? $data->id : $data->name)."'>".$data->name.'</option>';
+            $html .= "<option value='" . (isset($data->id) ? $data->id : $data->name) . "'>" . $data->name . '</option>';
         }
     }
 
@@ -71,7 +71,7 @@ function getKoderegister(array $paramRegister)
         }
     }
     if ($akumLength < count($allowedColumn)) {
-        throw new \Exception("Kolom yang diminta kurang! berikut daftarnya : \n".implode("\n", array_diff($allowedColumn, $tmpWhere)), 1);
+        throw new \Exception("Kolom yang diminta kurang! berikut daftarnya : \n" . implode("\n", array_diff($allowedColumn, $tmpWhere)), 1);
     }
 
     return ($query->max('koderegister') ?? 0) + 1;
@@ -89,7 +89,7 @@ function getkdunit($sp2d)
             'tglsp2d' => $sp2d['tglsp2d'],
         ])->first()->kdunit;
 }
-if (! function_exists('convertAlphabeticalToNumberDate')) {
+if (!function_exists('convertAlphabeticalToNumberDate')) {
     function convertAlphabeticalToNumberDate($stringDate)
     {
         if ($stringDate != null) {
@@ -97,43 +97,43 @@ if (! function_exists('convertAlphabeticalToNumberDate')) {
             $stringDate = explode(' ', $stringDate);
             switch ($stringDate[1]) {
                 case 'Januari':
-                    $str = $stringDate[2].'-'.$number[0].'-'.$stringDate[0];
+                    $str = $stringDate[2] . '-' . $number[0] . '-' . $stringDate[0];
                     break;
                 case 'Februari':
-                    $str = $stringDate[2].'-'.$number[1].'-'.$stringDate[0];
+                    $str = $stringDate[2] . '-' . $number[1] . '-' . $stringDate[0];
                     break;
                 case 'Maret':
-                    $str = $stringDate[2].'-'.$number[2].'-'.$stringDate[0];
+                    $str = $stringDate[2] . '-' . $number[2] . '-' . $stringDate[0];
                     break;
                 case 'April':
-                    $str = $stringDate[2].'-'.$number[3].'-'.$stringDate[0];
+                    $str = $stringDate[2] . '-' . $number[3] . '-' . $stringDate[0];
                     break;
                 case 'Mei':
-                    $str = $stringDate[2].'-'.$number[4].'-'.$stringDate[0];
+                    $str = $stringDate[2] . '-' . $number[4] . '-' . $stringDate[0];
                     break;
                 case 'Juni':
-                    $str = $stringDate[2].'-'.$number[5].'-'.$stringDate[0];
+                    $str = $stringDate[2] . '-' . $number[5] . '-' . $stringDate[0];
                     break;
                 case 'Juli':
-                    $str = $stringDate[2].'-'.$number[6].'-'.$stringDate[0];
+                    $str = $stringDate[2] . '-' . $number[6] . '-' . $stringDate[0];
                     break;
                 case 'Agustus':
-                    $str = $stringDate[2].'-'.$number[7].'-'.$stringDate[0];
+                    $str = $stringDate[2] . '-' . $number[7] . '-' . $stringDate[0];
                     break;
                 case 'September':
-                    $str = $stringDate[2].'-'.$number[8].'-'.$stringDate[0];
+                    $str = $stringDate[2] . '-' . $number[8] . '-' . $stringDate[0];
                     break;
                 case 'Oktober':
-                    $str = $stringDate[2].'-'.$number[9].'-'.$stringDate[0];
+                    $str = $stringDate[2] . '-' . $number[9] . '-' . $stringDate[0];
                     break;
                 case 'November':
-                    $str = $stringDate[2].'-'.$number[10].'-'.$stringDate[0];
+                    $str = $stringDate[2] . '-' . $number[10] . '-' . $stringDate[0];
                     break;
                 case 'Desember':
-                    $str = $stringDate[2].'-'.$number[11].'-'.$stringDate[0];
+                    $str = $stringDate[2] . '-' . $number[11] . '-' . $stringDate[0];
                     break;
                 default:
-                    $str = $stringDate[2].'- not valid -'.$stringDate[0];
+                    $str = $stringDate[2] . '- not valid -' . $stringDate[0];
                     break;
             }
 
@@ -143,7 +143,7 @@ if (! function_exists('convertAlphabeticalToNumberDate')) {
         }
     }
 }
-if (! function_exists('convertNumericDateToAlphabetical')) {
+if (!function_exists('convertNumericDateToAlphabetical')) {
     function convertNumericDateToAlphabetical($stringDate)
     {
         if ($stringDate != null) {
@@ -151,43 +151,43 @@ if (! function_exists('convertNumericDateToAlphabetical')) {
             $stringDate = explode('-', $stringDate);
             switch ($stringDate[1]) {
                 case '01':
-                    $str = $stringDate[2].' '.$number[0].' '.$stringDate[0];
+                    $str = $stringDate[2] . ' ' . $number[0] . ' ' . $stringDate[0];
                     break;
                 case '02':
-                    $str = $stringDate[2].' '.$number[1].' '.$stringDate[0];
+                    $str = $stringDate[2] . ' ' . $number[1] . ' ' . $stringDate[0];
                     break;
                 case '03':
-                    $str = $stringDate[2].' '.$number[2].' '.$stringDate[0];
+                    $str = $stringDate[2] . ' ' . $number[2] . ' ' . $stringDate[0];
                     break;
                 case '04':
-                    $str = $stringDate[2].' '.$number[3].' '.$stringDate[0];
+                    $str = $stringDate[2] . ' ' . $number[3] . ' ' . $stringDate[0];
                     break;
                 case '05':
-                    $str = $stringDate[2].' '.$number[4].' '.$stringDate[0];
+                    $str = $stringDate[2] . ' ' . $number[4] . ' ' . $stringDate[0];
                     break;
                 case '06':
-                    $str = $stringDate[2].' '.$number[5].' '.$stringDate[0];
+                    $str = $stringDate[2] . ' ' . $number[5] . ' ' . $stringDate[0];
                     break;
                 case '07':
-                    $str = $stringDate[2].' '.$number[6].' '.$stringDate[0];
+                    $str = $stringDate[2] . ' ' . $number[6] . ' ' . $stringDate[0];
                     break;
                 case '08':
-                    $str = $stringDate[2].' '.$number[7].' '.$stringDate[0];
+                    $str = $stringDate[2] . ' ' . $number[7] . ' ' . $stringDate[0];
                     break;
                 case '09':
-                    $str = $stringDate[2].' '.$number[8].' '.$stringDate[0];
+                    $str = $stringDate[2] . ' ' . $number[8] . ' ' . $stringDate[0];
                     break;
                 case '10':
-                    $str = $stringDate[2].' '.$number[9].' '.$stringDate[0];
+                    $str = $stringDate[2] . ' ' . $number[9] . ' ' . $stringDate[0];
                     break;
                 case '11':
-                    $str = $stringDate[2].' '.$number[10].' '.$stringDate[0];
+                    $str = $stringDate[2] . ' ' . $number[10] . ' ' . $stringDate[0];
                     break;
                 case '12':
-                    $str = $stringDate[2].' '.$number[11].' '.$stringDate[0];
+                    $str = $stringDate[2] . ' ' . $number[11] . ' ' . $stringDate[0];
                     break;
                 default:
-                    $str = $stringDate[2].'  not valid  '.$stringDate[0];
+                    $str = $stringDate[2] . '  not valid  ' . $stringDate[0];
                     break;
             }
 
@@ -262,41 +262,46 @@ function buildTreeOrganisasi(array &$elements, $idParent = '0')
 
     return $branch;
 }
+function checkPermissionMenu($id, $role)
+{
+    return DB::table('role_menu')->where(['idmenu' => $id, 'idrole' => $role])->count() > 0 ? true : false;
+}
 
 function buildMenu(array &$elements, $place = 'sidebar')
 {
     $html = '';
     foreach ($elements as $element) {
         $element = (array) $element;
-        if ($place == 'sidebar') {
-            if (isset($element['children'])) {
-                $children = buildMenu($element['children']);
-                $html .= '<li class="menu-item">
+        if (checkPermissionMenu($element['id'], session('user')->idrole)) {
+            if ($place == 'sidebar') {
+                if (isset($element['children'])) {
+                    $children = buildMenu($element['children']);
+                    $html .= '<li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons '.$element['icons'].'"></i>
-                            <div data-i18n="Layouts">'.$element['nama'].'</div>
+                            <i class="menu-icon tf-icons ' . $element['icons'] . '"></i>
+                            <div data-i18n="Layouts">' . $element['nama'] . '</div>
                         </a>
 
-                        <ul class="menu-sub">'.$children.'</ul>
+                        <ul class="menu-sub">' . $children . '</ul>
                     </li>';
-            } else {
-                $html .= '<li class="menu-item '.(app('request')->route()->named($element['link']) ? 'active' : '').'">
-                    <a href="'.route($element['link']).'" class="menu-link ">
-                        <i class="menu-icon tf-icons '.$element['icons'].'"></i>
-                        <div data-i18n="Analytics">'.$element['nama'].'</div>
+                } else {
+                    $html .= '<li class="menu-item ' . (app('request')->route()->named($element['link']) ? 'active' : '') . '">
+                    <a href="' . route($element['link']) . '" class="menu-link ">
+                        <i class="menu-icon tf-icons ' . $element['icons'] . '"></i>
+                        <div data-i18n="Analytics">' . $element['nama'] . '</div>
                     </a>
                 </li>';
-            }
-        } elseif ($place == 'profile') {
-            $html .= '<li>
-                        <a class="dropdown-item '.(app('request')->route()->named($element['link']) ? 'active' : '').'" href="'.route($element['link']).'">
+                }
+            } elseif ($place == 'profile') {
+                $html .= '<li>
+                        <a class="dropdown-item ' . (app('request')->route()->named($element['link']) ? 'active' : '') . '" href="' . route($element['link']) . '">
                             <span class="d-flex align-items-center align-middle">
-                                <i class="flex-shrink-0 me-2 '.$element['icons'].'"></i>
-                                <span class="flex-grow-1 align-middle">'.$element['nama'].'</span>
+                                <i class="flex-shrink-0 me-2 ' . $element['icons'] . '"></i>
+                                <span class="flex-grow-1 align-middle">' . $element['nama'] . '</span>
                             </span>
                         </a>
                     </li>';
-            // '<span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>'
+            }
         }
     }
 
