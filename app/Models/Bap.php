@@ -76,7 +76,7 @@ class Bap extends Model
                 'bap.pattern_nobaterima',
                 'bap.pattern_nobaterimaopd',
                 'bap.tanggalmulaipemanfaatan',
-                'bap.tanggalselesaipemanfaata'
+                'bap.tanggalselesaipemanfaatan'
             )->orderBy('bap.idbap', 'ASC')
             ->get();
     }
