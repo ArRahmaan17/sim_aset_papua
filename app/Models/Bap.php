@@ -19,7 +19,6 @@ class Bap extends Model
 
         return self::select('bap.*')->join('kibtransaksi as kt', 'kt.kodebap', '=', 'bap.idbap')
             ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
-            ->join('kibsp2d as kd', 'k.kodekib', '!=', 'kd.kodekib')
             ->where([
                 'bap.kodejenistransaksi' => '101',
                 'bap.tahunorganisasi' => env('APP_YEAR'),
