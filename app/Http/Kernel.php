@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\Authenticated;
 use App\Http\Middleware\haveOrganisasi;
+use App\Http\Middleware\MenuPermission;
 use App\Http\Middleware\selectApp;
 use App\Http\Middleware\UnAuthenticated;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -44,7 +45,7 @@ class Kernel extends HttpKernel
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+            \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
@@ -72,5 +73,6 @@ class Kernel extends HttpKernel
         'authenticated' => Authenticated::class,
         'have-organisasi' => haveOrganisasi::class,
         'select-app' => selectApp::class,
+        'menu-permission' => MenuPermission::class,
     ];
 }
