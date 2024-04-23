@@ -30,7 +30,7 @@ class Bap extends Model
                 'bap.kodeunit' => $copied->kodeunit,
                 'bap.kodesubunit' => $copied->kodesubunit,
                 'bap.kodesubsubunit' => $copied->kodesubsubunit,
-            ])->whereRaw('NOT EXISTS (select kodekib from kibsp2d kd)')->groupBy('bap.kodebap')->orderBy('bap.idbap', 'ASC')
+            ])->whereRaw('NOT EXISTS (select kodekib from kibsp2d kd)')->groupBy('bap.*')->orderBy('bap.idbap', 'ASC')
             ->get();
     }
 
