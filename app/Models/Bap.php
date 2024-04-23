@@ -32,7 +32,7 @@ class Bap extends Model
                 'bap.kodesubunit' => $copied->kodesubunit,
                 'bap.kodesubsubunit' => $copied->kodesubsubunit,
             ])->whereRaw('NOT EXISTS (select kodekib from kibsp2d kd)')->orderBy('bap.idbap', 'ASC')
-            ->groupBy('bap.kodebap', 'bap.idbap')->get();
+            ->get();
     }
 
     public static function getAllOrganizationBapsSp2d()
@@ -56,7 +56,7 @@ class Bap extends Model
                 'bap.kodesubunit' => $copied->kodesubunit,
                 'bap.kodesubsubunit' => $copied->kodesubsubunit,
             ])
-            ->orderBy('idbap', 'ASC')->groupBy('bap.kodebap', 'bap.idbap')->get();
+            ->orderBy('idbap', 'ASC')->get();
     }
 
     public static function getDetailBap($kodebap)
