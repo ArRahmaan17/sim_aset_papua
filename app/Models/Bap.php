@@ -32,7 +32,7 @@ class Bap extends Model
                 'bap.kodesubunit' => $copied->kodesubunit,
                 'bap.kodesubsubunit' => $copied->kodesubsubunit,
             ])->whereRaw('NOT EXISTS (select kodekib from kibsp2d kd)')->orderBy('bap.idbap', 'ASC')
-            ->groupBy('bap.kodebap')->get();
+            ->groupBy('bap.kodebap', 'bap.idbap')->get();
     }
 
     public static function getAllOrganizationBapsSp2d()
@@ -56,7 +56,7 @@ class Bap extends Model
                 'bap.kodesubunit' => $copied->kodesubunit,
                 'bap.kodesubsubunit' => $copied->kodesubsubunit,
             ])
-            ->orderBy('idbap', 'ASC')->groupBy('kodebap')->get();
+            ->orderBy('idbap', 'ASC')->groupBy('bap.kodebap', 'bap.idbap')->get();
     }
 
     public static function getDetailBap($kodebap)
@@ -66,7 +66,7 @@ class Bap extends Model
             return $obj->kodekib;
         }, $dataKibTransaksi);
         $dataKib = DB::table('kib')
-            ->selectRaw('kib.*, kodekib as iddetail, uraibarang as urai, (select kategori from masterasalusul where kodeasalusul = kib.kodeasalusul) as "select-asal-usul-barang-perolehan-aset", (select count(kodekib) from kibtransaksi where kodebap = '.$kodebap.' and uraibarang = kib.uraibarang group by uraibarang) as jumlah')
+            ->selectRaw('kib.*, kodekib as iddetail, uraibarang as urai, (select kategori from masterasalusul where kodeasalusul = kib.kodeasalusul) as "select-asal-usul-barang-perolehan-aset", (select count(kodekib) from kibtransaksi where kodebap = ' . $kodebap . ' and uraibarang = kib.uraibarang group by uraibarang) as jumlah')
             ->whereIn('kodekib', $kodekib)
             ->get()
             ->unique('uraibarang')
