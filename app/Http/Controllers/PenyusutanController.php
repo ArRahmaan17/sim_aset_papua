@@ -29,7 +29,7 @@ class PenyusutanController extends Controller
                 'p.kodesubsubunit' => session('organisais')->kodesubsubunit,
             ]);
         }
-        $totalData->orderByRaw('p.kodeurusan, p.kodesuburusan, p.kodesubsuburusan, p.kodeorganisasi, p.kodesuborganisasi, p.kodeunit, p.kodesubunit, p.kodesubsubunit asc')
+        $totalData = $totalData->orderByRaw('p.kodeurusan, p.kodesuburusan, p.kodesubsuburusan, p.kodeorganisasi, p.kodesuborganisasi, p.kodeunit, p.kodesubunit, p.kodesubsubunit asc')
             ->count();
         $totalFiltered = $totalData;
         if (empty($request['search']['value'])) {
