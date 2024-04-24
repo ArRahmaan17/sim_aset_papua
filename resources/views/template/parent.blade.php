@@ -229,6 +229,13 @@
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="https://cdn.datatables.net/v/bs5/dt-2.0.3/datatables.min.js"></script>
+    @if (env('APP_ENV') === 'production')
+        <script>
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+            })
+        </script>
+    @endif
     <script>
         function serializeObject(node) {
             var o = {};
