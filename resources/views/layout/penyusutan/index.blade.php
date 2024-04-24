@@ -7,6 +7,7 @@
         <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
             <div class="card">
                 <div class="card-body">
+                    <div class="card-title col-12">List Data Penyusutan</div>
                     <div class="row row-bordered g-0 flex-column-reverse flex-sm-row">
                         <div class="table-responsive">
                             <table id="table_penyusutan" class="table table-striped">

@@ -14,6 +14,7 @@ class PenyusutanController extends Controller
     public function dataTable(Request $request)
     {
         $totalData = DB::table('penyusutan as p')
+            ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan')
             ->join('kibtransaksi as kt', 'p.kodekib', '=', 'kt.kodekib')
             ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
             ->join('bap as b', 'kt.kodebap', '=', 'b.idbap');
@@ -34,6 +35,7 @@ class PenyusutanController extends Controller
         $totalFiltered = $totalData;
         if (empty($request['search']['value'])) {
             $assets = DB::table('penyusutan as p')
+                ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan')
                 ->join('kibtransaksi as kt', 'p.kodekib', '=', 'kt.kodekib')
                 ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
                 ->join('bap as b', 'kt.kodebap', '=', 'b.idbap')
@@ -60,6 +62,7 @@ class PenyusutanController extends Controller
             $assets = $assets->get();
         } else {
             $assets = DB::table('penyusutan as p')
+                ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan')
                 ->join('kibtransaksi as kt', 'p.kodekib', '=', 'kt.kodekib')->select('*')
                 ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')->select('*')
                 ->join('bap as b', 'kt.kodebap', '=', 'b.idbap')->select('*')
@@ -86,6 +89,7 @@ class PenyusutanController extends Controller
             $assets = $assets->get();
 
             $totalFiltered = DB::table('penyusutan as p')
+                ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan')
                 ->join('kibtransaksi as kt', 'p.kodekib', '=', 'kt.kodekib')
                 ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
                 ->join('bap as b', 'kt.kodebap', '=', 'b.idbap')
