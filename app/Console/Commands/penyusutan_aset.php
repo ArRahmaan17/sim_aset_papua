@@ -30,7 +30,7 @@ class penyusutan_aset extends Command
         try {
             $data = DB::table('kibtransaksi as k')
                 ->select('k.kodekib')
-                ->whereRaw('MONTH(tanggalpenyusutan) = MONTH(CURDATE()) and k.tahunorganisasi = (YEAR(CURDATE())-1) and k.tahunperolehan ='.env('TAHUN_APLIKASI'))
+                ->whereRaw('MONTH(tanggalpenyusutan) = MONTH(CURDATE()) and k.tahunorganisasi = (YEAR(CURDATE())-1) and k.tahunperolehan =' . env('TAHUN_APLIKASI'))
                 ->get()
                 ->toArray();
             $kodekib = array_column($data, 'kodekib');
@@ -87,8 +87,9 @@ class penyusutan_aset extends Command
                     $data['susut'] = $data['nilaiakumulasibarang'] / $data['masamanfaat'];
                     $data['tahun'] = intval(env('TAHUN_APLIKASI'));
                     $data['nilai'] = $data['nilaiakumulasibarang'] / $data['masamanfaat'];
-                    $data['ket'] = 'penyusutan tahun '.env('TAHUN_APLIKASI');
+                    $data['ket'] = 'penyusutan tahun ' . env('TAHUN_APLIKASI');
                     $data['bulan'] = now('Asia/Jakarta')->month;
+                    $data['tgl_penyusutan'] = now('Asia/Jakarta');
                     unset($data['nilaiakumulasibarang'], $data['masamanfaat']);
 
                     return $data;

@@ -169,6 +169,7 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
     Route::get('/perolehan/bap/check/{ba?}/{column?}', [PerolehanController::class, 'bapCheck'])->name('perolehan.bap.check');
     Route::get('/perolehan/bap/detail/{id?}', [PerolehanController::class, 'getDetailBap'])->name('perolehan.bap.show');
     Route::get('/penyusutan', [PenyusutanController::class, 'index'])->name('penyusutan')->middleware(['menu-permission']);
+    Route::get('/penyusutan/data-table', [PenyusutanController::class, 'dataTable'])->name('penyusutan.data-table');
     Route::get('/auth/app/logout', [AuthController::class, 'logout'])->name('logout.application');
     Route::get('/auth/system/logout', [AuthController::class, 'logout_system'])->name('logout.system');
     Route::name('control.')->group(function () {
