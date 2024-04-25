@@ -21,6 +21,7 @@ use App\Http\Controllers\Perolehan\PerolehanSP2DController;
 use App\Http\Controllers\RehabController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\SatuanController;
+use App\Http\Controllers\Sp2dController;
 use App\Http\Controllers\StatusTanahController;
 use App\Http\Controllers\UserControlController;
 use App\Http\Controllers\WarnaController;
@@ -156,6 +157,8 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::put('/master/rehab/update/{id?}', [RehabController::class, 'update'])->name('rehab.update');
         Route::delete('/master/rehab/delete/{id?}', [RehabController::class, 'destroy'])->name('rehab.delete');
     });
+    Route::get('/sp2d', [Sp2dController::class, 'index'])->name('sp2d')->middleware(['menu-permission']);
+    Route::get('/sp2d/data-table', [Sp2dController::class, 'dataTable'])->name('sp2d.data-table');
     Route::get('/perolehan-sp2d', [PerolehanSP2DController::class, 'index'])->name('perolehan-sp2d')->middleware(['menu-permission']);
     Route::post('/perolehan-sp2d/store', [PerolehanSP2DController::class, 'store'])->name('perolehan-sp2d.store');
     Route::put('/perolehan-sp2d/update/{ba?}', [PerolehanSP2DController::class, 'update'])->name('perolehan-sp2d.update');

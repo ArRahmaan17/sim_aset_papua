@@ -68,7 +68,7 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
-    <link href="https://cdn.datatables.net/v/bs5/dt-2.0.3/datatables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/v/bs5/dt-2.0.5/rg-1.5.0/datatables.min.css" rel="stylesheet">
     @stack('css')
 </head>
 
@@ -228,7 +228,8 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <script src="https://cdn.datatables.net/v/bs5/dt-2.0.3/datatables.min.js"></script>
+
+    <script src="https://cdn.datatables.net/v/bs5/dt-2.0.5/rg-1.5.0/datatables.min.js"></script>
     @if (env('APP_ENV') === 'production')
         <script>
             document.addEventListener('contextmenu', (e) => {

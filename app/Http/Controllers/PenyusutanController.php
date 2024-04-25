@@ -14,7 +14,7 @@ class PenyusutanController extends Controller
     public function dataTable(Request $request)
     {
         $totalData = DB::table('penyusutan as p')
-            ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan')
+            ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan', 'b.tahunorganisasi')
             ->join('kibtransaksi as kt', 'p.kodekib', '=', 'kt.kodekib')
             ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
             ->join('bap as b', 'kt.kodebap', '=', 'b.idbap');
@@ -35,11 +35,10 @@ class PenyusutanController extends Controller
         $totalFiltered = $totalData;
         if (empty($request['search']['value'])) {
             $assets = DB::table('penyusutan as p')
-                ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan')
+                ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan', 'b.tahunorganisasi')
                 ->join('kibtransaksi as kt', 'p.kodekib', '=', 'kt.kodekib')
                 ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
-                ->join('bap as b', 'kt.kodebap', '=', 'b.idbap')
-                ->select('*');
+                ->join('bap as b', 'kt.kodebap', '=', 'b.idbap');
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
                     ->offset($request['start']);
@@ -62,10 +61,10 @@ class PenyusutanController extends Controller
             $assets = $assets->get();
         } else {
             $assets = DB::table('penyusutan as p')
-                ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan')
-                ->join('kibtransaksi as kt', 'p.kodekib', '=', 'kt.kodekib')->select('*')
-                ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')->select('*')
-                ->join('bap as b', 'kt.kodebap', '=', 'b.idbap')->select('*')
+                ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan', 'b.tahunorganisasi')
+                ->join('kibtransaksi as kt', 'p.kodekib', '=', 'kt.kodekib')
+                ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
+                ->join('bap as b', 'kt.kodebap', '=', 'b.idbap')
                 ->where('penyusutan', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
                 $assets->orderByRaw('p.kodeurusan, p.kodesuburusan, p.kodesubsuburusan, p.kodeorganisasi, p.kodesuborganisasi, p.kodeunit, p.kodesubunit, p.kodesubsubunit ' . $request['order'][0]['dir']);
@@ -89,11 +88,10 @@ class PenyusutanController extends Controller
             $assets = $assets->get();
 
             $totalFiltered = DB::table('penyusutan as p')
-                ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan')
+                ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan', 'b.tahunorganisasi')
                 ->join('kibtransaksi as kt', 'p.kodekib', '=', 'kt.kodekib')
                 ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
                 ->join('bap as b', 'kt.kodebap', '=', 'b.idbap')
-                ->select('*')
                 ->where('penyusutan', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
                 $totalFiltered->orderByRaw('p.kodeurusan, p.kodesuburusan, p.kodesubsuburusan, p.kodeorganisasi, p.kodesuborganisasi, p.kodeunit, p.kodesubunit, p.kodesubsubunit ' . $request['order'][0]['dir']);
