@@ -23,7 +23,7 @@ Briefly describe your project here. What problem does it solve? What technologie
 1. Clone the repository:
 
    ```bash 
-    git clone https://github.com/your-username/your-project.git
+    git clone https://github.com/ArRahmaan17/sim_aset_papua.git
     ```
 
 2. Install All Dependencies
