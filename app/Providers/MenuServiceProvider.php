@@ -22,12 +22,12 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function boot(Request $request): void
     {
-        $menu_sidebar = DB::table('menu as m')
+        $menu_sidebar = DB::table('auth.menu as m')
             ->select('m.idmenu as id', 'parents as parent', 'icons', 'nama', 'link')
             ->where('letak', 'sidebar')
             ->get()->toArray();
         $menu_sidebar = buildTree($menu_sidebar);
-        $menu_profile = DB::table('menu as m')
+        $menu_profile = DB::table('auth.menu as m')
             ->select('m.idmenu as id', 'parents as parent', 'icons', 'nama', 'link')
             ->where('letak', 'profile')
             ->get()->toArray();

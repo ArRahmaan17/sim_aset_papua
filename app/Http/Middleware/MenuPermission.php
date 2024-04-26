@@ -16,8 +16,8 @@ class MenuPermission
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $data = DB::table('menu as m')
-            ->join('role_menu as rm', 'rm.idmenu', '=', 'm.idmenu')
+        $data = DB::table('auth.menu as m')
+            ->join('auth.role_menu as rm', 'rm.idmenu', '=', 'm.idmenu')
             ->where(['m.link' => $request->route()->getName(), 'rm.idrole' => session('user')->idrole])->count() > 0 ? true : false;
         if ($data) {
             return $next($request);

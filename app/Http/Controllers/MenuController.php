@@ -15,14 +15,14 @@ class MenuController extends Controller
     public function index()
     {
         $routes = Route::getRoutes();
-        $roles = DB::table('role')->where('idrole', '<>', 1)->get();
+        $roles = DB::table('auth.role')->where('idrole', '<>', 1)->get();
 
         return view('layout.menu.index', compact('roles', 'routes'));
     }
 
     public function showDetail($id)
     {
-        $data = DB::table('menu')
+        $data = DB::table('auth.menu')
             ->select(DB::raw(' idmenu as id, nama as text, parents as parent'))
             ->where('idmenu', $id)
             ->orWhere('parents', $id)
@@ -40,13 +40,13 @@ class MenuController extends Controller
 
     public function all()
     {
-        $menuSideBar = DB::table('menu')
+        $menuSideBar = DB::table('auth.menu')
             ->select(DB::raw(' idmenu as id, nama as text, parents as parent, letak'))
             ->where('letak', 'sidebar')
             ->get()
             ->toArray();
         $treeMenuSideBar = buildTree($menuSideBar);
-        $menuProfile = DB::table('menu')
+        $menuProfile = DB::table('auth.menu')
             ->select(DB::raw(' idmenu as id, nama as text, parents as parent, letak'))
             ->where('letak', 'profile')
             ->get()->toArray();
@@ -69,7 +69,7 @@ class MenuController extends Controller
             $menu = $request->only('menu')['menu'];
             $id = $menu['id'];
             unset($menu['text'], $menu['id']);
-            DB::table('menu')->where('idmenu', $id)->update($menu);
+            DB::table('auth.menu')->where('idmenu', $id)->update($menu);
             DB::commit();
             $response = ['message' => 'menu updated successfully'];
             $status = 200;
@@ -95,7 +95,7 @@ class MenuController extends Controller
             }
             $menu['updated_at'] = $menu['created_at'] = now('Asia/Jakarta');
             $roles = ($request->has('role')) ? $request->only('role') : ['role' => []];
-            $idmenu = DB::table('menu')->insertGetId($menu, 'idmenu');
+            $idmenu = DB::table('auth.menu')->insertGetId($menu, 'idmenu');
             $data_role = [];
             if ($request->has('role')) {
                 foreach ($roles['role'] as $index => $role) {
@@ -159,7 +159,7 @@ class MenuController extends Controller
             if ($request->has('letak') && $request->letak == 'profile') {
                 $data['parents'] = 0;
             }
-            DB::table('menu')->where('idmenu', $id)->update($request->except('_token', 'role'));
+            DB::table('auth.menu')->where('idmenu', $id)->update($request->except('_token', 'role'));
             DB::table('role_menu')->where('idmenu', $id)->delete();
             $roles = ($request->has('role')) ? $request->only('role') : ['role' => []];
             if ($request->has('role')) {
@@ -198,11 +198,11 @@ class MenuController extends Controller
     {
         DB::beginTransaction();
         try {
-            $parent = DB::table('menu')->where('parents', $id)->count();
+            $parent = DB::table('auth.menu')->where('parents', $id)->count();
             if ($parent != 0) {
                 throw new Exception('cant delete parent menu', 422);
             }
-            DB::table('menu')->where('idmenu', $id)->delete();
+            DB::table('auth.menu')->where('idmenu', $id)->delete();
             DB::table('role_menu')->where('idmenu', $id)->delete();
             DB::commit();
             $status = 422;

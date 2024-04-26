@@ -30,7 +30,7 @@ class penyusutan_aset extends Command
         try {
             $data = DB::table('kibtransaksi as k')
                 ->select('k.kodekib')
-                ->whereRaw('MONTH(tanggalpenyusutan) = MONTH(CURDATE()) and k.tahunorganisasi = (YEAR(CURDATE())-1) and k.tahunperolehan =' . env('TAHUN_APLIKASI'))
+                ->whereRaw("date_part('month', tanggalpenyusutan) = date_part('month', CURRENT_TIMESTAMP) and k.tahunorganisasi = (date_part('year', CURRENT_TIMESTAMP)-1) and k.tahunperolehan =' . env('TAHUN_APLIKASI')")
                 ->get()
                 ->toArray();
             $kodekib = array_column($data, 'kodekib');

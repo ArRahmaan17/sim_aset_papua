@@ -22,7 +22,7 @@ class AuthController extends Controller
         $user = User::where('username', $request->username)->first();
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
-                $organisasi = DB::table('users_opd as uo')->select('mo.*')->join('masterorganisasi as mo', function (JoinClause $join) {
+                $organisasi = DB::table('auth.users_opd as uo')->select('mo.*')->join('masterorganisasi as mo', function (JoinClause $join) {
                     $join->on('uo.kodeurusan', '=', 'mo.kodeurusan')
                         ->on('uo.kodesuburusan', '=', 'mo.kodesuburusan')
                         ->on('uo.kodesubsuburusan', '=', 'mo.kodesubsuburusan')

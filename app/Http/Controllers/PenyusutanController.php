@@ -17,7 +17,7 @@ class PenyusutanController extends Controller
             ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan', 'b.tahunorganisasi')
             ->join('kibtransaksi as kt', 'p.kodekib', '=', 'kt.kodekib')
             ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
-            ->join('bap as b', 'kt.kodebap', '=', 'b.idbap');
+            ->join('bap as b', 'kt.kodebap', '=', 'b.kodebap');
         if (intval(session('user')->idrole) > 3) {
             $totalData->where([
                 'p.kodeurusan' => session('organisais')->kodeurusan,
@@ -38,7 +38,7 @@ class PenyusutanController extends Controller
                 ->select('b.kodebap', 'k.kodekib', 'k.alamat', 'k.keterangan', 'p.nilai', 'p.tahun', 'p.tgl_penyusutan', 'b.tahunorganisasi')
                 ->join('kibtransaksi as kt', 'p.kodekib', '=', 'kt.kodekib')
                 ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
-                ->join('bap as b', 'kt.kodebap', '=', 'b.idbap');
+                ->join('bap as b', 'kt.kodebap', '=', 'b.kodebap');
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
                     ->offset($request['start']);

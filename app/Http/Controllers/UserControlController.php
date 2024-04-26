@@ -17,12 +17,12 @@ class UserControlController extends Controller
 
     public function dataTable(Request $request)
     {
-        $totalData = DB::table('role')
+        $totalData = DB::table('auth.role')
             ->orderBy('role', 'asc')
             ->count();
         $totalFiltered = $totalData;
         if (empty($request['search']['value'])) {
-            $assets = DB::table('role')
+            $assets = DB::table('auth.role')
                 ->select('*');
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -33,7 +33,7 @@ class UserControlController extends Controller
             }
             $assets = $assets->get();
         } else {
-            $assets = DB::table('role')->select('*')
+            $assets = DB::table('auth.role')->select('*')
                 ->where('role', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
                 $assets->orderByRaw('role ' . $request['order'][0]['dir']);
@@ -44,7 +44,7 @@ class UserControlController extends Controller
             }
             $assets = $assets->get();
 
-            $totalFiltered = DB::table('role')
+            $totalFiltered = DB::table('auth.role')
                 ->select('*')
                 ->where('role', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
@@ -85,13 +85,13 @@ class UserControlController extends Controller
                 $data['foto'] = $filename;
             }
             $id = session('user')->idusers;
-            DB::table('users')
+            DB::table('auth.users')
                 ->where('idusers', $id)
                 ->update($data);
             DB::commit();
             $status = 200;
             $message = ['message' => 'Profile user berhasil di ubah'];
-            $data = DB::table('users')->where('idusers', $id)->first();
+            $data = DB::table('auth.users')->where('idusers', $id)->first();
             session()->forget('user');
             session()->put('user', $data);
         } catch (Throwable $th) {
@@ -110,7 +110,7 @@ class UserControlController extends Controller
         try {
             $id = session('user')->idusers;
             if ($request->newpassword == $request->password && $request->confirm == 'on') {
-                DB::table('users')
+                DB::table('auth.users')
                     ->where('idusers', $id)
                     ->update(['password' => Hash::make($request->password)]);
             } else if ($request->newpassword != $request->password) {
@@ -137,7 +137,7 @@ class UserControlController extends Controller
     {
         DB::beginTransaction();
         try {
-            DB::table('role')->insert($request->except('_token'));
+            DB::table('auth.role')->insert($request->except('_token'));
             DB::commit();
             $status = 200;
             $message = ['message' => 'Role user berhasil ditambahkan'];
@@ -152,7 +152,7 @@ class UserControlController extends Controller
 
     public function roleShow(string $id)
     {
-        $data = DB::table('role')->where('idrole', $id)->first();
+        $data = DB::table('auth.role')->where('idrole', $id)->first();
         if ($data) {
             $status = 200;
             $message = ['message' => 'data role berhasil di temukan', 'data' => $data];
@@ -168,7 +168,7 @@ class UserControlController extends Controller
     {
         DB::beginTransaction();
         try {
-            DB::table('role')->where('idrole', $id)->update($request->except('_token'));
+            DB::table('auth.role')->where('idrole', $id)->update($request->except('_token'));
             DB::commit();
             $status = 200;
             $message = ['message' => 'Role user berhasil di ubah'];
@@ -185,7 +185,7 @@ class UserControlController extends Controller
     {
         DB::beginTransaction();
         try {
-            DB::table('role')
+            DB::table('auth.role')
                 ->where('idrole', $id)
                 ->delete();
             DB::commit();
@@ -207,7 +207,7 @@ class UserControlController extends Controller
 
     public function userCreate()
     {
-        $roles = DB::table('role')->where('idrole', '>=', session('user')->idrole)->get();
+        $roles = DB::table('auth.role')->where('idrole', '>=', session('user')->idrole)->get();
         $semuaorganisasi = (new OrganisasiController)->useable()->getData()->data;
         return view('layout.control.user-create', compact('roles', 'semuaorganisasi'));
     }
@@ -244,7 +244,7 @@ class UserControlController extends Controller
                     unset($user_opd['wajibsusut'], $data['useropd']);
                 }
             }
-            $id = DB::table('users')->insertGetId($data);
+            $id = DB::table('auth.users')->insertGetId($data);
             if (intval($request->idrole) > 3) {
                 $user_opd['idusers'] = $id;
                 DB::table('users_opd')->insert($user_opd);

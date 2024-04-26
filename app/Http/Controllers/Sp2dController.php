@@ -17,7 +17,7 @@ class Sp2dController extends Controller
 
     public function dataTable(Request $request)
     {
-        $totalFiltered = DB::table('sp2d as p')
+        $totalFiltered = DB::table('anggaran.sp2d as p')
             ->selectRaw('p.nosp2d ,tglsp2d, kdunit, nmunit, keperluan, SUM(nilai) as nilaisp2d, tahun')
             ->groupBy(
                 'nukegunit',
@@ -35,7 +35,7 @@ class Sp2dController extends Controller
             ->get();
         $totalFiltered = count($totalFiltered);
         if (empty($request['search']['value'])) {
-            $assets = DB::table('sp2d as p')
+            $assets = DB::table('anggaran.sp2d as p')
                 ->selectRaw('p.nosp2d ,tglsp2d, kdunit, nmunit, keperluan, SUM(nilai) as nilaisp2d, tahun');
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -63,7 +63,7 @@ class Sp2dController extends Controller
                 'nmunit'
             )->get();
         } else {
-            $assets = DB::table('sp2d as p')
+            $assets = DB::table('anggaran.sp2d as p')
                 ->selectRaw('p.nosp2d ,tglsp2d, kdunit, nmunit, keperluan, SUM(nilai) as nilaisp2d, tahun')
                 ->where('nosp2d', 'like', '%' . $request['search']['value'] . '%')
                 ->orWhere('tglsp2d', 'like', '%' . $request['search']['value'] . '%')
@@ -82,7 +82,7 @@ class Sp2dController extends Controller
             }
             $assets = $assets->groupByRaw("nukegunit, nosp2d, tglsp2d, kdunit, nmunit, keperluan, nilai, tahun, nmkegunit, nuprgrm, nmunit HAVING (CASE WHEN '" . $request['search']['value'] . "' REGEXP '^[0-9]+$' THEN SUM(nilai) like '%" . $request['search']['value'] . "%' else true = true END)")->get();
 
-            $totalFiltered = DB::table('sp2d as p')
+            $totalFiltered = DB::table('anggaran.sp2d as p')
                 ->selectRaw('p.nosp2d ,tglsp2d, kdunit, nmunit, keperluan, SUM(nilai) as nilaisp2d, tahun')
                 ->selectRaw('p.nosp2d ,tglsp2d, kdunit, nmunit, keperluan, SUM(nilai) as nilaisp2d, tahun')
                 ->where('nosp2d', 'like', '%' . $request['search']['value'] . '%')

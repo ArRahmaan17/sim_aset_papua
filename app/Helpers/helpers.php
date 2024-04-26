@@ -8,7 +8,7 @@ function getRoleId()
 }
 function getRole()
 {
-    return DB::table('role')->where('idrole', session('user')->idrole)->first()->role;
+    return DB::table('auth.role')->where('idrole', session('user')->idrole)->first()->role;
 }
 function splitKodeGolongan($kodegolongan)
 {
@@ -82,7 +82,7 @@ function convertStringToNumber($string)
 }
 function getkdunit($sp2d)
 {
-    return DB::table('sp2d')
+    return DB::table('anggaran.sp2d')
         ->where([
             'kdper' => $sp2d['kdper'],
             'nosp2d' => $sp2d['nosp2d'],
@@ -264,7 +264,7 @@ function buildTreeOrganisasi(array &$elements, $idParent = '0')
 }
 function checkPermissionMenu($id, $role)
 {
-    return DB::table('role_menu')->where(['idmenu' => $id, 'idrole' => $role])->count() > 0 ? true : false;
+    return DB::table('auth.role_menu')->where(['idmenu' => $id, 'idrole' => $role])->count() > 0 ? true : false;
 }
 
 function buildMenu(array &$elements, $place = 'sidebar')

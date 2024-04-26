@@ -17,7 +17,7 @@ class Bap extends Model
         $copied = clone session('organisasi');
         unset($copied->organisasi, $copied->wajibsusut);
 
-        return self::select('bap.*')->join('kibtransaksi as kt', 'kt.kodebap', '=', 'bap.idbap')
+        return self::select('bap.*')->join('kibtransaksi as kt', 'kt.kodebap', '=', 'bap.kodebap')
             ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
             ->where([
                 'bap.kodejenistransaksi' => '101',
@@ -87,7 +87,7 @@ class Bap extends Model
         unset($copied->organisasi, $copied->wajibsusut);
 
         return self::select('bap.*')
-            ->join('kibtransaksi as kt', 'kt.kodebap', '=', 'bap.idbap')
+            ->join('kibtransaksi as kt', 'kt.kodebap', '=', 'bap.kodebap')
             ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
             ->join('kibsp2d as kd', 'k.kodekib', '=', 'kd.kodekib')
             ->where([

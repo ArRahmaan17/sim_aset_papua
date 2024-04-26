@@ -14,7 +14,7 @@ class PerolehanSP2DController extends Controller
     public function index()
     {
         $dataMaster = DB::table('masterbarang')->where('kodesubsub', '<>', 0)->get();
-        $dataPerogramSP2D = DB::table('sp2d')->selectRaw('nuprgrm as id, nmprgrm as name')
+        $dataPerogramSP2D = DB::table('anggaran.sp2d')->selectRaw('nuprgrm as id, nmprgrm as name')
             ->where('nuprgrm', '<>', null)
             ->where('nmunit', session('organisasi')->organisasi)
             ->groupBy(
@@ -29,7 +29,7 @@ class PerolehanSP2DController extends Controller
 
     public function getKegiatan($idProgram)
     {
-        $dataPerogramSP2D = DB::table('sp2d')->selectRaw('nukegunit as id, concat(nukegunit," - ",nmkegunit) as name')
+        $dataPerogramSP2D = DB::table('anggaran.sp2d')->selectRaw('nukegunit as id, concat(nukegunit," - ",nmkegunit) as name')
             ->where('nuprgrm', $idProgram)
             ->where('nmunit', session('organisasi')->organisasi)
             ->groupBy(
@@ -44,7 +44,7 @@ class PerolehanSP2DController extends Controller
 
     public function getRekening($idProgram)
     {
-        $dataRekeningSP2D = DB::table('sp2d')->selectRaw(
+        $dataRekeningSP2D = DB::table('anggaran.sp2d')->selectRaw(
             'nosp2d, tglsp2d, kdper, nmper, sp2d.nilai as nilai, (sp2d.nilai - (case when (select count(0) from kib as k join kibsp2d as ks on k.kodekib = ks.kodekib where ks.nosp2d = sp2d.nosp2d and ks.tglsp2d = sp2d.tglsp2d and ks.kdper = sp2d.kdper) > 0 then (select sum(ks.nilai) from kib as k join kibsp2d as ks on k.kodekib = ks.kodekib where ks.nosp2d = sp2d.nosp2d and ks.tglsp2d = sp2d.tglsp2d and ks.kdper = sp2d.kdper) else 0 end)) as sisa_nilai,keperluan'
         )
             ->where('nukegunit', $idProgram)
