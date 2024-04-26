@@ -48,9 +48,9 @@ Briefly describe your project here. What problem does it solve? What technologie
     ```bash
     php artisan serve
     ```
-    visit <a href="localhost:8080">localhost:8080</a> in your browser
+    visit <a href="localhost:8000">localhost:8000</a> in your browser
 
 2. Import Master
     <br> 
-    visit <a href="localhost:8080/import-master">localhost:8080/import-master</a> in your browser, (be careful)
+    visit <a href="localhost:8000/import-master">localhost:8080/import-master</a> in your browser, (be careful)
     
