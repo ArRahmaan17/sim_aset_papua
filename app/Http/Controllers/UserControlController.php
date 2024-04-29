@@ -259,6 +259,7 @@ class UserControlController extends Controller
             $response = ['message' => 'Tambah user berhasil'];
             DB::commit();
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollBack();
             $status = 422;
             $response = ['message' => 'Tambah user gagal'];
