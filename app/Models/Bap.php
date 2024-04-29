@@ -17,8 +17,10 @@ class Bap extends Model
         $copied = clone session('organisasi');
         unset($copied->organisasi, $copied->wajibsusut);
 
-        return self::select('bap.*')->join('kibtransaksi as kt', 'kt.kodebap', '=', 'bap.kodebap')
+        return self::select('bap.*')
+            ->join('kibtransaksi as kt', 'kt.kodebap', '=', 'bap.kodebap')
             ->join('kib as k', 'kt.kodekib', '=', 'k.kodekib')
+            ->join('kibsp2d as kd', 'kd.kodekib', '!=', 'k.kodekib')
             ->where([
                 'bap.kodejenistransaksi' => '101',
                 'bap.tahunorganisasi' => env('APP_YEAR'),
@@ -30,7 +32,7 @@ class Bap extends Model
                 'bap.kodeunit' => $copied->kodeunit,
                 'bap.kodesubunit' => $copied->kodesubunit,
                 'bap.kodesubsubunit' => $copied->kodesubsubunit,
-            ])->whereRaw('NOT EXISTS (select kodekib from kibsp2d kd)')->groupBy(
+            ])->groupBy(
                 'bap.idbap',
                 'bap.kodebap',
                 'bap.tanggalbap',
