@@ -49,7 +49,7 @@ class PerolehanController extends Controller
                 $copied['uraibarang'] = $kib['urai'];
                 $copied['tahunperolehan'] = 2024;
                 $copied['tanggalperolehan'] = now('Asia/Jakarta');
-                $copied['kodepemilik'] = 34;
+                $copied['kodepemilik'] = 12;
                 $copied['uraiorganisasi'] = getOrganisasi();
                 $copied['kodeklasifikasi'] = ($copied['nilaibarang'] >= intval(classificationType($copied)->nilai)) ? 1 : 2;
                 $copied['kodeklasifikasi_u'] = ($copied['nilaibarang'] >= intval(classificationType($copied)->nilai)) ? 1 : 2;
