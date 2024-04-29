@@ -320,9 +320,10 @@ class PerolehanController extends Controller
         return response()->json($message, $status);
     }
 
-    public function getDetailBap($kodebap)
+    public function getDetailBap($idbap)
     {
-        $data = Bap::getDetailBap($kodebap);
+        $bap = Bap::where('idbap', $idbap)->first();
+        $data = Bap::getDetailBap($bap->kodebap);
         $data['dataKib'] = collect(array_values($data['dataKib']))->flatten()->all();
         if (count($data['dataKibTransaksi']) > 0 || count($data['dataKib']) > 0) {
             $response = ['message' => 'Detail Bap berhasil ditemukan', 'data' => $data];

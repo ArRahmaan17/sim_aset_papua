@@ -315,7 +315,7 @@
             let data = $(element).parents('tr').data('bap');
             $.ajax({
                 type: "get",
-                url: `{{ route('perolehan.bap.show') }}/${data.kodebap}`,
+                url: `{{ route('perolehan.bap.show') }}/${data.idbap}`,
                 dataType: "json",
                 success: function(response) {
                     $('#container-detail-asset').html('');
