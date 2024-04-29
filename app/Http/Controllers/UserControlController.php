@@ -244,7 +244,7 @@ class UserControlController extends Controller
                     unset($user_opd['wajibsusut'], $data['useropd']);
                 }
             }
-            $id = DB::table('auth.users')->insertGetId($data);
+            $id = DB::table('auth.users')->insertGetId($data, 'idusers');
             if (intval($request->idrole) > 3) {
                 $user_opd['idusers'] = $id;
                 DB::table('users_opd')->insert($user_opd);
