@@ -95,7 +95,6 @@ class UserControlController extends Controller
             session()->forget('user');
             session()->put('user', $data);
         } catch (Throwable $th) {
-            dd($th);
             DB::rollBack();
             $status = 422;
             $message = ['message' => 'Profile user gagal di ubah'];
@@ -261,7 +260,6 @@ class UserControlController extends Controller
             $response = ['message' => 'Tambah user berhasil'];
             DB::commit();
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollBack();
             $status = 422;
             $response = ['message' => 'Tambah user gagal'];
