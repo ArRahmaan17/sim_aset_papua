@@ -247,8 +247,8 @@ class UserControlController extends Controller
             $id = DB::table('auth.users')->insertGetId($data, 'idusers');
             if (intval($request->idrole) > 3) {
                 $user_opd['idusers'] = $id;
-                DB::table('users_opd')->insert($user_opd);
-                DB::table('role_menu')->insert([
+                DB::table('auth.users_opd')->insert($user_opd);
+                DB::table('auth.role_menu')->insert([
                     'idrole' => $request->idrole,
                     'idmenu' => 1,
                     'created_at' => now('Asia/Jakarta'),
