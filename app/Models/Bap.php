@@ -109,14 +109,13 @@ class Bap extends Model
 
     public static function getDetailBap($kodebap)
     {
-        dd("select count(kodekib) from kibtransaksi where kodebap = quote_literal('" . $kodebap . "') and uraibarang = kib.uraibarang group by uraibarang");
         $dataKibTransaksi = DB::table('kibtransaksi')->where('kodebap', $kodebap)->get()->toArray();
         $kodekib = array_map(function ($obj) {
             return $obj->kodekib;
         }, $dataKibTransaksi);
         $dataKib = DB::table('kib')
             ->selectRaw(
-                "kib.*, kodekib as iddetail, uraibarang as urai, (select kategori from masterasalusul where kodeasalusul = kib.kodeasalusul) as " . '"select-asal-usul-barang-perolehan-aset"' . ", (select count(kodekib) from kibtransaksi where kodebap = quote_literal('" . $kodebap . "') and uraibarang = kib.uraibarang group by uraibarang) as jumlah"
+                "kib.*, kodekib as iddetail, uraibarang as urai, (select kategori from masterasalusul where kodeasalusul = kib.kodeasalusul) as " . '"select-asal-usul-barang-perolehan-aset"' . ", (select count(kodekib) from kibtransaksi where kodebap = '" . $kodebap . "' and uraibarang = kib.uraibarang group by uraibarang) as jumlah"
             )
             ->whereIn('kodekib', $kodekib)
             ->get()
@@ -134,7 +133,7 @@ class Bap extends Model
         }, $dataKibTransaksi);
         $dataKib = DB::table('kib')
             ->selectRaw(
-                "kib.*, kodekib as iddetail, uraibarang as urai, (select kategori from masterasalusul where kodeasalusul = kib.kodeasalusul) as " . '"select-asal-usul-barang-perolehan-aset"' . ", (select count(kodekib) from kibtransaksi where kodebap = quote_literal('" . $kodebap . "') and uraibarang = kib.uraibarang group by uraibarang) as jumlah, (SELECT json_build_array(json_build_object('id', concat(kd.nosp2d,'_',kd.tglsp2d), 'nilai', kd.nilai, 'keperluan', sp.keperluan, 'kdper', kd.kdper, 'persentase', kd.persentase)) from kibsp2d kd join anggaran.sp2d sp on kd.kdper = sp.kdper and kd.nuprgrm = sp.nuprgrm and kd.nosp2d = sp.nosp2d and kd.tglsp2d = sp.tglsp2d and kd.kdkegunit = sp.nukegunit  where kodekib = kib.kodekib) as sp2d"
+                "kib.*, kodekib as iddetail, uraibarang as urai, (select kategori from masterasalusul where kodeasalusul = kib.kodeasalusul) as " . '"select-asal-usul-barang-perolehan-aset"' . ", (select count(kodekib) from kibtransaksi where kodebap = '" . $kodebap . "' and uraibarang = kib.uraibarang group by uraibarang) as jumlah, (SELECT json_build_array(json_build_object('id', concat(kd.nosp2d,'_',kd.tglsp2d), 'nilai', kd.nilai, 'keperluan', sp.keperluan, 'kdper', kd.kdper, 'persentase', kd.persentase)) from kibsp2d kd join anggaran.sp2d sp on kd.kdper = sp.kdper and kd.nuprgrm = sp.nuprgrm and kd.nosp2d = sp.nosp2d and kd.tglsp2d = sp.tglsp2d and kd.kdkegunit = sp.nukegunit  where kodekib = kib.kodekib) as sp2d"
             )
             ->whereIn('kodekib', $kodekib)
             ->get()
