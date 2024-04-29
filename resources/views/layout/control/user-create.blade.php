@@ -116,6 +116,7 @@
                             title: 'Success',
                             message: response.message,
                         });
+                        $("#formCreateUser")[0].reset();
                     },
                     error: function(error) {
                         iziToast.error({
