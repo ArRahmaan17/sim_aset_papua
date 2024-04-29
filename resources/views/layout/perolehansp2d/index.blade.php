@@ -376,7 +376,7 @@
             let data = $(element).parents('tr').data('bap');
             $.ajax({
                 type: "get",
-                url: `{{ route('perolehan-sp2d.bap.show') }}/${data.idbap}`,
+                url: `{{ route('perolehan-sp2d.bap.show') }}/${data.kodebap}`,
                 dataType: "json",
                 success: function(response) {
                     $('#container-detail-asset').html('');
