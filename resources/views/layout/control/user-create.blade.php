@@ -117,6 +117,7 @@
                             message: response.message,
                         });
                         $("#formCreateUser")[0].reset();
+                        $('.select2').val('').addClass('d-none').prop('disabled', true);
                     },
                     error: function(error) {
                         iziToast.error({
