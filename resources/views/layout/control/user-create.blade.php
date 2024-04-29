@@ -70,7 +70,7 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <div class="mb-3 col-md-12 d-none">
+                            <div class="mb-3 col-md-12 d-none container-organisasi">
                                 <label for="">Organisasi</label>
                                 <select class="form-control select2" name="useropd" disabled>
                                     {!! $semuaorganisasi !!}
@@ -117,7 +117,8 @@
                             message: response.message,
                         });
                         $("#formCreateUser")[0].reset();
-                        $('.select2').val('').addClass('d-none').prop('disabled', true);
+                        $('.select2').val('').prop('disabled', true);
+                        $('.container-organisasi').addClass('d-none')
                     },
                     error: function(error) {
                         iziToast.error({
