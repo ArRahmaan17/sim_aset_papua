@@ -94,7 +94,7 @@
     <script>
         $(function() {
             $('[name=idrole]').click(function() {
-                if (this.value == '9') {
+                if (parseInt(this.value) > 3) {
                     $('.d-none').removeClass('d-none');
                     $('.select2').prop('disabled', false);
                     $('.select2').select2();
