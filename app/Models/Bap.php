@@ -109,6 +109,7 @@ class Bap extends Model
 
     public static function getDetailBap($kodebap)
     {
+        dd("select count(kodekib) from kibtransaksi where kodebap = quote_literal('" . $kodebap . "') and uraibarang = kib.uraibarang group by uraibarang");
         $dataKibTransaksi = DB::table('kibtransaksi')->where('kodebap', $kodebap)->get()->toArray();
         $kodekib = array_map(function ($obj) {
             return $obj->kodekib;

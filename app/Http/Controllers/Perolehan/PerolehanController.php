@@ -323,7 +323,6 @@ class PerolehanController extends Controller
     public function getDetailBap($idbap)
     {
         $bap = Bap::where('idbap', $idbap)->first();
-        dd($bap->kodebap);
         $data = Bap::getDetailBap($bap->kodebap);
         $data['dataKib'] = collect(array_values($data['dataKib']))->flatten()->all();
         if (count($data['dataKibTransaksi']) > 0 || count($data['dataKib']) > 0) {
