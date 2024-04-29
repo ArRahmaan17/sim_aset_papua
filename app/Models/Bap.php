@@ -113,7 +113,7 @@ class Bap extends Model
         }, $dataKibTransaksi);
         $dataKib = DB::table('kib')
             ->selectRaw(
-                "kib.*, kodekib as iddetail, uraibarang as urai, (select kategori from masterasalusul where kodeasalusul = kib.kodeasalusul) as " . 'select-asal-usul-barang-perolehan-aset' . ", (select count(kodekib) from kibtransaksi where kodebap = quote_literal('" . $kodebap . "') and uraibarang = kib.uraibarang group by uraibarang) as jumlah"
+                "kib.*, kodekib as iddetail, uraibarang as urai, (select kategori from masterasalusul where kodeasalusul = kib.kodeasalusul) as " . '"select-asal-usul-barang-perolehan-aset"' . ", (select count(kodekib) from kibtransaksi where kodebap = quote_literal('" . $kodebap . "') and uraibarang = kib.uraibarang group by uraibarang) as jumlah"
             )
             ->whereIn('kodekib', $kodekib)
             ->get()
