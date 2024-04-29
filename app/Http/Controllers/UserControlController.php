@@ -228,7 +228,7 @@ class UserControlController extends Controller
             if (intval($request->idrole) > 3) {
                 $user_opd = (array)clone (session('organisasi'));
                 unset($user_opd['wajibsusut']);
-                if ($data['useropd']) {
+                if (isset($data['useropd'])) {
                     unset($user_opd['organisasi']);
                     [
                         $user_opd['kodeurusan'],
