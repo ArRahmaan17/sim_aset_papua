@@ -284,7 +284,7 @@ class PerolehanController extends Controller
                             $copied['jenis'],
                             $copied['tanggalperolehan'],
                         );
-                        $copied['nilaitransaksi'] = $kib['nilaibarang'];
+                        $copied['nilaitransaksi'] = convertStringToNumber($kib['nilaibarang']);
                         $copied['kodekib'] = $kodekib;
                         $copied['kodebap'] = $bap->idbap;
                         $copied['kodejenistransaksi'] = 101;

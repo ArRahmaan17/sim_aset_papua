@@ -115,8 +115,8 @@ class PerolehanSP2DController extends Controller
                     $copied['tanggalperolehan'] = now('Asia/Jakarta');
                     $copied['kodepemilik'] = 12;
                     $copied['uraiorganisasi'] = getOrganisasi();
-                    $copied['kodeklasifikasi'] = ($copied['nilaibarang'] >= intval(classificationType($copied)->nilai)) ? 1 : 2;
-                    $copied['kodeklasifikasi_u'] = ($copied['nilaibarang'] >= intval(classificationType($copied)->nilai)) ? 1 : 2;
+                    $copied['kodeklasifikasi'] = (intval($copied['nilaibarang']) >= intval(classificationType($copied)->nilai)) ? 1 : 2;
+                    $copied['kodeklasifikasi_u'] = (intval($copied['nilaibarang']) >= intval(classificationType($copied)->nilai)) ? 1 : 2;
                     $copied['koderegister'] = getKoderegister($copied);
                     $kib_sp2d = clone (object) $kib['sp2d'];
                     unset($copied['sp2d'], $copied['select-asal-usul-barang-perolehan-aset'], $copied['jumlah'], $copied['iddetail'], $copied['kodemasterbarang'], $copied['urai']);
