@@ -108,8 +108,8 @@ class PerolehanController extends Controller
 
     public function update(Request $request, $ba)
     {
-        $kibs = $request->only('detail');
         DB::beginTransaction();
+        $kibs = $request->only('detail');
         try {
             $bap = DB::table('bap')->where('kodebap', $ba)->first();
             $copied = clone session('organisasi');
