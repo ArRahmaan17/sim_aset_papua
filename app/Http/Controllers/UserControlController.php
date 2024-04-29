@@ -249,12 +249,14 @@ class UserControlController extends Controller
                 $user_opd['created_at'] = now('Asia/Jakarta');
                 $user_opd['updated_at'] = now('Asia/Jakarta');
                 DB::table('auth.users_opd')->insert($user_opd);
-                DB::table('auth.role_menu')->insert([
-                    'idrole' => $request->idrole,
-                    'idmenu' => 1,
-                    'created_at' => now('Asia/Jakarta'),
-                    'updated_at' => now('Asia/Jakarta'),
-                ]);
+                if (DB::table('auth.users')->where('idrole', $request->idrole)->count() == 0) {
+                    DB::table('auth.role_menu')->insert([
+                        'idrole' => $request->idrole,
+                        'idmenu' => 1,
+                        'created_at' => now('Asia/Jakarta'),
+                        'updated_at' => now('Asia/Jakarta'),
+                    ]);
+                }
             }
             $status = 200;
             $response = ['message' => 'Tambah user berhasil'];
