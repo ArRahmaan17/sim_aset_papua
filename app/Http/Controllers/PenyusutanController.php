@@ -48,14 +48,14 @@ class PenyusutanController extends Controller
             }
             if (intval(session('user')->idrole) > 3) {
                 $assets->where([
-                    'p.kodeurusan' => session('organisais')->kodeurusan,
-                    'p.kodesuburusan' => session('organisais')->kodesuburusan,
-                    'p.kodesubsuburusan' => session('organisais')->kodesubsuburusan,
-                    'p.kodeorganisasi' => session('organisais')->kodeorganisasi,
-                    'p.kodesuborganisasi' => session('organisais')->kodesuborganisasi,
-                    'p.kodeunit' => session('organisais')->kodeunit,
-                    'p.kodesubunit' => session('organisais')->kodesubunit,
-                    'p.kodesubsubunit' => session('organisais')->kodesubsubunit,
+                    'p.kodeurusan' => session('organisasi')->kodeurusan,
+                    'p.kodesuburusan' => session('organisasi')->kodesuburusan,
+                    'p.kodesubsuburusan' => session('organisasi')->kodesubsuburusan,
+                    'p.kodeorganisasi' => session('organisasi')->kodeorganisasi,
+                    'p.kodesuborganisasi' => session('organisasi')->kodesuborganisasi,
+                    'p.kodeunit' => session('organisasi')->kodeunit,
+                    'p.kodesubunit' => session('organisasi')->kodesubunit,
+                    'p.kodesubsubunit' => session('organisasi')->kodesubsubunit,
                 ]);
             }
             $assets = $assets->get();
@@ -75,14 +75,14 @@ class PenyusutanController extends Controller
             }
             if (intval(session('user')->idrole) > 3) {
                 $assets->where([
-                    'p.kodeurusan' => session('organisais')->kodeurusan,
-                    'p.kodesuburusan' => session('organisais')->kodesuburusan,
-                    'p.kodesubsuburusan' => session('organisais')->kodesubsuburusan,
-                    'p.kodeorganisasi' => session('organisais')->kodeorganisasi,
-                    'p.kodesuborganisasi' => session('organisais')->kodesuborganisasi,
-                    'p.kodeunit' => session('organisais')->kodeunit,
-                    'p.kodesubunit' => session('organisais')->kodesubunit,
-                    'p.kodesubsubunit' => session('organisais')->kodesubsubunit,
+                    'p.kodeurusan' => session('organisasi')->kodeurusan,
+                    'p.kodesuburusan' => session('organisasi')->kodesuburusan,
+                    'p.kodesubsuburusan' => session('organisasi')->kodesubsuburusan,
+                    'p.kodeorganisasi' => session('organisasi')->kodeorganisasi,
+                    'p.kodesuborganisasi' => session('organisasi')->kodesuborganisasi,
+                    'p.kodeunit' => session('organisasi')->kodeunit,
+                    'p.kodesubunit' => session('organisasi')->kodesubunit,
+                    'p.kodesubsubunit' => session('organisasi')->kodesubsubunit,
                 ]);
             }
             $assets = $assets->get();
@@ -98,14 +98,14 @@ class PenyusutanController extends Controller
             }
             if (intval(session('user')->idrole) > 3) {
                 $totalFiltered->where([
-                    'p.kodeurusan' => session('organisais')->kodeurusan,
-                    'p.kodesuburusan' => session('organisais')->kodesuburusan,
-                    'p.kodesubsuburusan' => session('organisais')->kodesubsuburusan,
-                    'p.kodeorganisasi' => session('organisais')->kodeorganisasi,
-                    'p.kodesuborganisasi' => session('organisais')->kodesuborganisasi,
-                    'p.kodeunit' => session('organisais')->kodeunit,
-                    'p.kodesubunit' => session('organisais')->kodesubunit,
-                    'p.kodesubsubunit' => session('organisais')->kodesubsubunit,
+                    'p.kodeurusan' => session('organisasi')->kodeurusan,
+                    'p.kodesuburusan' => session('organisasi')->kodesuburusan,
+                    'p.kodesubsuburusan' => session('organisasi')->kodesubsuburusan,
+                    'p.kodeorganisasi' => session('organisasi')->kodeorganisasi,
+                    'p.kodesuborganisasi' => session('organisasi')->kodesuborganisasi,
+                    'p.kodeunit' => session('organisasi')->kodeunit,
+                    'p.kodesubunit' => session('organisasi')->kodesubunit,
+                    'p.kodesubsubunit' => session('organisasi')->kodesubsubunit,
                 ]);
             }
             $totalFiltered = $totalFiltered->count();
