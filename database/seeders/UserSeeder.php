@@ -250,7 +250,7 @@ class UserSeeder extends Seeder
                 $data_opd['updated_at'] = now('Asia/Jakarta');
                 DB::table('auth.users_opd')->insert($data_opd);
             }
-            // DB::commit();
+            DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
             //throw $th;
