@@ -131,7 +131,7 @@ class MenuController extends Controller
      */
     public function show(string $id)
     {
-        $menu = DB::table('menu as m')
+        $menu = DB::table('auth.menu as m')
             ->join('role_menu as rm', 'm.idmenu', '=', 'rm.idmenu')
             ->selectRaw('m.*, JSON_ARRAYAGG(rm.idrole) as "role[]"')
             ->where('m.idmenu', $id)
