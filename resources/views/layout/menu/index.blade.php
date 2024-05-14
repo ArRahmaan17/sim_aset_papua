@@ -600,15 +600,16 @@
                                 dataType: "json",
                                 success: function(response) {
                                     $("#container-tree-menu-sidebar")
-                                        .jstree(
-                                            true)
+                                        .jstree(true)
                                         .delete_node($(
                                                 "#container-tree-menu-sidebar"
                                             )
-                                            .jstree(
-                                                true)
+                                            .jstree(true)
                                             .get_selected());
-                                    resetJstree()
+                                    $("#container-tree-menu-sidebar")
+                                        .switchClass('col-6', 'col-12', 700);
+                                    $("#form-container").switchClass('d-block',
+                                        'd-none', 50);
                                 },
                                 error: function() {
                                     resetJstree()

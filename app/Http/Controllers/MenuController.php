@@ -113,7 +113,7 @@ class MenuController extends Controller
                 'created_at' => now('Asia/Jakarta'),
                 'updated_at' => now('Asia/Jakarta'),
             ];
-            DB::table('role_menu')->insert($data_role);
+            DB::table('auth.role_menu')->insert($data_role);
             DB::commit();
             $data = ['message' => 'menu berhasil di buat', 'data' => ['text' => $menu['nama'], 'id' => $idmenu, 'parent' => $request->parents == '0-sidebar' ? '0-sidebar' : ($request->parents == '0-profile' ? '0-profile' : $menu['parents'])]];
             $status = 200;
@@ -132,10 +132,10 @@ class MenuController extends Controller
     public function show(string $id)
     {
         $menu = DB::table('auth.menu as m')
-            ->join('role_menu as rm', 'm.idmenu', '=', 'rm.idmenu')
-            ->selectRaw('m.*, JSON_ARRAYAGG(rm.idrole) as "role[]"')
+            ->join('auth.role_menu as rm', 'm.idmenu', '=', 'rm.idmenu')
+            ->selectRaw('m.*, JSON_AGG(rm.idrole) as "role[]"')
             ->where('m.idmenu', $id)
-            ->groupBy('idmenu')
+            ->groupBy('m.idmenu')
             ->first();
         if ($menu) {
             $data = ['message' => 'data menu berhasil di dapatkan', 'data' => $menu];
@@ -160,7 +160,7 @@ class MenuController extends Controller
                 $data['parents'] = 0;
             }
             DB::table('auth.menu')->where('idmenu', $id)->update($request->except('_token', 'role'));
-            DB::table('role_menu')->where('idmenu', $id)->delete();
+            DB::table('auth.role_menu')->where('idmenu', $id)->delete();
             $roles = ($request->has('role')) ? $request->only('role') : ['role' => []];
             if ($request->has('role')) {
                 foreach ($roles['role'] as $index => $role) {
@@ -178,7 +178,7 @@ class MenuController extends Controller
                 'created_at' => now('Asia/Jakarta'),
                 'updated_at' => now('Asia/Jakarta'),
             ];
-            DB::table('role_menu')->insert($data_role);
+            DB::table('auth.role_menu')->insert($data_role);
             $status = 200;
             $message = ['message' => 'Data menu berhasil di ubah', 'data' => array_merge($request->except('_token', 'role'), ['id' => $id])];
             DB::commit();
@@ -203,9 +203,9 @@ class MenuController extends Controller
                 throw new Exception('cant delete parent menu', 422);
             }
             DB::table('auth.menu')->where('idmenu', $id)->delete();
-            DB::table('role_menu')->where('idmenu', $id)->delete();
+            DB::table('auth.role_menu')->where('idmenu', $id)->delete();
             DB::commit();
-            $status = 422;
+            $status = 200;
             $message = ['message' => 'berhasil menghapus menu'];
         } catch (\Exception $th) {
             DB::rollBack();
