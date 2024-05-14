@@ -20,14 +20,14 @@ class PenyusutanController extends Controller
             ->join('bap as b', 'kt.kodebap', '=', 'b.kodebap');
         if (intval(session('user')->idrole) > 3) {
             $totalData->where([
-                'p.kodeurusan' => session('organisais')->kodeurusan,
-                'p.kodesuburusan' => session('organisais')->kodesuburusan,
-                'p.kodesubsuburusan' => session('organisais')->kodesubsuburusan,
-                'p.kodeorganisasi' => session('organisais')->kodeorganisasi,
-                'p.kodesuborganisasi' => session('organisais')->kodesuborganisasi,
-                'p.kodeunit' => session('organisais')->kodeunit,
-                'p.kodesubunit' => session('organisais')->kodesubunit,
-                'p.kodesubsubunit' => session('organisais')->kodesubsubunit,
+                'p.kodeurusan' => session('organisasi')->kodeurusan,
+                'p.kodesuburusan' => session('organisasi')->kodesuburusan,
+                'p.kodesubsuburusan' => session('organisasi')->kodesubsuburusan,
+                'p.kodeorganisasi' => session('organisasi')->kodeorganisasi,
+                'p.kodesuborganisasi' => session('organisasi')->kodesuborganisasi,
+                'p.kodeunit' => session('organisasi')->kodeunit,
+                'p.kodesubunit' => session('organisasi')->kodesubunit,
+                'p.kodesubsubunit' => session('organisasi')->kodesubsubunit,
             ]);
         }
         $totalData = $totalData->orderByRaw('p.kodeurusan, p.kodesuburusan, p.kodesubsuburusan, p.kodeorganisasi, p.kodesuborganisasi, p.kodeunit, p.kodesubunit, p.kodesubsubunit asc')
