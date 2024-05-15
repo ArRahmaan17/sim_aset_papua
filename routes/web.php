@@ -16,6 +16,7 @@ use App\Http\Controllers\MasterController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrganisasiController;
 use App\Http\Controllers\PenyusutanController;
+use App\Http\Controllers\Perolehan\PerolehanAPBDController;
 use App\Http\Controllers\Perolehan\PerolehanController;
 use App\Http\Controllers\Perolehan\PerolehanSP2DController;
 use App\Http\Controllers\RehabController;
@@ -165,6 +166,12 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
     Route::get('/perolehan-sp2d/all-kegiatan/{idprogram?}', [PerolehanSP2DController::class, 'getKegiatan'])->name('perolehan-sp2d.get-kegiatan');
     Route::get('/perolehan-sp2d/bap/detail/{id?}', [PerolehanSP2DController::class, 'getDetailBap'])->name('perolehan-sp2d.bap.show');
     Route::get('/perolehan-sp2d/all-rekening/{idkegiatan?}', [PerolehanSP2DController::class, 'getRekening'])->name('perolehan-sp2d.get-rekening');
+    Route::get('/perolehan-apbd', [PerolehanAPBDController::class, 'index'])->name('perolehan-apbd');
+    Route::post('/perolehan-apbd/store', [PerolehanAPBDController::class, 'store'])->name('perolehan-apbd.store');
+    Route::put('/perolehan-apbd/update/{ba?}', [PerolehanAPBDController::class, 'update'])->name('perolehan-apbd.update');
+    Route::get('/perolehan-apbd/all-kegiatan/{idprogram?}', [PerolehanAPBDController::class, 'getKegiatan'])->name('perolehan-apbd.get-kegiatan');
+    Route::get('/perolehan-apbd/bap/detail/{id?}', [PerolehanAPBDController::class, 'getDetailBap'])->name('perolehan-apbd.bap.show');
+    Route::get('/perolehan-apbd/all-rekening/{idkegiatan?}', [PerolehanAPBDController::class, 'getRekening'])->name('perolehan-apbd.get-rekening');
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan')->middleware(['menu-permission']);
     Route::post('/perolehan/store', [PerolehanController::class, 'store'])->name('perolehan.store');
     Route::put('/perolehan/update/{ba?}', [PerolehanController::class, 'update'])->name('perolehan.update');
@@ -202,6 +209,10 @@ Route::middleware(['un_authenticated'])->group(function () {
     //     Excel::import(new MasterImport, public_path('master.xlsx'));
     //     return response()->json(['status' => 'done', 'message' => 'Master imported']);
     // })->name('import-master');
+    Route::get('/pulllll', function () {
+        $output = shell_exec('cd .. && git pull');
+        return response()->json(['status' => 'done', 'message' => $output]);
+    })->name('git-pull');
     // end DangerLine
     Route::get('/auth/login', [AuthController::class, 'index'])->name('login');
     Route::post('/auth/login', [AuthController::class, 'login'])->middleware(['throttle:login-process'])->name('login-process');

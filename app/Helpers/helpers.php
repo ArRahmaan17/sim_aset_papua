@@ -2,94 +2,112 @@
 
 use Illuminate\Support\Facades\DB;
 
-function getRoleId()
-{
-    return session('user')->idrole;
+if (!function_exists('getRoleId')) {
+    function getRoleId()
+    {
+        return session('user')->idrole;
+    }
 }
-function getRole()
-{
-    return DB::table('auth.role')->where('idrole', session('user')->idrole)->first()->role;
+if (!function_exists('getRole')) {
+    function getRole()
+    {
+        return DB::table('auth.role')->where('idrole', session('user')->idrole)->first()->role;
+    }
 }
-function splitKodeGolongan($kodegolongan)
-{
-    return implode('.', str_split($kodegolongan));
+if (!function_exists('splitKodeGolongan')) {
+    function splitKodeGolongan($kodegolongan)
+    {
+        return implode('.', str_split($kodegolongan));
+    }
 }
-
-function stringPad($word, $length = 2, $pad = '0', $type = STR_PAD_LEFT)
-{
-    return str_pad($word, $length, $pad, $type);
+if (!function_exists('stringPad')) {
+    function stringPad($word, $length = 2, $pad = '0', $type = STR_PAD_LEFT)
+    {
+        return str_pad($word, $length, $pad, $type);
+    }
 }
-
-function dataToOption($allData, $attr = false)
-{
-    $html = "<option value=''>Mohon Pilih</option>";
-    foreach ($allData as $index => $data) {
-        if ($attr) {
-            $html .= "<option data-attr='" . $data->attribute . "' value='" . (isset($data->id) ? $data->id : $data->name) . "'>" . $data->name . ' ( Tersedia di ' . $data->attribute . ')</option>';
-        } else {
-            $html .= "<option value='" . (isset($data->id) ? $data->id : $data->name) . "'>" . $data->name . '</option>';
+if (!function_exists('dataToOption')) {
+    function dataToOption($allData, $attr = false)
+    {
+        $html = "<option value=''>Mohon Pilih</option>";
+        foreach ($allData as $index => $data) {
+            if ($attr) {
+                $html .= "<option data-attr='" . $data->attribute . "' value='" . (isset($data->id) ? $data->id : $data->name) . "'>" . $data->name . ' ( Tersedia di ' . $data->attribute . ')</option>';
+            } else {
+                $html .= "<option value='" . (isset($data->id) ? $data->id : $data->name) . "'>" . $data->name . '</option>';
+            }
         }
+
+        return $html;
     }
-
-    return $html;
 }
-function classificationType(array $conditions)
-{
-    return DB::table('masterkapitalisasi')->where('kodegolongan', $conditions['kodegolongan'])->where('kodebidang', $conditions['kodebidang'])->first();
+if (!function_exists('classificationType')) {
+    function classificationType(array $conditions)
+    {
+        return DB::table('masterkapitalisasi')->where('kodegolongan', $conditions['kodegolongan'])->where('kodebidang', $conditions['kodebidang'])->first();
+    }
 }
-function getKoderegister(array $paramRegister)
-{
-    $allowedColumn = [
-        'kodeurusan',
-        'kodesuburusan',
-        'kodeorganisasi',
-        'kodesuborganisasi',
-        'kodeunit',
-        'kodesubunit',
-        'kodesubsubunit',
-        'kodegolongan',
-        'kodebidang',
-        'kodekelompok',
-        'kodesub',
-        'kodesubsub',
-        'tahunorganisasi',
-        'tahunperolehan',
-    ];
+if (!function_exists('getKoderegister')) {
 
-    $tmpWhere = [];
+    function getKoderegister(array $paramRegister)
+    {
+        $allowedColumn = [
+            'kodeurusan',
+            'kodesuburusan',
+            'kodeorganisasi',
+            'kodesuborganisasi',
+            'kodeunit',
+            'kodesubunit',
+            'kodesubsubunit',
+            'kodegolongan',
+            'kodebidang',
+            'kodekelompok',
+            'kodesub',
+            'kodesubsub',
+            'tahunorganisasi',
+            'tahunperolehan',
+        ];
 
-    $query = DB::table('kib')
-        ->where('tahunorganisasi', 2024)
-        ->where('statusdata', 'aktif');
+        $tmpWhere = [];
 
-    $akumLength = 0;
-    foreach ($paramRegister as $key => $value) {
-        if (in_array($key, $allowedColumn)) {
-            $query->where($key, $value);
-            $akumLength++;
-            array_push($tmpWhere, $key);
+        $query = DB::table('kib')
+            ->where('tahunorganisasi', 2024)
+            ->where('statusdata', 'aktif');
+
+        $akumLength = 0;
+        foreach ($paramRegister as $key => $value) {
+            if (in_array($key, $allowedColumn)) {
+                $query->where($key, $value);
+                $akumLength++;
+                array_push($tmpWhere, $key);
+            }
         }
-    }
-    if ($akumLength < count($allowedColumn)) {
-        throw new \Exception("Kolom yang diminta kurang! berikut daftarnya : \n" . implode("\n", array_diff($allowedColumn, $tmpWhere)), 1);
-    }
+        if ($akumLength < count($allowedColumn)) {
+            throw new \Exception("Kolom yang diminta kurang! berikut daftarnya : \n" . implode("\n", array_diff($allowedColumn, $tmpWhere)), 1);
+        }
 
-    return ($query->max('koderegister') ?? 0) + 1;
+        return ($query->max('koderegister') ?? 0) + 1;
+    }
 }
-function convertStringToNumber($string)
-{
-    return implode('', explode('.', $string));
+if (!function_exists('convertStringToNumber')) {
+    function convertStringToNumber($string)
+    {
+        return implode('', explode('.', $string));
+    }
 }
-function getkdunit($sp2d)
-{
-    return DB::table('anggaran.sp2d')
-        ->where([
-            'kdper' => $sp2d['kdper'],
-            'nosp2d' => $sp2d['nosp2d'],
-            'tglsp2d' => $sp2d['tglsp2d'],
-        ])->first()->kdunit;
+if (!function_exists('getkdunit')) {
+    function getkdunit($sp2d)
+    {
+        return DB::table('anggaran.sp2d')
+            ->where([
+                'kdper' => $sp2d['kdper'],
+                'nosp2d' => $sp2d['nosp2d'],
+                'tglsp2d' => $sp2d['tglsp2d'],
+            ])->first()->kdunit;
+    }
 }
 if (!function_exists('convertAlphabeticalToNumberDate')) {
+
     function convertAlphabeticalToNumberDate($stringDate)
     {
         if ($stringDate != null) {
@@ -197,86 +215,107 @@ if (!function_exists('convertNumericDateToAlphabetical')) {
         }
     }
 }
-function kodeOrganisasi()
-{
-    $copi = clone session('organisasi');
-    unset($copi->organisasi, $copi->tahunorganisasi, $copi->wajibsusut);
+if (!function_exists('kodeOrganisasi')) {
+    function kodeOrganisasi()
+    {
+        $copi = clone session('organisasi');
+        unset($copi->organisasi, $copi->tahunorganisasi, $copi->wajibsusut);
 
-    return implode('.', array_values((array) $copi));
-}
-
-function getOrganisasi()
-{
-    return session('organisasi')->organisasi;
-}
-function buildTree(array &$elements, $idParent = 0)
-{
-    $branch = [];
-    foreach ($elements as $element) {
-        $element = (array) $element;
-        if ($element['parent'] == $idParent) {
-            $children = buildTree($elements, $element['id']);
-            if ($children) {
-                $element['children'] = $children;
-            }
-            unset($element['parent']);
-            $branch[] = $element;
-        }
+        return implode('.', array_values((array) $copi));
+        return implode('.', array_values((array) $copi));
+        return implode('.', array_values((array) $copi));
     }
-
-    return $branch;
 }
-function buildTreeMenu(array &$elements, $idParent = '0')
-{
-    $branch = [];
-    foreach ($elements as $element) {
-        $element = (array) $element;
-        if ($element['parent'] === $idParent) {
-            // dd($elements, $element['parent'], $element['id']);
-            $children = buildTreeMenu($elements, $element['id']);
-            if ($children) {
-                $element['children'] = $children;
-            }
-            unset($element['parent']);
-            $branch[] = $element;
-        }
+if (!function_exists('getOrganisasi')) {
+    function getOrganisasi()
+    {
+        return session('organisasi')->organisasi;
     }
-
-    return $branch;
 }
-function buildTreeOrganisasi(array &$elements, $idParent = '0')
-{
-    $branch = [];
-    foreach ($elements as $element) {
-        $element = (array) $element;
-        if ($element['parent'] === $idParent) {
-            // dd($elements, $element['parent'], $element['id']);
-            $children = buildTreeOrganisasi($elements, $element['id']);
-            if ($children) {
-                $element['children'] = $children;
+if (!function_exists('buildTree')) {
+    function buildTree(array &$elements, $idParent = 0)
+    {
+        $branch = [];
+        foreach ($elements as $element) {
+            $element = (array) $element;
+            if ($element['parent'] == $idParent) {
+                $children = buildTree($elements, $element['id']);
+                if ($children) {
+                    $element['children'] = $children;
+                }
+                unset($element['parent']);
+                $branch[] = $element;
             }
-            unset($element['parent']);
-            $branch[] = $element;
         }
+
+        return $branch;
+        return $branch;
+        return $branch;
     }
-
-    return $branch;
 }
-function checkPermissionMenu($id, $role)
-{
-    return DB::table('auth.role_menu')->where(['idmenu' => $id, 'idrole' => $role])->count() > 0 ? true : false;
-}
+if (!function_exists('buildTreeMenu')) {
 
-function buildMenu(array &$elements, $place = 'sidebar')
-{
-    $html = '';
-    foreach ($elements as $element) {
-        $element = (array) $element;
-        if (checkPermissionMenu($element['id'], session('user')->idrole)) {
-            if ($place == 'sidebar') {
-                if (isset($element['children'])) {
-                    $children = buildMenu($element['children']);
-                    $html .= '<li class="menu-item">
+    function buildTreeMenu(array &$elements, $idParent = '0')
+    {
+        $branch = [];
+        foreach ($elements as $element) {
+            $element = (array) $element;
+            if ($element['parent'] === $idParent) {
+                // dd($elements, $element['parent'], $element['id']);
+                $children = buildTreeMenu($elements, $element['id']);
+                if ($children) {
+                    $element['children'] = $children;
+                }
+                unset($element['parent']);
+                $branch[] = $element;
+            }
+        }
+
+        return $branch;
+        return $branch;
+        return $branch;
+    }
+}
+if (!function_exists('buildTreeOrganisasi')) {
+    function buildTreeOrganisasi(array &$elements, $idParent = '0')
+    {
+        $branch = [];
+        foreach ($elements as $element) {
+            $element = (array) $element;
+            if ($element['parent'] === $idParent) {
+                // dd($elements, $element['parent'], $element['id']);
+                $children = buildTreeOrganisasi($elements, $element['id']);
+                if ($children) {
+                    $element['children'] = $children;
+                }
+                unset($element['parent']);
+                $branch[] = $element;
+            }
+        }
+
+        return $branch;
+        return $branch;
+        return $branch;
+    }
+}
+if (!function_exists('checkPermissionMenu')) {
+    function checkPermissionMenu($id, $role)
+    {
+        return DB::table('auth.role_menu')->where(['idmenu' => $id, 'idrole' => $role])->count() > 0 ? true : false;
+    }
+}
+if (!function_exists('buildMenu')) {
+
+    function buildMenu(array &$elements, $place = 'sidebar')
+    {
+        $html = '';
+        foreach ($elements as $element) {
+            $element = (array) $element;
+            if (checkPermissionMenu($element['id'], session('user')->idrole)) {
+                if ($place == 'sidebar') {
+                    if (isset($element['children'])) {
+                        $children = buildMenu($element['children']);
+                        $html .= '<li class="menu-item">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons ' . $element['icons'] . '"></i>
                             <div data-i18n="Layouts">' . $element['nama'] . '</div>
@@ -284,16 +323,16 @@ function buildMenu(array &$elements, $place = 'sidebar')
 
                         <ul class="menu-sub">' . $children . '</ul>
                     </li>';
-                } else {
-                    $html .= '<li class="menu-item ' . (app('request')->route()->named($element['link']) ? 'active' : '') . '">
+                    } else {
+                        $html .= '<li class="menu-item ' . (app('request')->route()->named($element['link']) ? 'active' : '') . '">
                     <a href="' . route($element['link']) . '" class="menu-link ">
                         <i class="menu-icon tf-icons ' . $element['icons'] . '"></i>
                         <div data-i18n="Analytics">' . $element['nama'] . '</div>
                     </a>
                 </li>';
-                }
-            } elseif ($place == 'profile') {
-                $html .= '<li>
+                    }
+                } elseif ($place == 'profile') {
+                    $html .= '<li>
                         <a class="dropdown-item ' . (app('request')->route()->named($element['link']) ? 'active' : '') . '" href="' . route($element['link']) . '">
                             <span class="d-flex align-items-center align-middle">
                                 <i class="flex-shrink-0 me-2 ' . $element['icons'] . '"></i>
@@ -301,18 +340,24 @@ function buildMenu(array &$elements, $place = 'sidebar')
                             </span>
                         </a>
                     </li>';
+                }
             }
         }
-    }
 
-    return $html;
+        return $html;
+        return $html;
+        return $html;
+    }
 }
-function limitOffsetToArray($limit = 5, $offset = 1)
-{
-    $data = [];
-    for ($i = ($limit + $offset) - $limit; $i < ($limit + $offset); $i++) {
-        array_push($data, $i);
-    }
+if (!function_exists('limitOffsetToArray')) {
 
-    return $data;
+    function limitOffsetToArray($limit = 5, $offset = 1)
+    {
+        $data = [];
+        for ($i = ($limit + $offset) - $limit; $i < ($limit + $offset); $i++) {
+            array_push($data, $i);
+        }
+
+        return $data;
+    }
 }
