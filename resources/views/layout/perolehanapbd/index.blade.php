@@ -608,8 +608,9 @@
                 }
             });
             if (elementExists.length !== 1) {
+                data.iddetail = window.countDetailAsset + 1;
                 $('#container-attribusi-asset').append(`<li
-                class="list-group-item d-flex justify-content-between align-items-center" data-id='${data.iddetail}' data-attribusi='${JSON.stringify({...data, ...window.persentaseSp2d})}'>
+                class="list-group-item d-flex justify-content-between align-items-center" data-id='${data.iddetail}' data-attribusi='${JSON.stringify({...data, rekening: window.persentaseSp2d})}'>
                 <div class='col-8'>
                     ${data.deskripsibarang}
                 </div>
@@ -944,10 +945,15 @@
             $('#program').attr('disabled', false);
             let data = serializeObject($('#ba-form'));
             let detailData = [];
+            let detailAttribusi = [];
             $('#container-detail-asset').find('li').map((index, element) => {
                 detailData.push($(element).data('master'))
             });
+            $('#container-attribusi-asset').find('li').map((index, element) => {
+                detailAttribusi.push($(element).data('attribusi'))
+            });
             data.detail = detailData;
+            data.atribusi = detailAttribusi;
             data._token = `{{ csrf_token() }}`;
             $.ajax({
                 type: "POST",
@@ -962,18 +968,18 @@
                     $('.datetime-picker').datepicker('clearDates');
                     setTimeout(() => {
                         $('.container-alert-ba').html(`<div class="alert alert-success alert-ba">
-                                <div class="row justify-content-start align-items-center">
-                                    <div class="col-1">
-                                        <i class='bx bxs-check-circle bx-lg' ></i>
-                                    </div>
-                                    <div class="col-11 fw-bold">
-                                        <span>Success</span>
-                                    </div>
+                            <div class="row justify-content-start align-items-center">
+                                <div class="col-1">
+                                    <i class='bx bxs-check-circle bx-lg' ></i>
                                 </div>
-                                <div class="p-2">
-                                    ${response.message}
+                                <div class="col-11 fw-bold">
+                                    <span>Success</span>
                                 </div>
-                            </div>`);
+                            </div>
+                            <div class="p-2">
+                                ${response.message}
+                            </div>
+                        </div>`);
                     }, 500)
                     setTimeout(() => {
                         $('.alert-ba').toggle("fade", 1000);
@@ -1082,7 +1088,6 @@
 
         function minusNilaiSp2d(nilai) {
             if (!$('#modalDetailAsset').hasClass('show')) {
-                console.log('trigger')
                 hitungPersentase()
             }
             $(document).find('.pilih-sp2d:checked').map((index, element) => {
@@ -1361,10 +1366,11 @@
             $('#selesai-attribusi').click(function() {
                 $('#tambah-attribusi').click();
                 $("#modalTambahAttribusi").modal('hide');
-                $('#add-detail-asset').removeClass('disabled');
                 $('#save-ba').removeClass('disabled');
                 $('#add-attribusi').addClass('disabled');
-                $().find('.pilih-sp2d')
+                $('.attribusi').find('.pilih-sp2d').map(function(index, element) {
+                    $(element).prop('disabled', true);
+                });
             })
             setMaskMoney();
             $('.data-table').DataTable();

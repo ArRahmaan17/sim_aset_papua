@@ -81,10 +81,12 @@ class PerolehanAPBDController extends Controller
 
     public function store(Request $request)
     {
+
         DB::beginTransaction();
         try {
-            $bap = $request->except('detail', '_token');
+            $bap = $request->except('detail', '_token', 'atribusi');
             $kibs = $request->only('detail');
+            $atribusi = $request->only('atribusi');
             $bap['kodejenistransaksi'] = 101;
             $bap['tanggalbap'] = convertAlphabeticalToNumberDate($request->tanggalbap);
             $bap['tanggalkontrak'] = isset($request->tanggalkontrak) ? convertAlphabeticalToNumberDate($request->tanggalkontrak) : null;
@@ -103,6 +105,72 @@ class PerolehanAPBDController extends Controller
             $sp2d = clone (object) ($bap);
             unset($bap['program'], $bap['kegiatan']);
             $kodebap = DB::table('bap')->insertGetId($bap, 'kodebap');
+            if (count($atribusi) > 0) {
+                foreach ($atribusi['atribusi'] as $index => $att) {
+                    $nilai_total_attribusi = convertStringToNumber($att['nilaibarang']) / count($kibs['detail']);
+                    $data_attribusi = [
+                        'kodegolongan' => 153,
+                        'kodebidang' => 1,
+                        'kodekelompok' => 1,
+                        'kodesub' => 9,
+                        'kodesubsub' => 1,
+                        'uraibarang' => 'Aset Tidak Berwujud Lainya...',
+                        'deskripsibarang' => $att['deskripsibarang'],
+                        'nilaibarang' => $nilai_total_attribusi,
+                        'tahunperolehan' => env('APP_YEAR'),
+                        'uraiorganisasi' => getOrganisasi(),
+                        'kodeasalusul' => 1,
+                        'kodeklasifikasi' => (intval($nilai_total_attribusi) >= intval(classificationType([
+                            'kodegolongan' => 153,
+                            'kodebidang' => 1,
+                            'kodekelompok' => 1,
+                            'kodesub' => 9,
+                            'kodesubsub' => 1,
+                        ])->nilai ?? (-1))) ? 1 : 2,
+                        'kodeklasifikasi_u' => (intval($nilai_total_attribusi) >= intval(classificationType([
+                            'kodegolongan' => 153,
+                            'kodebidang' => 1,
+                            'kodekelompok' => 1,
+                            'kodesub' => 9,
+                            'kodesubsub' => 1,
+                        ])->nilai ?? (-1))) ? 1 : 2,
+                        'koderegister' => getKoderegister(array_merge(
+                            $must,
+                            [
+                                'tahunperolehan' => env('APP_YEAR'),
+                                'kodegolongan' => 153,
+                                'kodebidang' => 1,
+                                'kodekelompok' => 1,
+                                'kodesub' => 9,
+                                'kodesubsub' => 1,
+                            ]
+                        )),
+                        'kodepemilik' => 12
+                    ];
+                    $kodekibAttribusi =  DB::table('kib')->insertGetId(array_merge($data_attribusi, $must), 'kodekib');
+                    $data_attribusi['kodekib'] = $kodekibAttribusi;
+                    $data_attribusi['kodebap'] = $kodebap;
+                    $data_attribusi['nilaitransaksi'] = $data_attribusi['nilaibarang'];
+                    $data_attribusi['kodejenistransaksi'] = 101;
+                    $data_attribusi['kodejurnal'] = 0;
+                    $data_attribusi['tanggaltransaksi'] = now('Asia/Jakarta');
+                    $data_attribusi['tanggalpenyusutan'] = Carbon::createFromFormat('Y-m-d', convertAlphabeticalToNumberDate($request->tanggalbap))->addYear();
+                    unset($data_attribusi['deskripsibarang'], $data_attribusi['nilaibarang'], $data_attribusi['tahunperolehan'], $data_attribusi['kodeasalusul'], $data_attribusi['kodepemilik']);
+                    DB::table('kibtransaksi')->insert(array_merge($data_attribusi, $must));
+                    foreach ($att['rekening'] as $index => $rekening) {
+                        [$data_sp2d_attribusi[$index]['nosp2d'], $data_sp2d_attribusi[$index]['tglsp2d']] = explode('_', $rekening['id']);
+                        $data_sp2d_attribusi[$index]['kdper'] = $rekening['kdper'];
+                        $data_sp2d_attribusi[$index]['kodekib'] = $kodekibAttribusi;
+                        $data_sp2d_attribusi[$index]['tahun'] = env('TAHUN_APLIKASI');
+                        $data_sp2d_attribusi[$index]['nilai'] = intval(convertStringToNumber($rekening['nilai']));
+                        $data_sp2d_attribusi[$index]['nuprgrm'] = $sp2d->program;
+                        $data_sp2d_attribusi[$index]['kdkegunit'] = $sp2d->kegiatan;
+                        $data_sp2d_attribusi[$index]['persentase'] = $rekening['persentase'];
+                        $data_sp2d_attribusi[$index]['kdunit'] = getkdunit($data_sp2d_attribusi[$index]);
+                        DB::table('kibsp2d')->insert($data_sp2d_attribusi);
+                    }
+                }
+            }
             foreach ($kibs['detail'] as $index => $kib) {
                 $jumlah = $kib['jumlah'];
                 for ($i = 0; $i < (int) $jumlah; $i++) {
