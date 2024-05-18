@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="header_inventaris" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="24e12746-bb95-46b2-9347-b8ab64d61685">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="aset_papua"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="kodeopd" class="java.lang.String"/>
+	<parameter name="tahun" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT m.organisasi FROM masterorganisasi m 
+WHERE (kodeurusan, kodesuburusan, kodeorganisasi, kodeunit, kodesubunit) = row(
+        coalesce(nullif(split_part($P{kodeopd}, '.', 1),'')::integer,0),
+        coalesce(nullif(split_part($P{kodeopd}, '.', 2),'')::integer,0),
+        coalesce(nullif(split_part($P{kodeopd}, '.', 3),'')::integer,0),
+        coalesce(nullif(split_part($P{kodeopd}, '.', 4),'')::integer,0),
+        coalesce(nullif(split_part($P{kodeopd}, '.', 5),'')::integer,0)
+      )
+  AND tahunorganisasi = 2022;]]>
+	</queryString>
+	<field name="organisasi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="organisasi"/>
+		<property name="com.jaspersoft.studio.field.label" value="organisasi"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="masterorganisasi"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="110" splitType="Stretch">
+			<staticText>
+				<reportElement x="80" y="30" width="20" height="20" uuid="53c6aaf6-2797-4d46-a741-73e6fb3b9c4f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="90" width="199" height="20" uuid="1152ab08-6934-4020-9051-9f33d449021e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="0" width="199" height="20" uuid="57a1e014-5ef3-4fff-84fc-615bc6bb5d49"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{organisasi}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="80" y="90" width="20" height="20" uuid="85627b96-70e3-428d-a16a-250a24749dcb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="90" width="79" height="20" uuid="f04e5496-2588-4ca1-ba86-9121ba1c0845"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[KLASIFIKASI
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="0" width="20" height="20" uuid="6bd7ae19-05f1-4d25-b3df-154f164e79c4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="79" height="20" uuid="074159c0-7738-47f6-852a-4fc098753abc"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[SKPD]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="30" width="199" height="20" uuid="56e6e3ce-12d8-46ef-aac6-c5380bac9ca9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.getParameterValue("kodeopd")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="100" y="60" width="199" height="20" uuid="11ca092c-17cf-449e-949f-b60ae27d0745"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[PAPUA BARAT DAYA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="30" width="79" height="20" uuid="ae9d9a8c-db42-42eb-bdbf-a226be190f27"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[KABUPATEN
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="79" height="20" uuid="8ac0dd46-3fa9-4ee5-9c23-069ae9c47b7e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[PROVINSI
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="60" width="20" height="20" uuid="01b562bb-aac8-4a49-af03-d0bbd69c09e5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<noData>
+		<band height="110">
+			<staticText>
+				<reportElement x="0" y="30" width="79" height="20" uuid="a6e3d083-77db-4429-941b-f7109991abb5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[KABUPATEN
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="0" width="20" height="20" uuid="2360e600-5d04-4d27-bfde-06401a633c58"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="30" width="199" height="20" uuid="c57ff998-4af5-4560-8a2c-8c9ee3b0c325"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="90" width="20" height="20" uuid="0abac6fa-bad2-4f84-afa9-6744b2828e2b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="90" width="79" height="20" uuid="b6ef863e-0821-4968-be98-8e9804c84bd9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[KLASIFIKASI
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="60" width="199" height="20" uuid="8c550b2f-f508-4072-a3f9-914286ed0fec"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[PAPUA BARAT DAYA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="60" width="20" height="20" uuid="fbc03183-6442-46ce-ab47-c7435e2ff3ee"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="30" width="20" height="20" uuid="0d2b5dbd-d3d4-4a31-99eb-4862244c3805"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="79" height="20" uuid="bf4ba478-2b6a-4e34-85e8-27ca4c144455"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[SKPD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="90" width="199" height="20" uuid="9759306f-1289-48c8-b7c6-583c3f572e6a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="0" width="199" height="20" uuid="5733215b-971d-41e9-9ea2-443f0733125e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{organisasi}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="60" width="79" height="20" uuid="e103b1b8-db0d-4160-8e3f-e6ebc07edd08"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[PROVINSI
+]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

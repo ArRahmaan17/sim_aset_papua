@@ -1,58 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BUKU_INVENTARIS" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="23972e94-855f-4823-a87f-4e4b734cc259">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="aset_papua"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="tahun" class="java.lang.Integer"/>
+	<parameter name="kodeopd" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[]]>
+		<![CDATA[select * from rep_108_buku_inventaris('2',$P{tahun},'1','1','1','308','12')]]>
 	</queryString>
+	<field name="kodebarang" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="kodebarang"/>
+		<property name="com.jaspersoft.studio.field.label" value="kodebarang"/>
+	</field>
+	<field name="register" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="register"/>
+		<property name="com.jaspersoft.studio.field.label" value="register"/>
+	</field>
+	<field name="uraibarang" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="uraibarang"/>
+		<property name="com.jaspersoft.studio.field.label" value="uraibarang"/>
+	</field>
+	<field name="merktype" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="merktype"/>
+		<property name="com.jaspersoft.studio.field.label" value="merktype"/>
+	</field>
+	<field name="nodokumen" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nodokumen"/>
+		<property name="com.jaspersoft.studio.field.label" value="nodokumen"/>
+	</field>
+	<field name="bahan" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="bahan"/>
+		<property name="com.jaspersoft.studio.field.label" value="bahan"/>
+	</field>
+	<field name="asalusul" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="asalusul"/>
+		<property name="com.jaspersoft.studio.field.label" value="asalusul"/>
+	</field>
+	<field name="tahunperolehan" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="tahunperolehan"/>
+		<property name="com.jaspersoft.studio.field.label" value="tahunperolehan"/>
+	</field>
+	<field name="konstruksi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="konstruksi"/>
+		<property name="com.jaspersoft.studio.field.label" value="konstruksi"/>
+	</field>
+	<field name="satuan" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="satuan"/>
+		<property name="com.jaspersoft.studio.field.label" value="satuan"/>
+	</field>
+	<field name="kondisi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="kondisi"/>
+		<property name="com.jaspersoft.studio.field.label" value="kondisi"/>
+	</field>
+	<field name="jumlah" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="jumlah"/>
+		<property name="com.jaspersoft.studio.field.label" value="jumlah"/>
+	</field>
+	<field name="harga" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="harga"/>
+		<property name="com.jaspersoft.studio.field.label" value="harga"/>
+	</field>
+	<field name="total" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="total"/>
+		<property name="com.jaspersoft.studio.field.label" value="total"/>
+	</field>
+	<variable name="sumJumlahBarang" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{jumlah}]]></variableExpression>
+	</variable>
+	<variable name="sumHarga" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{harga}]]></variableExpression>
+	</variable>
+	<variable name="tesvariable" class="java.lang.String">
+		<variableExpression><![CDATA[$P{kodeopd}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="802" height="79" uuid="6b03b555-6a37-4531-a582-329d25225b31"/>
+		<band height="202" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="802" height="79" uuid="7174c411-9a7f-4647-afa7-7b73ab139622"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[BUKU INVENTARIS
-TAHUN ANGGARAN [xtahun]
-]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA["BUKU INVENTARIS"+"\n"+ "TAHUN ANGGARAN "+$P{tahun}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="79" width="801" height="101" uuid="a06d398d-c43e-4399-b6dc-7e8e61f13283"/>
+				<subreportParameter name="kodeopd">
+					<subreportParameterExpression><![CDATA[$P{kodeopd}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["header_inventaris.jrxml"]]></subreportExpression>
+			</subreport>
 		</band>
 	</title>
-	<pageHeader>
-		<band height="60" splitType="Stretch">
-			<staticText>
-				<reportElement x="160" y="10" width="20" height="20" uuid="4d182805-b80f-4491-b02b-2c59a7823870"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="40" width="160" height="20" uuid="ddc1b96d-f660-4ab5-904b-e43fe3cb6424"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Pengguna Barang]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="10" width="160" height="20" uuid="1d2fe9b7-bf4a-4921-b45c-fb108650b033"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Kuasa Pengguna Barang]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="180" y="40" width="622" height="20" uuid="cb194296-d84a-45a6-a3a7-3a9fb5c0e1e6"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Static Text]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="180" y="10" width="622" height="20" uuid="529795ac-89d5-40d3-b3ad-8686e978ceae"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Static Text]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="160" y="40" width="20" height="20" uuid="58b40afd-a18c-4392-ba05-fb9343221a9e"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[:]]></text>
-			</staticText>
-		</band>
-	</pageHeader>
 	<columnHeader>
 		<band height="71" splitType="Stretch">
 			<staticText>
@@ -68,19 +108,6 @@ TAHUN ANGGARAN [xtahun]
 				</textElement>
 				<text><![CDATA[Tahun Perolehan
 ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="116" y="30" width="48" height="41" uuid="5139e4ec-14dd-4cc9-a3c1-92c4a1a05e6f"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Nama]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="164" y="10" width="200" height="20" uuid="213643d2-3745-4cac-b014-baf7da9c7c77"/>
@@ -166,7 +193,7 @@ TAHUN ANGGARAN [xtahun]
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="30" width="48" height="41" uuid="41d34e41-3401-4d07-aea0-e73064cbd5df"/>
+				<reportElement x="20" y="30" width="72" height="41" uuid="41d34e41-3401-4d07-aea0-e73064cbd5df"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -180,7 +207,7 @@ TAHUN ANGGARAN [xtahun]
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="68" y="30" width="48" height="41" uuid="50a3dff9-c9ff-40fa-a939-ce02fb9bd8d5"/>
+				<reportElement x="92" y="30" width="72" height="41" uuid="50a3dff9-c9ff-40fa-a939-ce02fb9bd8d5"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -323,8 +350,8 @@ TAHUN ANGGARAN [xtahun]
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<staticText>
-				<reportElement x="710" y="0" width="44" height="20" uuid="2847113f-ce07-445e-a69b-c9b1e4320f98"/>
+			<textField pattern="#,##0.###;#,-##0.###">
+				<reportElement x="710" y="0" width="44" height="20" uuid="745b912d-c3c2-4bbc-ac6b-3bb2175b7879"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -334,10 +361,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="0" width="20" height="20" uuid="1b6b38fc-1d55-4600-92e2-f3312f4acd37"/>
+				<textFieldExpression><![CDATA[$F{harga}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="20" height="20" uuid="35597696-78b7-439e-948c-527d6e0912ce"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -347,10 +374,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="754" y="0" width="48" height="20" uuid="f1ca5ba0-276a-45ff-952f-8a5de3d4aff3"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="754" y="0" width="48" height="20" uuid="a6522b4a-fe20-470d-bf96-cf69bdf60e30"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -360,10 +387,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="68" y="0" width="48" height="20" uuid="a46aaf17-d406-4117-bcbc-8328c6ff8408"/>
+				<textFieldExpression><![CDATA["@"+$F{harga}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="92" y="0" width="72" height="20" uuid="9a50c45d-312f-4b50-9b51-51d133ee555d"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -373,10 +400,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="20" y="0" width="48" height="20" uuid="2966328a-ce94-42b9-ab4b-55514edec722"/>
+				<textFieldExpression><![CDATA[$F{register}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="20" y="0" width="72" height="20" uuid="deca0c34-f34d-40e4-a09b-92aa00061d83"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -386,10 +413,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="655" y="0" width="55" height="20" uuid="1407b301-3796-451c-8956-8bde2a710863"/>
+				<textFieldExpression><![CDATA[$F{kodebarang}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;#,-##0.###">
+				<reportElement x="655" y="0" width="55" height="20" uuid="4c41fe81-7ada-415d-a8fb-1c09c7d955cd"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -399,10 +426,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="238" y="0" width="63" height="20" uuid="02098136-8029-4e92-8070-c44eeb089ee8"/>
+				<textFieldExpression><![CDATA[$F{jumlah}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="238" y="0" width="63" height="20" uuid="5665597f-6022-4b00-9c6f-84a87dc8cdf5"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -412,10 +439,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="301" y="0" width="63" height="20" uuid="dd41c996-993d-4eb5-8791-fd7b4ed12946"/>
+				<textFieldExpression><![CDATA[$F{merktype}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="301" y="0" width="63" height="20" uuid="f331f1d0-4985-4cb7-8f03-f03466da3095"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -425,10 +452,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="116" y="0" width="48" height="20" uuid="a9c244a8-b9bb-4729-aa8a-ae505d418d13"/>
+				<textFieldExpression><![CDATA[$F{nodokumen}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="164" y="0" width="74" height="20" uuid="2bc6c746-67cf-4798-9482-9a043c968143"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -438,10 +465,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="164" y="0" width="74" height="20" uuid="f8bae297-8115-4811-8127-b19e4ba8d4b3"/>
+				<textFieldExpression><![CDATA[$F{uraibarang}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="461" y="0" width="36" height="20" uuid="3ed17e82-210f-4c23-af9f-9b4ef6b83bb4"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -451,10 +478,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="461" y="0" width="36" height="20" uuid="def66bb6-01a7-4890-bac4-a7307145341a"/>
+				<textFieldExpression><![CDATA[$F{tahunperolehan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="0" width="52" height="20" uuid="781c2db2-936d-4f75-9f06-065596da0c90"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -464,10 +491,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="409" y="0" width="52" height="20" uuid="82dd54b4-3955-4365-aeca-7f68fc9d6cd5"/>
+				<textFieldExpression><![CDATA[$F{asalusul}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="364" y="0" width="45" height="20" uuid="192b61a2-dbb8-4a6d-91e2-4ff9272a98e3"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -477,10 +504,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="364" y="0" width="45" height="20" uuid="bc777cbb-8d5b-4e9d-ab4a-874b44a13a41"/>
+				<textFieldExpression><![CDATA[$F{bahan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="547" y="0" width="50" height="20" uuid="d734b4f5-3d47-4c83-89e3-093d0d716aec"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -490,10 +517,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="547" y="0" width="50" height="20" uuid="07ba13c1-0a4d-4888-9427-69db2dcfd28d"/>
+				<textFieldExpression><![CDATA[$F{satuan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="597" y="0" width="58" height="20" uuid="d93c94e1-f886-4452-8dfa-5e0bf8e421dc"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -503,10 +530,10 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="597" y="0" width="58" height="20" uuid="41913877-0b72-45fb-a6b7-dc028945a508"/>
+				<textFieldExpression><![CDATA[$F{kondisi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="497" y="0" width="50" height="20" uuid="c07f8482-db53-4f73-ad50-0c9c93025cf2"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -516,36 +543,78 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="497" y="0" width="50" height="20" uuid="0320ac03-0242-4adc-80ca-045e7a991385"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$F{tahunperolehan}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="45" splitType="Stretch"/>
+		<band height="20" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
 		<band height="54" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="754" y="0" width="48" height="20" uuid="15d202e8-22bf-4b1e-a101-2f735e5fcdba"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="#,##0.###;#,-##0.###">
+				<reportElement x="655" y="0" width="55" height="20" uuid="b31f33fd-3bc2-4bb9-9f24-462db46fdae1">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sumJumlahBarang}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;#,-##0.###">
+				<reportElement x="710" y="0" width="44" height="20" uuid="e3e2739c-d1ce-4946-bded-e0b128f9985e"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sumHarga}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="655" height="20" uuid="71f81d65-3b26-47b2-91ae-c21fcf97158b"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+		</band>
 	</summary>
 	<noData>
-		<band height="90">
+		<band height="280">
 			<staticText>
-				<reportElement x="461" y="10" width="36" height="61" uuid="64e81085-d240-4ce7-8094-7779201c06bc"/>
+				<reportElement x="-1" y="260" width="801" height="20" uuid="ab59e4c4-2196-469e-b997-5fdce39983e2"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -553,208 +622,12 @@ TAHUN ANGGARAN [xtahun]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
+					<font size="6" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Tahun Perolehan
-]]></text>
+				<text><![CDATA[NIHIL]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="655" y="10" width="147" height="20" uuid="8cc2f88d-f446-42e4-8478-b57a5614c5e1"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[SPESIFIKASI BARANG
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="710" y="30" width="44" height="41" uuid="cc8de6bb-1922-419b-a8ec-cf7b0017ecf3"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Harga (Rp)
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="547" y="10" width="50" height="61" uuid="249cd2a6-7deb-448e-ad92-89cbc2b4810a"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Satuan
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="754" y="30" width="48" height="41" uuid="27385bc2-35b6-46cd-84e8-7a4f419f4071"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Keterangan
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="597" y="10" width="58" height="61" uuid="2d10f5da-e5e6-4636-aeff-e28b84871655"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Keadaan Barang (B/KB/RB)
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="68" y="30" width="48" height="41" uuid="09b71818-a519-46ea-8c71-0e864c638217"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Register
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="238" y="30" width="63" height="41" uuid="fd6da184-4ddf-4115-810c-a30a2dc1834b"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Merek / Type
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="10" width="164" height="20" uuid="ff7070ac-57a7-41cf-9e8f-fb99b52ada15"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Nomor]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="409" y="10" width="52" height="61" uuid="3eb56536-f81e-4eca-9608-1244915c9249"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Asal/Cara Perolehan Barang
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="30" width="20" height="41" uuid="edf6638a-a6b8-411d-987f-8d5413d9d916"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[No Urut
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="20" y="30" width="48" height="41" uuid="7e486073-1ae4-4eb1-95f8-dfd2d12f6ac7"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Kode Barang
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="655" y="30" width="55" height="41" uuid="50c420c1-7526-46c1-ad50-d359df36a74e"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Jumlah Barang
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="164" y="10" width="200" height="20" uuid="68b689c1-2df5-483f-91b0-de79af56f148"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[SPESIFIKASI BARANG
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="497" y="10" width="50" height="61" uuid="a419d50c-014e-420d-9b39-fd165e03084d"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Ukuran Barang /Kontruksi (P,S,D)
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="364" y="10" width="45" height="61" uuid="e69df737-f4ee-467c-a5af-b186675b664a"/>
+				<reportElement x="363" y="200" width="45" height="61" uuid="aa5095e1-f788-4606-acfe-d295ee1a7301"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -768,7 +641,7 @@ TAHUN ANGGARAN [xtahun]
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="301" y="30" width="63" height="41" uuid="f456c39a-49b5-4add-a540-ac8965b40db9"/>
+				<reportElement x="654" y="220" width="55" height="41" uuid="619c3294-6d39-489d-b20d-ee202e8b6c98"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -778,11 +651,11 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[No.Sertifikat No.Pabrik  No.Chasis No.Mesin
+				<text><![CDATA[Jumlah Barang
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="116" y="30" width="48" height="41" uuid="57894e1b-f3fa-4c4b-8576-a84bb9a8bd14"/>
+				<reportElement x="596" y="200" width="58" height="61" uuid="480e4bdc-f166-4846-b2c9-f4ec260e2d6d"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -792,10 +665,164 @@ TAHUN ANGGARAN [xtahun]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[Nama]]></text>
+				<text><![CDATA[Keadaan Barang (B/KB/RB)
+]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="164" y="30" width="74" height="41" uuid="89fa5760-407d-4031-bcef-ab49f27b27e7"/>
+				<reportElement x="19" y="220" width="72" height="41" uuid="8af388ef-f1b2-4001-91ec-7f6dc942db16"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Kode Barang
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="460" y="200" width="36" height="61" uuid="52a20780-8800-4984-9ddf-33e3b2a96044"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Tahun Perolehan
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="163" y="200" width="200" height="20" uuid="422bd4f1-fa65-4661-a8fc-290cadb3b23d"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[SPESIFIKASI BARANG
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-1" y="200" width="164" height="20" uuid="e1dd5102-7ab9-4601-8d53-2d869b40c48d"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Nomor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="408" y="200" width="52" height="61" uuid="41f1d5e2-e3d3-4d17-855e-86ac7502fdaa"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Asal/Cara Perolehan Barang
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="654" y="200" width="147" height="20" uuid="1f91dcc9-ed6c-46c2-bbf3-c087105badb6"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[SPESIFIKASI BARANG
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="237" y="220" width="63" height="41" uuid="897e30ef-d96d-49d6-90f9-5b4c8f1c6853"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Merek / Type
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="496" y="200" width="50" height="61" uuid="f697bc56-d3bb-4b38-9074-94f63167d273"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Ukuran Barang /Kontruksi (P,S,D)
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="91" y="220" width="72" height="41" uuid="40e64341-b82b-4c23-8dbc-25dc08be8585"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Register
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="753" y="220" width="48" height="41" uuid="6f9dedc8-a77f-44d9-8adf-1e2b4c8efc8b"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Keterangan
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="709" y="220" width="44" height="41" uuid="135728e9-c0b5-4b8f-b778-cd1d5261e883"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Harga (Rp)
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="163" y="220" width="74" height="41" uuid="11f95749-b475-40f1-be36-436dc899fb13"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -809,7 +836,7 @@ TAHUN ANGGARAN [xtahun]
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="70" width="801" height="20" uuid="ab59e4c4-2196-469e-b997-5fdce39983e2"/>
+				<reportElement x="300" y="220" width="63" height="41" uuid="dc31bdd8-477e-4bc0-82c2-1d2e28fcb46f"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -817,10 +844,49 @@ TAHUN ANGGARAN [xtahun]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6" isBold="true"/>
+					<font size="6"/>
 				</textElement>
-				<text><![CDATA[NIHIL]]></text>
+				<text><![CDATA[No.Sertifikat No.Pabrik  No.Chasis No.Mesin
+]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="-1" y="220" width="20" height="41" uuid="6d909674-5e7d-4353-8979-b6971d99cb23"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[No Urut
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="546" y="200" width="50" height="61" uuid="5677ca4d-bedf-469c-b198-8dc17b43b83a"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Satuan
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="0" width="802" height="79" uuid="501b1466-8587-4e3f-ac1b-c7ab6770cb72"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["BUKU INVENTARIS"+"\n"+ "TAHUN ANGGARAN "+$P{tahun}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="79" width="801" height="101" uuid="09d58c25-7d91-4ac6-b11e-cdced39f8310"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["header_inventaris.jrxml"]]></subreportExpression>
+			</subreport>
 		</band>
 	</noData>
 </jasperReport>
