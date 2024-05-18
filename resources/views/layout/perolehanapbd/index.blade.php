@@ -1289,7 +1289,7 @@
                     $(this).focus();
                     return
                 }
-                $(this).val(`BA-APBB-{{ env('APP_YEAR') }}-${this.value}-{{ kodeOrganisasi() }}`);
+                $(this).val(`BA-APBD-{{ env('APP_YEAR') }}-${this.value}-{{ kodeOrganisasi() }}`);
                 let input = this
                 $.ajax({
                     type: "get",
@@ -1316,7 +1316,7 @@
                 });
             });
             $('.formated').focus(function() {
-                value = (this.value).split(`BA-APBB-{{ env('APP_YEAR') }}-`)
+                value = (this.value).split(`BA-APBD-{{ env('APP_YEAR') }}-`)
                     .join('')
                     .split(`-{{ kodeOrganisasi() }}`).join('');
                 $(this).val(value)

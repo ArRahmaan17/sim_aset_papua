@@ -23,7 +23,7 @@ class PerolehanAPBDController extends Controller
                 'nmprgrm'
             )
             ->get();
-        $dataBap = Bap::getAllOrganizationBapsSp2d();
+        $dataBap = Bap::getAllOrganizationBapsApbd();
 
         return view('layout.perolehanapbd.index', compact('dataMaster', 'dataBap', 'dataPerogramAPBD'));
     }
@@ -66,7 +66,7 @@ class PerolehanAPBDController extends Controller
     public function getDetailBap($idbap)
     {
         $bap = Bap::where('idbap', $idbap)->first();
-        $data = Bap::getDetailBapSp2d($bap->kodebap);
+        $data = Bap::getDetailBapApbd($bap->kodebap);
         $data['dataKib'] = collect(array_values($data['dataKib']))->flatten()->all();
         if (count($data['dataKibTransaksi']) > 0 || count($data['dataKib']) > 0) {
             $response = ['message' => 'Detail Bap berhasil ditemukan', 'data' => $data];
@@ -156,6 +156,7 @@ class PerolehanAPBDController extends Controller
                     $data_attribusi['tanggalpenyusutan'] = Carbon::createFromFormat('Y-m-d', convertAlphabeticalToNumberDate($request->tanggalbap))->addYear();
                     unset($data_attribusi['deskripsibarang'], $data_attribusi['nilaibarang'], $data_attribusi['tahunperolehan'], $data_attribusi['kodeasalusul'], $data_attribusi['kodepemilik']);
                     DB::table('kibtransaksi')->insert(array_merge($data_attribusi, $must));
+                    $data_sp2d_attribusi = [];
                     foreach ($att['rekening'] as $index => $rekening) {
                         [$data_sp2d_attribusi[$index]['nosp2d'], $data_sp2d_attribusi[$index]['tglsp2d']] = explode('_', $rekening['id']);
                         $data_sp2d_attribusi[$index]['kdper'] = $rekening['kdper'];
@@ -166,8 +167,8 @@ class PerolehanAPBDController extends Controller
                         $data_sp2d_attribusi[$index]['kdkegunit'] = $sp2d->kegiatan;
                         $data_sp2d_attribusi[$index]['persentase'] = $rekening['persentase'];
                         $data_sp2d_attribusi[$index]['kdunit'] = getkdunit($data_sp2d_attribusi[$index]);
-                        DB::table('kibsp2d')->insert($data_sp2d_attribusi);
                     }
+                    DB::table('kibsp2d')->insert($data_sp2d_attribusi);
                 }
             }
             foreach ($kibs['detail'] as $index => $kib) {
