@@ -81,7 +81,6 @@ class PerolehanAPBDController extends Controller
 
     public function store(Request $request)
     {
-
         DB::beginTransaction();
         try {
             $bap = $request->except('detail', '_token', 'atribusi');
@@ -107,7 +106,7 @@ class PerolehanAPBDController extends Controller
             $kodebap = DB::table('bap')->insertGetId($bap, 'kodebap');
             if (count($atribusi) > 0) {
                 foreach ($atribusi['atribusi'] as $index => $att) {
-                    $nilai_total_attribusi = convertStringToNumber($att['nilaibarang']) / count($kibs['detail']);
+                    $nilai_total_attribusi = convertStringToNumber($att['nilaibarang']);
                     $data_attribusi = [
                         'kodegolongan' => 153,
                         'kodebidang' => 1,
@@ -162,7 +161,7 @@ class PerolehanAPBDController extends Controller
                         $data_sp2d_attribusi[$index]['kdper'] = $rekening['kdper'];
                         $data_sp2d_attribusi[$index]['kodekib'] = $kodekibAttribusi;
                         $data_sp2d_attribusi[$index]['tahun'] = env('TAHUN_APLIKASI');
-                        $data_sp2d_attribusi[$index]['nilai'] = intval(convertStringToNumber($rekening['nilai']));
+                        $data_sp2d_attribusi[$index]['nilai'] = intval(convertStringToNumber($rekening['nilai'])) / 100;
                         $data_sp2d_attribusi[$index]['nuprgrm'] = $sp2d->program;
                         $data_sp2d_attribusi[$index]['kdkegunit'] = $sp2d->kegiatan;
                         $data_sp2d_attribusi[$index]['persentase'] = $rekening['persentase'];
@@ -240,7 +239,7 @@ class PerolehanAPBDController extends Controller
                         $data_sp2d[$index]['kdper'] = $datasp2d['kdper'];
                         $data_sp2d[$index]['kodekib'] = $kodekib;
                         $data_sp2d[$index]['tahun'] = env('TAHUN_APLIKASI');
-                        $data_sp2d[$index]['nilai'] = intval(convertStringToNumber($datasp2d['nilai'])) / 100;
+                        $data_sp2d[$index]['nilai'] = (intval(convertStringToNumber($datasp2d['nilai'])) / $jumlah) / 100;
                         $data_sp2d[$index]['nuprgrm'] = $sp2d->program;
                         $data_sp2d[$index]['kdkegunit'] = $sp2d->kegiatan;
                         $data_sp2d[$index]['persentase'] = $datasp2d['persentase'];
@@ -253,7 +252,6 @@ class PerolehanAPBDController extends Controller
             $response = ['message' => 'berhasil menyimpan perolehan sp2d'];
             $status = 200;
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollBack();
             $response = ['message' => 'gagal menyimpan perolehan sp2d'];
             $status = 422;

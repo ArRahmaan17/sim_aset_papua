@@ -1086,23 +1086,21 @@
             window.persentaseSp2d = window.persentaseSp2d.toArray();
         }
 
-        function minusNilaiSp2d(nilai) {
+        function minusNilaiSp2d(nilai, jumlah) {
             if (!$('#modalDetailAsset').hasClass('show')) {
                 hitungPersentase()
             }
             $(document).find('.pilih-sp2d:checked').map((index, element) => {
                 let data = $(element).parents('tr').data('sp2d');
                 let nilaisisa = 0;
-
                 persentase = window.persentaseSp2d[index];
                 window.persentaseSp2d[index].nilai = parseFloat((persentase.id ==
-                        `${data.nosp2d}_${data.tglsp2d}`) ? (persentase.persentase / 100) * nilai :
-                    0).toFixed(2);
+                        `${data.nosp2d}_${data.tglsp2d}`) ? ((persentase.persentase / 100) * nilai) *
+                    jumlah : 0).toFixed(2);
                 nilaisisa = parseFloat(parseFloat(data.sisa_nilai) < parseFloat(data.nilai) && parseFloat(
-                        data.sisa_nilai) != 0.00 ? data.sisa_nilai : data.nilai) - parseFloat((persentase
-                            .id == `${data.nosp2d}_${data.tglsp2d}`) ? (persentase.persentase / 100) * nilai :
-                        0)
-                    .toFixed(2);
+                    data.sisa_nilai) != 0.00 ? data.sisa_nilai : data.nilai) - parseFloat((persentase
+                        .id == `${data.nosp2d}_${data.tglsp2d}`) ? ((persentase.persentase / 100) * nilai) *
+                    jumlah : 0).toFixed(2);
                 $(element).parents('tr').find('td:nth-child(3)').html(numberFormat(nilaisisa))
             });
             if ($('#modalDetailAsset').hasClass('show')) {
@@ -1216,7 +1214,8 @@
                         if (window.sp2d > 0 && parseInt(currencyToNumberFormat(` ${this.value}`)) <= window
                             .sp2d) {
                             $(this).removeClass('is-invalid');
-                            minusNilaiSp2d(parseInt(currencyToNumberFormat(` ${this.value}`)))
+                            minusNilaiSp2d(parseInt(currencyToNumberFormat(` ${this.value}`)), $(
+                                '[name=jumlah]').val() ?? 1)
                         } else {
                             $(this).addClass('is-invalid');
                         }
@@ -1226,7 +1225,7 @@
                         if (window.sp2d > 0 && parseInt(currencyToNumberFormat(` ${this.value}`)) <= window
                             .sp2d) {
                             $(this).removeClass('is-invalid');
-                            minusNilaiSp2d(parseInt(currencyToNumberFormat(` ${this.value}`)))
+                            minusNilaiSp2d(parseInt(currencyToNumberFormat(` ${this.value}`)), 1)
                         } else {
                             $(this).addClass('is-invalid');
                         }

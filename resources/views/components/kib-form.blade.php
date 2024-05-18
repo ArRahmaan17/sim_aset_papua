@@ -123,18 +123,18 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
+                    <label class="form-label" for="jumlah">Jumlah <i
+                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
+                    <input id="jumlah" name="jumlah" type="text" class="form-control money-mask">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
                     <label class="form-label" for="nilaibarang">Nilai Satuan <i
                             class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
                     </label>
                     <input id="nilaibarang" name="nilaibarang" type="text" maxlength="22"
                         class="form-control money-mask">
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label" for="jumlah">Jumlah <i
-                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
-                    <input id="jumlah" name="jumlah" type="text" class="form-control money-mask">
                 </div>
             </div>
         </div>
@@ -294,6 +294,13 @@
             </div>
             <div class="col-lg-6">
                 <div class="mb-3">
+                    <label class="form-label" for="jumlah">Jumlah <i
+                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
+                    <input id="jumlah" name="jumlah" type="text" class="form-control money-mask">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
                     <label class="form-label" for="nilaibarang">Nilai Satuan <i
                             class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
                     </label>
@@ -308,13 +315,6 @@
                 <div class="mb-3">
                     <select id="kodekondisi" name="kodekondisi" class="select2modal" style="width: 100%;">
                     </select>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label" for="jumlah">Jumlah <i
-                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
-                    <input id="jumlah" name="jumlah" type="text" class="form-control money-mask">
                 </div>
             </div>
             <div class="col-lg-6">
@@ -451,6 +451,13 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
+                    <label class="form-label" for="jumlah">Jumlah <i
+                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
+                    <input id="jumlah" name="jumlah" type="text" class="form-control money-mask">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
                     <label class="form-label" for="nilaibarang">Nilai Satuan <i
                             class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></i>
                     </label>
@@ -466,13 +473,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label" for="jumlah">Jumlah <i
-                            class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
-                    <input id="jumlah" name="jumlah" type="text" class="form-control money-mask">
-                </div>
-            </div>
+
             <div class="col-lg-6">
                 <div class="mb-3">
                     <label class="form-label" for="tahunperolehan">Tahun Perolehan <i
@@ -605,17 +606,17 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <label class="form-label" for="nilaibarang">Nilai Satuan <i
+                    <label class="form-label" for="jumlah">Jumlah <i
                             class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
-                    <input id="nilaibarang" name="nilaibarang" type="text" maxlength="22"
-                        class="form-control money-mask">
+                    <input id="jumlah" name="jumlah" type="text" class="form-control money-mask">
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <label class="form-label" for="jumlah">Jumlah <i
+                    <label class="form-label" for="nilaibarang">Nilai Satuan <i
                             class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
-                    <input id="jumlah" name="jumlah" type="text" class="form-control money-mask">
+                    <input id="nilaibarang" name="nilaibarang" type="text" maxlength="22"
+                        class="form-control money-mask">
                 </div>
             </div>
         </div>
