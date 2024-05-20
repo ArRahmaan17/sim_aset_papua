@@ -309,8 +309,8 @@ class PerolehanAPBDController extends Controller
                 return $kodekib !== 0;
             });
             if ($removerequestatribusi !== []) {
-                DB::table('kib')->whereIn('kodekib', $removerequestatribusi)->delete();
                 DB::table('kibsp2d')->whereIn('kodekib', $removerequestatribusi)->delete();
+                DB::table('kib')->whereIn('kodekib', $removerequestatribusi)->delete();
             }
             foreach ($kibs['detail'] as $index => $kib_jumlah) {
                 if (intval($kib_jumlah['jumlah']) > 1) {
@@ -545,7 +545,7 @@ class PerolehanAPBDController extends Controller
                         $data_sp2d[$index]['kdper'] = $datasp2d['kdper'];
                         $data_sp2d[$index]['kodekib'] = $kodekib[0];
                         $data_sp2d[$index]['tahun'] = env('TAHUN_APLIKASI');
-                        $data_sp2d[$index]['nilai'] = floatval(convertStringToNumber($datasp2d['nilai']));
+                        $data_sp2d[$index]['nilai'] = floatval(convertStringToNumber($datasp2d['nilai'])) / 100;
                         $data_sp2d[$index]['nuprgrm'] = $sp2d->program;
                         $data_sp2d[$index]['kdkegunit'] = $sp2d->kegiatan;
                         $data_sp2d[$index]['persentase'] = $datasp2d['persentase'];
