@@ -440,8 +440,7 @@
 
         function showBap(element) {
             window.state = 'update';
-            $(element)
-                .parents('tbody')
+            $(element).parents('tbody')
                 .find(`button`)
                 .removeClass('disabled')
                 .html(`<i class='bx bxs-pencil'></i> Gunakan`);
@@ -459,12 +458,24 @@
                         window.countDetailAsset = kib.iddetail;
                         generateListDetailAsset(kib);
                     });
+                    var sp2d_attribusi = [];
+                    response.data.kibAttribusi.forEach(kib => {
+                        window.tempAsset = kib;
+                        window.iddetail = kib.iddetail;
+                        window.countDetailAsset = kib.iddetail;
+                        generateListAttribusi(kib);
+                        if (sp2d_attribusi.length == 0) {
+                            sp2d_attribusi.push(...JSON.parse(kib.sp2d));
+                        }
+                    });
                     $("#program").val(response.data.sp2d.program).trigger('change');
                     setTimeout(() => {
                         $("#kegiatan").val(response.data.sp2d.kegiatan).trigger('change');
                         $('#program').attr('disabled', true);
                         $('#kegiatan').attr('disabled', true);
                     }, 500);
+
+                    $("#add-attribusi").removeClass('d-none disabled');
                     $("#update-ba").removeClass('disabled d-none');
                     $("#cancel-ba").removeClass('disabled d-none');
                     $("#save-ba").addClass('disabled d-none');
@@ -608,14 +619,19 @@
                 }
             });
             if (elementExists.length !== 1) {
-                data.iddetail = window.countDetailAsset + 1;
+                if (data.iddetail == undefined) {
+                    data.iddetail = window.countDetailAsset++;
+                }
+                if (data.sp2d == undefined) {
+                    data.sp2d = JSON.stringify(window.persentaseSp2d);
+                }
                 $('#container-attribusi-asset').append(`<li
-                class="list-group-item d-flex justify-content-between align-items-center" data-id='${data.iddetail}' data-attribusi='${JSON.stringify({...data, rekening: window.persentaseSp2d})}'>
+                class="list-group-item d-flex justify-content-between align-items-center" data-id='${data.iddetail}' data-attribusi='${JSON.stringify({...data})}'>
                 <div class='col-8'>
                     ${data.deskripsibarang}
                 </div>
                 <div class='col-4 d-flex justify-content-end gap-3 align-items-center'>
-                    <span class="badge bg-info icon-name" style='font-size:1rem;'>Rp. ${data.nilaibarang}</span>
+                    <span class="badge bg-info icon-name" style='font-size:1rem;'>${numberFormat(data.nilaibarang)}</span>
                     <span class="badge bg-danger" onclick="deleteDetailAsset(${data.iddetail})"><i class='bx bx-trash bx-xs'></i></span>
                     <span class="badge bg-info"><i class='bx bx-show bx-xs'></i></span>
                     <span class="badge bg-success" onclick="editDetailAsset(this)"><i class='bx bx-pencil bx-xs'></i></span>
@@ -999,10 +1015,15 @@
             $('#ba-form').find('input, textarea, select').removeAttr('disabled');
             let data = serializeObject($('#ba-form'));
             let detailData = [];
+            let detailAttribusi = [];
             $('#container-detail-asset').find('li').map((index, element) => {
                 detailData.push($(element).data('master'))
             });
+            $('#container-attribusi-asset').find('li').map((index, element) => {
+                detailAttribusi.push($(element).data('attribusi'))
+            });
             data.detail = detailData;
+            data.atribusi = detailAttribusi;
             data._token = `{{ csrf_token() }}`;
             $.ajax({
                 type: "PUT",
@@ -1140,7 +1161,9 @@
                         </tr>`;
             });
             $(".sp2d").find('table > tbody').html(html);
-            $($(".sp2d")[0]).find('tr > td:last-child > input').prop('disabled', 'true')
+            if (window.state !== 'update') {
+                $($(".sp2d")[0]).find('tr > td:last-child > input').prop('disabled', 'true')
+            }
             pilihAPBD();
         }
 
@@ -1149,7 +1172,8 @@
                 let data = $(this).parents('tr').data('sp2d');
                 if (window.sp2d == 0) {
                     if (this.checked == true) {
-                        window.sp2d = (window.state == 'update' && window.iddetail !== null) ? parseInt(
+                        window.sp2d = (window.state == 'update' && window.iddetail !== null && $(
+                                '#modalDetailAsset').hasClass('show')) ? parseInt(
                                 currencyToNumberFormat(` ${$('[name=nilaibarang]').val()}`)) : parseFloat(data
                                 .sisa_nilai) < parseFloat(data.nilai) && parseFloat(data.sisa_nilai) == 0.00 ?
                             parseFloat(data.nilai) : parseFloat(data.sisa_nilai);
@@ -1184,9 +1208,8 @@
                     }
                     hitungPersentase()
                     if (!$('#modalDetailAsset').hasClass('show')) {
-                        $('#add-attribusi').removeClass('disabled');
                         $('#add-detail-asset').addClass('disabled');
-                        $('#add-attribusi').removeClass('d-none');
+                        $('#add-attribusi').removeClass('d-none disabled');
                         $('#save-ba').addClass('disabled');
                         $('#update-ba').addClass('disabled');
                     }
@@ -1205,8 +1228,7 @@
                         $('#nilaibarangattribusi')
                             .parents('.col-sm-10')
                             .find('.form-text')
-                            .html(
-                                `Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
+                            .html(`Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
                     }
                 }
                 if ($('#modalDetailAsset').hasClass('show')) {
@@ -1230,6 +1252,10 @@
                             $(this).addClass('is-invalid');
                         }
                     });
+                }
+                if (window.state == 'update') {
+                    $('#add-attribusi').removeClass('disabled');
+                    $('#add-detail-asset').removeClass('disabled');
                 }
             });
         }
@@ -1321,15 +1347,20 @@
                     .split(`-{{ kodeOrganisasi() }}`).join('');
                 $(this).val(value)
             });
-            $('#add-attribusi').click(function() {
+            $('#add-attribusi').click(function(e) {
+                e.prevenDefault;
+                if (window.sp2d === 0) {
+                    return
+                }
                 $('#modalTambahAttribusi').modal('show');
+                $('#add-detail-asset').addClass('disabled');
             });
             $('#tambah-attribusi').click(function() {
                 if ($('#deskripsibarangattr').val() !== '' && $('#nilaibarangattribusi').val() !== '') {
                     let data = {
-                        'iddetail': window.idattribusi,
                         'deskripsibarang': $('#deskripsibarangattr').val(),
-                        'nilaibarang': $('#nilaibarangattribusi').val(),
+                        'nilaibarang': parseInt(currencyToNumberFormat(` ${$('#nilaibarangattribusi')
+                            .val()}`)),
                     };
                     generateListAttribusi(data);
                     $('#deskripsibarangattr').val('');
@@ -1366,6 +1397,7 @@
                 $('#tambah-attribusi').click();
                 $("#modalTambahAttribusi").modal('hide');
                 $('#save-ba').removeClass('disabled');
+                $('#update-ba').removeClass('disabled');
                 $('#add-attribusi').addClass('disabled');
                 $('.attribusi').find('.pilih-sp2d').map(function(index, element) {
                     $(element).prop('disabled', true);
@@ -1377,6 +1409,7 @@
             onClickMasterBarang();
             $('#add-detail-asset').click(function() {
                 window.iddetail = null;
+                window.sp2d = 0;
                 var order = window.countDetailAsset += 1;
                 $('.input-group').find('input').removeClass('is-invalid')
                 $('.input-group').find('span').removeClass('border-1 border-danger')
