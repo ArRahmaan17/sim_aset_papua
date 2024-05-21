@@ -290,7 +290,7 @@ class PerolehanAPBDController extends Controller
                     return $kodekib->kodekib;
                 })->toArray();
             $requestdatakib = array_map(function ($requestkib) {
-                return intval($requestkib['kodekib']);
+                return intval($requestkib['kodekib'] ?? null);
             }, $kibs['detail']);
             $datakibatribusi = DB::table('bap as b')->select('kt.kodekib')
                 ->join('kibtransaksi as kt', 'kt.kodebap', '=', 'b.kodebap')
@@ -440,6 +440,7 @@ class PerolehanAPBDController extends Controller
                     ->toArray();
                 if (count($data) > 0) {
                     $copied = (array) (clone (object) $kib);
+                    $jumlah = intval($copied['jumlah']);
                     unset($copied['kodekib'], $copied['select-asal-usul-barang-perolehan-aset'], $copied['jumlah'], $copied['iddetail'], $copied['kodemasterbarang'], $copied['urai'], $copied['kodekib']);
                     $kodekib = array_map(function ($obj) {
                         return $obj->kodekib;
@@ -448,10 +449,21 @@ class PerolehanAPBDController extends Controller
                         return $obj->kodekibtransaksi;
                     }, $data);
                     unset($copied['sp2d']);
-                    $copied['nilaibarang'] = intval(convertStringToNumber($copied['nilaibarang'])) / 100;
+                    $nilaibarang = $copied['nilaibarang'] = intval(convertStringToNumber($copied['nilaibarang'])) / 100;
                     $updatekib = DB::table('kib')
                         ->whereIn('kodekib', $kodekib)
                         ->update($copied);
+                    $tambahan = [];
+                    if (count($data) > $jumlah) {
+                        for ($i = 0; $i < $jumlah; $i++) {
+                            $kodekib_tambahan = DB::table('kib')->insertGetId($copied, 'kodekib');
+                            array_push($tambahan, $kodekib_tambahan);
+                        }
+                    } else if (count($data) < $jumlah) {
+                        DB::table('kibsp2d')->where('kodekib', $kodekib[0])->delete();
+                        DB::table('kibtransaksi')->where('kodekib', $kodekib[0])->delete();
+                        DB::table('kib')->where('kodekib', $kodekib[0])->delete();
+                    }
                     unset(
                         $copied['deskripsibarang'],
                         $copied['nilaibarang'],
@@ -537,21 +549,38 @@ class PerolehanAPBDController extends Controller
                     DB::table('kibtransaksi')
                         ->whereIn('kodekibtransaksi', $kodekibtransaksi)
                         ->update($copied);
-                    $data_sp2d = [];
-                    DB::table('kibsp2d')->whereIn('kodekib', $kodekib)->delete();
-                    foreach ($kib_sp2d as $index => $datasp2d) {
-                        $datasp2d = (array) $datasp2d;
-                        [$data_sp2d[$index]['nosp2d'], $data_sp2d[$index]['tglsp2d']] = explode('_', $datasp2d['id']);
-                        $data_sp2d[$index]['kdper'] = $datasp2d['kdper'];
-                        $data_sp2d[$index]['kodekib'] = $kodekib[0];
-                        $data_sp2d[$index]['tahun'] = env('TAHUN_APLIKASI');
-                        $data_sp2d[$index]['nilai'] = floatval(convertStringToNumber($datasp2d['nilai'])) / 100;
-                        $data_sp2d[$index]['nuprgrm'] = $sp2d->program;
-                        $data_sp2d[$index]['kdkegunit'] = $sp2d->kegiatan;
-                        $data_sp2d[$index]['persentase'] = $datasp2d['persentase'];
-                        $data_sp2d[$index]['kdunit'] = getkdunit($data_sp2d[$index]);
+                    if (count($data) > $jumlah) {
+                        foreach ($tambahan as $key => $valuekodekib) {
+                            $copied['kodekib'] = $valuekodekib;
+                            $copied['kodejenistransaksi'] = 101;
+                            $copied['kodebap'] = $ba;
+                            $copied['kodejurnal'] = 0;
+                            $copied['tanggaltransaksi'] = now('Asia/Jakarta');
+                            $copied['nilaitransaksi'] = $nilaibarang;
+                            $copied['tanggalpenyusutan'] = Carbon::createFromFormat('Y-m-d', $bap->tanggalbap)->addYear();
+                            DB::table('kibtransaksi')->insert($copied);
+                        }
                     }
-                    DB::table('kibsp2d')->insert($data_sp2d);
+                    $data_sp2d_update = [];
+                    DB::table('kibsp2d')->whereIn('kodekib', $kodekib)->delete();
+                    $kodekib = array_merge($kodekib, $tambahan);
+                    foreach ($kodekib as $index => $kode) {
+                        foreach ($kib_sp2d as $key => $datasp2d) {
+                            $datasp2d = (array) $datasp2d;
+                            $data = [];
+                            [$data_sp2d_update[$index][$key]['nosp2d'], $data_sp2d_update[$index][$key]['tglsp2d']] = explode('_', $datasp2d['id']);
+                            $data_sp2d_update[$index][$key]['kdper'] = $datasp2d['kdper'];
+                            $data_sp2d_update[$index][$key]['kodekib'] = $kode;
+                            $data_sp2d_update[$index][$key]['tahun'] = env('TAHUN_APLIKASI');
+                            $data_sp2d_update[$index][$key]['nilai'] = floatval(convertStringToNumber($datasp2d['nilai'])) / 100;
+                            $data_sp2d_update[$index][$key]['nuprgrm'] = $sp2d->program;
+                            $data_sp2d_update[$index][$key]['kdkegunit'] = $sp2d->kegiatan;
+                            $data_sp2d_update[$index][$key]['persentase'] = $datasp2d['persentase'];
+                            $data_sp2d_update[$index][$key]['kdunit'] = getkdunit($data_sp2d_update[$index][$key]);
+                        }
+                    }
+                    $data_sp2d_update = collect($data_sp2d_update)->flatten(1)->all();
+                    DB::table('kibsp2d')->insert($data_sp2d_update);
                 } else {
                     $jumlah = $kib['jumlah'];
                     for ($i = 0; $i < (int) $jumlah; $i++) {
@@ -610,27 +639,26 @@ class PerolehanAPBDController extends Controller
                         );
                         $copied['nilaitransaksi'] = convertStringToNumber($kib['nilaibarang']);
                         $copied['kodekib'] = $kodekib;
-                        $copied['kodebap'] = $bap->idbap;
+                        $copied['kodebap'] = $bap->kodebap;
                         $copied['kodejenistransaksi'] = 101;
                         $copied['kodejurnal'] = 0;
                         $copied['tanggaltransaksi'] = convertAlphabeticalToNumberDate($request->tanggalbap);
                         $copied['tanggalpenyusutan'] = convertAlphabeticalToNumberDate($request->tanggalbap);
                         DB::table('kibtransaksi')->insert($copied);
+                        $data_sp2d = [];
+                        foreach ($kib_sp2d as $index => $datasp2d) {
+                            [$data_sp2d[$index]['nosp2d'], $data_sp2d[$index]['tglsp2d']] = explode('_', $datasp2d['id']);
+                            $data_sp2d[$index]['kdper'] = $datasp2d['kdper'];
+                            $data_sp2d[$index]['kodekib'] = $kodekib;
+                            $data_sp2d[$index]['tahun'] = env('TAHUN_APLIKASI');
+                            $data_sp2d[$index]['nilai'] = (intval(convertStringToNumber($datasp2d['nilai'])) / $jumlah) / 100;
+                            $data_sp2d[$index]['nuprgrm'] = $sp2d->program;
+                            $data_sp2d[$index]['kdkegunit'] = $sp2d->kegiatan;
+                            $data_sp2d[$index]['persentase'] = $datasp2d['persentase'];
+                            $data_sp2d[$index]['kdunit'] = getkdunit($data_sp2d[$index]);
+                        }
+                        DB::table('kibsp2d')->insert($data_sp2d);
                     }
-                    $data_sp2d = [];
-                    DB::table('kibsp2d')->where('kodekib', $kodekib)->delete();
-                    foreach ($kib_sp2d as $index => $datasp2d) {
-                        [$data_sp2d[$index]['nosp2d'], $data_sp2d[$index]['tglsp2d']] = explode('_', $datasp2d['id']);
-                        $data_sp2d[$index]['kdper'] = $datasp2d['kdper'];
-                        $data_sp2d[$index]['kodekib'] = $kodekib;
-                        $data_sp2d[$index]['tahun'] = env('TAHUN_APLIKASI');
-                        $data_sp2d[$index]['nilai'] = intval(convertStringToNumber($datasp2d['nilai'])) / 100;
-                        $data_sp2d[$index]['nuprgrm'] = $sp2d->program;
-                        $data_sp2d[$index]['kdkegunit'] = $sp2d->kegiatan;
-                        $data_sp2d[$index]['persentase'] = $datasp2d['persentase'];
-                        $data_sp2d[$index]['kdunit'] = getkdunit($data_sp2d[$index]);
-                    }
-                    DB::table('kibsp2d')->insert($data_sp2d);
                 }
             }
             if (DB::table('penyusutan')->whereIn('kodekib', $removerequest)->count() > 1) {

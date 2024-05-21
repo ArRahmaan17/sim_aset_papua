@@ -612,6 +612,7 @@
         }
 
         function generateListAttribusi(data) {
+            console.log(data);
             let elementExists = $('#container-attribusi-asset').find('li').map(function(index, element) {
                 let current_data = $(element).data('attribusi');
                 if (current_data.deskripsibarang.toLowerCase() == data.deskripsibarang.toLowerCase()) {
@@ -1000,6 +1001,11 @@
                     setTimeout(() => {
                         $('.alert-ba').toggle("fade", 1000);
                     }, 1500);
+                    $('.attribusi').find('div > table tbody').html('');
+                    $('#add-attribusi').addClass('d-none')
+                    $("#container-attribusi-asset").html('')
+                    $('#update-ba').addClass('d-none')
+                    $('#cancel-ba').addClass('d-none')
                     window.bastatus = false;
                     window.tempAsset = null;
                     window.countDetailAsset = 0;
@@ -1054,6 +1060,12 @@
                     setTimeout(() => {
                         $('.alert-ba').toggle("fade", 1000);
                     }, 1500);
+                    $('.attribusi').find('div > table tbody').html('');
+                    $('#add-attribusi').addClass('d-none')
+                    $("#container-attribusi-asset").html('')
+                    $('#update-ba').addClass('d-none');
+                    $('#cancel-ba').addClass('d-none');
+                    $('#save-ba').removeClass('d-none')
                     window.bastatus = false;
                     window.tempAsset = null;
                     window.state = 'add';
