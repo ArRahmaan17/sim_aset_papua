@@ -857,7 +857,7 @@
                     $(this).focus();
                     return
                 }
-                $(this).val(`BA-{{ env('APP_YEAR') }}-${this.value}-{{ kodeOrganisasi() }}`);
+                $(this).val(`BA-PRLH-{{ env('APP_YEAR') }}-${this.value}-{{ kodeOrganisasi() }}`);
                 let input = this
                 $.ajax({
                     type: "get",
@@ -884,7 +884,7 @@
                 });
             });
             $('.formated').focus(function() {
-                value = (this.value).split(`BA-{{ env('APP_YEAR') }}-`)
+                value = (this.value).split(`BA-PRLH-{{ env('APP_YEAR') }}-`)
                     .join('')
                     .split(`-{{ kodeOrganisasi() }}`).join('');
                 $(this).val(value)

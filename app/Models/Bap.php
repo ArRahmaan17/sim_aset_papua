@@ -32,7 +32,7 @@ class Bap extends Model
                 'bap.kodeunit' => $copied->kodeunit,
                 'bap.kodesubunit' => $copied->kodesubunit,
                 'bap.kodesubsubunit' => $copied->kodesubsubunit,
-            ])->groupBy(
+            ])->where('bap.kodebap', 'ilike', 'BA-PRLH-%')->groupBy(
                 'bap.idbap',
                 'bap.kodebap',
                 'bap.tanggalbap',
@@ -103,7 +103,7 @@ class Bap extends Model
                 'bap.kodeunit' => $copied->kodeunit,
                 'bap.kodesubunit' => $copied->kodesubunit,
                 'bap.kodesubsubunit' => $copied->kodesubsubunit,
-            ])->groupBy(
+            ])->where('bap.kodebap', 'ilike', 'BA-SP2D-%')->groupBy(
                 'bap.idbap',
                 'bap.kodebap',
                 'bap.tanggalbap',
@@ -173,7 +173,7 @@ class Bap extends Model
                 'bap.kodeunit' => $copied->kodeunit,
                 'bap.kodesubunit' => $copied->kodesubunit,
                 'bap.kodesubsubunit' => $copied->kodesubsubunit,
-            ])->groupBy(
+            ])->where('bap.kodebap', 'ilike', 'BA-APBD-%')->groupBy(
                 'bap.idbap',
                 'bap.kodebap',
                 'bap.tanggalbap',
