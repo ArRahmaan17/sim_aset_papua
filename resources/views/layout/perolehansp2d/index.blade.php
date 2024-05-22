@@ -984,20 +984,19 @@
             window.persentaseSp2d = window.persentaseSp2d.toArray();
         }
 
-        function minusNilaiSp2d(nilai) {
+        function minusNilaiSp2d(nilai, jumlah = 1) {
             $(document).find('.pilih-sp2d:checked').map((index, element) => {
                 let data = $(element).parents('tr').data('sp2d');
+                let nilaisisa = 0;
                 persentase = window.persentaseSp2d[index];
                 window.persentaseSp2d[index].nilai = parseFloat((persentase.id ==
-                        `${data.nosp2d}_${data.tglsp2d}`) ? (persentase.persentase / 100) * nilai :
-                    0).toFixed(2);
-                $(element).parents('tr').find('td:nth-child(3)').html(
-                    numberFormat(parseFloat(parseFloat(data.sisa_nilai) < parseFloat(data.nilai) && parseFloat(
-                                data.sisa_nilai) != 0.00 ? data
-                            .sisa_nilai : data.nilai) -
-                        parseFloat((persentase.id == `${data.nosp2d}_${data.tglsp2d}`) ? (persentase
-                            .persentase / 100) * nilai : 0).toFixed(2))
-                )
+                        `${data.nosp2d}_${data.tglsp2d}`) ? ((persentase.persentase / 100) * nilai) *
+                    jumlah : 0).toFixed(2);
+                nilaisisa = parseFloat(parseFloat(data.sisa_nilai) < parseFloat(data.nilai) && parseFloat(
+                    data.sisa_nilai) != 0.00 ? data.sisa_nilai : data.nilai) - parseFloat((persentase
+                        .id == `${data.nosp2d}_${data.tglsp2d}`) ? ((persentase.persentase / 100) * nilai) *
+                    jumlah : 0).toFixed(2);
+                $(element).parents('tr').find('td:nth-child(3)').html(numberFormat(nilaisisa))
             });
         }
 
@@ -1037,11 +1036,10 @@
                         window.sp2d = (window.state == 'update' && window.iddetail !== null) ? parseInt(
                                 currencyToNumberFormat(` ${$('[name=nilaibarang]').val()}`)) : parseFloat(data
                                 .sisa_nilai) < parseFloat(data.nilai) && parseFloat(data.sisa_nilai) == 0.00 ?
-                            parseFloat(data.nilai) : parseFloat(data.sisa_nilai);
+                            parseFloat(data.sisa_nilai) : parseFloat(data.nilai);
                         if ($('[name=nilaibarang]')
                             .siblings('.form-text').length == 0) {
-                            $('[name=nilaibarang]')
-                                .parents('.mb-3')
+                            $('[name=nilaibarang]').parents('.mb-3')
                                 .append(`<div class="form-text text-danger">
                           Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}
                         </div>`);
@@ -1068,7 +1066,8 @@
                     if (window.sp2d > 0 && parseInt(currencyToNumberFormat(` ${this.value}`)) <= window
                         .sp2d) {
                         $(this).removeClass('is-invalid');
-                        minusNilaiSp2d(parseInt(currencyToNumberFormat(` ${this.value}`)))
+                        minusNilaiSp2d(parseInt(currencyToNumberFormat(` ${this.value}`)), $('#jumlah')
+                            .val() ?? 1)
                     } else {
                         $(this).addClass('is-invalid');
                     }

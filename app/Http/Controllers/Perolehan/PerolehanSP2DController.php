@@ -171,7 +171,7 @@ class PerolehanSP2DController extends Controller
                         $data_sp2d[$index]['kdper'] = $datasp2d['kdper'];
                         $data_sp2d[$index]['kodekib'] = $kodekib;
                         $data_sp2d[$index]['tahun'] = env('TAHUN_APLIKASI');
-                        $data_sp2d[$index]['nilai'] = intval(convertStringToNumber($datasp2d['nilai'])) / 100;
+                        $data_sp2d[$index]['nilai'] = (intval(convertStringToNumber($datasp2d['nilai'])) / $jumlah) / 100;
                         $data_sp2d[$index]['nuprgrm'] = $sp2d->program;
                         $data_sp2d[$index]['kdkegunit'] = $sp2d->kegiatan;
                         $data_sp2d[$index]['persentase'] = $datasp2d['persentase'];
