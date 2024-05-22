@@ -425,6 +425,7 @@
             $('#save-ba').addClass('disabled').removeClass('d-none');
             $('#update-ba').addClass('disabled d-none');
             $('#cancel-ba').addClass('disabled d-none');
+            $('#add-detail-asset').removeClass('disabled');
             $('.attribusi').find('div > table tbody').html('');
             $('#add-attribusi').addClass('d-none')
             $("#container-attribusi-asset").html('')
