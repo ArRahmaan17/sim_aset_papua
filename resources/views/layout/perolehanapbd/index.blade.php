@@ -358,6 +358,7 @@
                 </div>
                 <div class="modal-body">
                     <form>
+                        <input type="hidden" id="idattribusi">
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="deskripsibarangattr">Deskripsi Atribusi</label>
                             <div class="col-sm-10">
@@ -384,7 +385,9 @@
                         <div class="row justify-content-end">
                             <div class="col-sm-10">
                                 <button id="tambah-attribusi" type="button" class="btn btn-success"><span
-                                        class='tf-icons bx bx-layer-plus'></span> Tambah</button>
+                                        class='tf-icons bx bx-layer-plus'></span> Tambah</button> <button
+                                    id="update-attribusi" type="button" class="btn btn-warning d-none"><span
+                                        class='tf-icons bx bx-edit'></span> Edit</button>
                                 <button id="selesai-attribusi" type="button" class="btn btn-warning"><span
                                         class='tf-icons bx bx-check'></span>
                                     Selesai</button>
@@ -422,6 +425,9 @@
             $('#save-ba').addClass('disabled').removeClass('d-none');
             $('#update-ba').addClass('disabled d-none');
             $('#cancel-ba').addClass('disabled d-none');
+            $('.attribusi').find('div > table tbody').html('');
+            $('#add-attribusi').addClass('d-none')
+            $("#container-attribusi-asset").html('')
             window.bastatus = false;
             window.state = 'add';
             window.tempAsset = null;
@@ -612,7 +618,6 @@
         }
 
         function generateListAttribusi(data) {
-            console.log(data);
             let elementExists = $('#container-attribusi-asset').find('li').map(function(index, element) {
                 let current_data = $(element).data('attribusi');
                 if (current_data.deskripsibarang.toLowerCase() == data.deskripsibarang.toLowerCase()) {
@@ -633,9 +638,9 @@
                 </div>
                 <div class='col-4 d-flex justify-content-end gap-3 align-items-center'>
                     <span class="badge bg-info icon-name" style='font-size:1rem;'>${numberFormat(data.nilaibarang)}</span>
-                    <span class="badge bg-danger" onclick="deleteDetailAsset(${data.iddetail})"><i class='bx bx-trash bx-xs'></i></span>
+                    <span class="badge bg-danger" onclick="deleteDetailAttribusi(${data.iddetail})"><i class='bx bx-trash bx-xs'></i></span>
                     <span class="badge bg-info"><i class='bx bx-show bx-xs'></i></span>
-                    <span class="badge bg-success" onclick="editDetailAsset(this)"><i class='bx bx-pencil bx-xs'></i></span>
+                    <span class="badge bg-success" onclick="editDetailAttribusi(this)"><i class='bx bx-pencil bx-xs'></i></span>
                 </div>
             </li>`)
             }
@@ -700,6 +705,113 @@
                         });
                         ($("#container-detail-asset").find('li').length == 0) ? $("#save-ba").addClass(
                             'disabled'): '';
+                    }, true],
+                    ['<button>TIDAK</button>', function(instance, toast) {
+                        instance.hide({
+                            transitionOut: 'fadeOut'
+                        }, toast, 'button');
+
+                    }],
+                ],
+            });
+        }
+
+        function editDetailAttribusi(elementattribusi) {
+            let sp2d = $(elementattribusi).parents('li').data('attribusi');
+            $('#modalTambahAttribusi').modal('show');
+            $('#nilaibarangattribusi').val(parseFloat(sp2d.nilaibarang));
+            $('#deskripsibarangattr').val(sp2d.deskripsibarang);
+            $('#idattribusi').val(sp2d.iddetail);
+            $('#update-attribusi').removeClass('d-none');
+            $('#tambah-attribusi').addClass('d-none');
+            $('#selesai-attribusi').addClass('d-none');
+            sp2d.sp2d = JSON.parse(sp2d.sp2d);
+            window.sp2d = parseFloat(sp2d.nilaibarang)
+            $('.attribusi').find('div > table tbody > tr').map((index, element) => {
+                sp2d.sp2d.forEach((rekening) => {
+                    let data_rekening = $(element).data('sp2d');
+                    if (rekening.id == `${data_rekening.nosp2d}_${data_rekening.tglsp2d}` && rekening
+                        .kdper == data_rekening.kdper && rekening.keperluan == data_rekening.keperluan) {
+                        $(element).find('td:nth-child(4) > input').click();
+                    }
+                })
+            });
+        }
+
+        function updateDetailAttribusi(data, id) {
+            data.sp2d = JSON.stringify(window.persentaseSp2d);
+            $('#container-attribusi-asset').find('li').map((index, element) => {
+                if ($(element).data('id') == id) {
+                    $(element).data('attribusi', data);
+                    $(element).find('.icon-name').html(`${numberFormat(data.nilaibarang)}`)
+                }
+            });
+            $("#modalTambahAttribusi").modal('hide');
+            $('#add-attribusi').addClass('disabled');
+            $('#save-ba').removeClass('disabled');
+            $('#update-ba').removeClass('disabled');
+            $(document).find('.pilih-sp2d').map((index,
+                container_sp2d) => {
+                if (container_sp2d.checked == true) {
+                    $(container_sp2d).prop('checked', false)
+                }
+            });
+        }
+
+        function deleteDetailAttribusi(id) {
+            iziToast.question({
+                timeout: 5000,
+                close: false,
+                overlay: true,
+                displayMode: 'once',
+                id: 'question',
+                zindex: 9999,
+                title: 'Warning',
+                message: 'Apakah anda yakin akan menghapus nilai atribusi ini?',
+                position: 'center',
+                buttons: [
+                    ['<button><b>IYA</b></button>', function(instance, toast) {
+                        instance.hide({
+                            transitionOut: 'fadeOut'
+                        }, toast, 'button');
+                        $('#container-attribusi-asset').find('li').map((index, element) => {
+                            if ($(element).data('id') == id) {
+                                let data_sp2d = JSON.parse($(element).data('attribusi').sp2d)
+                                data_sp2d.map((sp2d) => {
+                                    let id = sp2d.id.split('_');
+                                    $(document).find('.pilih-sp2d').map((index,
+                                        container_sp2d) => {
+                                        let datasp2d = $(container_sp2d).parents(
+                                            'tr').data('sp2d');
+                                        if (id[0] == datasp2d.nosp2d &&
+                                            id[1] == datasp2d.tglsp2d && datasp2d
+                                            .keperluan == sp2d.keperluan && datasp2d
+                                            .kdper == sp2d.kdper) {
+                                            let nilai = parseFloat(
+                                                currencyToNumberFormat(
+                                                    $(container_sp2d)
+                                                    .parents('tr')
+                                                    .find('td:nth-child(3)')
+                                                    .html())) / 100;
+                                            nilai += parseFloat(sp2d.nilai);
+                                            $(container_sp2d)
+                                                .parents('tr')
+                                                .find('td:nth-child(3)')
+                                                .html(numberFormat(nilai));
+                                            if ($(container_sp2d).prop(
+                                                    'disabled') == true) {
+                                                $(container_sp2d).prop('disabled',
+                                                    false);
+                                                $(container_sp2d)
+                                                    .parents('tr').removeClass(
+                                                        'bg-warning text-white')
+                                            }
+                                        }
+                                    })
+                                });
+                                $(element).remove();
+                            }
+                        });
                     }, true],
                     ['<button>TIDAK</button>', function(instance, toast) {
                         instance.hide({
@@ -1203,7 +1315,8 @@
                                         `Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
                             }
                         } else {
-                            if ($('#nilaibarangattribusi').siblings('.form-text').length == 0) {
+                            if ($('#nilaibarangattribusi').parents('.input-group').siblings('.form-text').length ==
+                                0) {
                                 $('#nilaibarangattribusi')
                                     .parents('.col-sm-10')
                                     .append(
@@ -1237,10 +1350,20 @@
                             .siblings('.form-text')
                             .html(`Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
                     } else {
-                        $('#nilaibarangattribusi')
+                        if ($('#nilaibarangattribusi')
                             .parents('.col-sm-10')
-                            .find('.form-text')
-                            .html(`Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
+                            .find('.form-text').length == 0) {
+                            $('#nilaibarangattribusi')
+                                .parents('.col-sm-10')
+                                .append(
+                                    `<div class="form-text text-danger">Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}</div>`
+                                );
+                        } else {
+                            $('#nilaibarangattribusi')
+                                .parents('.col-sm-10')
+                                .find('.form-text')
+                                .html(`Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
+                        }
                     }
                 }
                 if ($('#modalDetailAsset').hasClass('show')) {
@@ -1366,6 +1489,46 @@
                 }
                 $('#modalTambahAttribusi').modal('show');
                 $('#add-detail-asset').addClass('disabled');
+            });
+            $('#update-attribusi').click(function() {
+                if ($('#deskripsibarangattr').val() !== '' && $('#nilaibarangattribusi').val() !== '') {
+                    let data = {
+                        'deskripsibarang': $('#deskripsibarangattr').val(),
+                        'nilaibarang': parseInt(currencyToNumberFormat(` ${$('#nilaibarangattribusi')
+                            .val()}`)),
+                    };
+                    updateDetailAttribusi(data, $('#idattribusi').val());
+                    $('#deskripsibarangattr').val('');
+                    $('#idattribusi').val('');
+                    $('#nilaibarangattribusi').val('');
+                    window.sp2d = window.sp2d - parseFloat(currencyToNumberFormat(` ${data.nilaibarang}`));
+                    $('#nilaibarangattribusi')
+                        .parents('.col-sm-10')
+                        .find('.form-text')
+                        .html(`Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
+                    window.persentaseSp2d.map((sp2d) => {
+                        $(document).find('.pilih-sp2d').map((index, container_sp2d) => {
+                            let datasp2d = $(container_sp2d)
+                                .parents('tr').data('sp2d');
+                            let id = sp2d.id.split('_');
+                            if (id[0] == datasp2d.nosp2d &&
+                                id[1] == datasp2d.tglsp2d && datasp2d
+                                .keperluan == sp2d.keperluan && datasp2d
+                                .kdper == sp2d.kdper) {
+                                datasp2d.sisa_nilai = (((datasp2d.hasOwnProperty(
+                                            'sisa_nilai')) ? parseFloat(datasp2d
+                                            .sisa_nilai) : parseFloat(datasp2d.nilai)) -
+                                        parseFloat(sp2d.nilai))
+                                    .toString();
+                                $(container_sp2d)
+                                    .parents('tr').data('sp2d', datasp2d);
+                            }
+                        })
+                    });
+                    window.persentaseSp2d = [];
+                    window.sp2d = 0;
+                    hitungPersentase();
+                }
             });
             $('#tambah-attribusi').click(function() {
                 if ($('#deskripsibarangattr').val() !== '' && $('#nilaibarangattribusi').val() !== '') {
