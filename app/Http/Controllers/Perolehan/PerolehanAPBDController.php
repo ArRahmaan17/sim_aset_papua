@@ -91,6 +91,7 @@ class PerolehanAPBDController extends Controller
             $bap['tanggalkontrak'] = isset($request->tanggalkontrak) ? convertAlphabeticalToNumberDate($request->tanggalkontrak) : null;
             $bap['tanggalbaterima'] = isset($request->tanggalbapterima) ? convertAlphabeticalToNumberDate($request->tanggalbaterima) : null;
             $bap['tanggalkuitansi'] = isset($request->tanggalkuitansi) ? convertAlphabeticalToNumberDate($request->tanggalkuitansi) : null;
+            $bap['nilaikontrak'] = convertStringToNumber($request->nilaikontrak);
             $copied = clone session('organisasi');
             $bap['kodeurusan'] = $must['kodeurusan'] = $copied->kodeurusan;
             $bap['kodesuburusan'] = $must['kodesuburusan'] = $copied->kodesuburusan;

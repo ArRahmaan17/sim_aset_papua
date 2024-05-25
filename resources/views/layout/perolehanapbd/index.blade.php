@@ -610,7 +610,8 @@
                     ${window.tempAsset.urai}
                 </div>
                 <div class='col-4 d-flex justify-content-between align-items-center'>
-                    <span class="badge bg-primary icon-name" style='font-size:1rem;'>${data.jumlah}</span>
+                    <span class="badge bg-primary icon-name" style='font-size:1rem;'>${parseInt(data.jumlah)}</span>
+                    <span class="badge bg-primary icon-name" style='font-size:1rem;'>${numberFormat(parseFloat(data.nilaibarang))}</span>
                     <span class="badge bg-danger" onclick="deleteDetailAsset(${data.iddetail})"><i class='bx bx-trash bx-xs'></i></span>
                     <span class="badge bg-info"><i class='bx bx-show bx-xs'></i></span>
                     <span class="badge bg-success" onclick="editDetailAsset(this)"><i class='bx bx-pencil bx-xs'></i></span>
@@ -1369,8 +1370,8 @@
                 }
                 if ($('#modalDetailAsset').hasClass('show')) {
                     $('input[name=nilaibarang]').keyup(function() {
-                        if (window.sp2d > 0 && parseInt(currencyToNumberFormat(` ${this.value}`)) <= window
-                            .sp2d) {
+                        if (window.sp2d > 0 && parseInt(currencyToNumberFormat(` ${this.value}`)) *
+                            parseInt($('#jumlah').val() ?? 1) <= window.sp2d) {
                             $(this).removeClass('is-invalid');
                             minusNilaiSp2d(parseInt(currencyToNumberFormat(` ${this.value}`)), $(
                                 '[name=jumlah]').val() ?? 1)
