@@ -1811,7 +1811,9 @@
                 });
             });
             $('#nilaikontrak').change(function() {
-                $('.contract-value').html(`Rp. ${this.value}`);
+                $('.contract-value').html(
+                    numberFormat(parseFloat(currencyToNumberFormat(` ${this.value}`)) - window
+                        .totalbarang));
             })
         });
     </script>
