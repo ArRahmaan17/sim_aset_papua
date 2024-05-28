@@ -169,7 +169,8 @@
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <h3>Detail Aset</h3>
+                                            <h3>Detail Aset <span class="badge bg-success contract-value float-end"></span>
+                                            </h3>
                                             <ul id="container-detail-asset" class="list-group">
                                             </ul>
                                         </div>
@@ -461,7 +462,8 @@
                 success: function(response) {
                     $('#container-detail-asset').html('');
                     response.data.dataKib.forEach(kib => {
-                        kib.nilaibarang = parseInt(currencyToNumberFormat(` ${kib.nilaibarang}`)) / 100;
+                        kib.nilaibarang = parseFloat(currencyToNumberFormat(` ${kib.nilaibarang}`)) /
+                            100;
                         window.tempAsset = kib;
                         window.iddetail = kib.iddetail;
                         window.countDetailAsset = kib.iddetail;
@@ -595,7 +597,7 @@
                 }
             });
             renderFormDetailAsset(data, 'edit');
-            window.totalbarang -= parseFloat(currencyToNumberFormat(` ${data.nilaibarang}`));
+            window.totalbarang -= parseFloat(currencyToNumberFormat(` ${data.nilaibarang}`)) * parseInt(data.jumlah);
             setTimeout(() => {
                 dataToValueElement(data);
             }, 500);
@@ -615,7 +617,7 @@
                     <span class="badge bg-success" onclick="editDetailAsset(this)"><i class='bx bx-pencil bx-xs'></i></span>
                 </div>
             </li>`);
-            window.totalbarang += parseFloat(currencyToNumberFormat(` ${data.nilaibarang}`));
+            window.totalbarang += parseFloat(currencyToNumberFormat(` ${data.nilaibarang}`)) * parseInt(data.jumlah ?? 1);
         }
 
         function generateListAttribusi(data) {
@@ -951,7 +953,7 @@
             //  example valid string Rp 12.123.123.123,31
             //  the result 1212312312331
             result = str.split(" ");
-            result = result[1].split(".").join("").split(",").join("");
+            result = result[1].split(".").join("").split(",").join(".");
             return result;
         }
 
@@ -1299,7 +1301,7 @@
                     if (this.checked == true) {
                         window.sp2d = (window.state == 'update' && window.iddetail !== null && $(
                                 '#modalDetailAsset').hasClass('show')) ? parseFloat(data.sisa_nilai == data.nilai ?
-                                data.nilai : data.sisa_nilai) + (parseInt(currencyToNumberFormat(
+                                data.nilai : data.sisa_nilai) + (parseFloat(currencyToNumberFormat(
                                 ` ${$('[name=nilaibarang]').val()}`)) * parseInt($('#jumlah').val())) : parseFloat(
                                 data.sisa_nilai) < parseFloat(data.nilai) && parseFloat(data.sisa_nilai) == 0.00 ?
                             parseFloat(data.nilai) : parseFloat(data.sisa_nilai);
@@ -1370,10 +1372,10 @@
                 }
                 if ($('#modalDetailAsset').hasClass('show')) {
                     $('input[name=nilaibarang]').keyup(function() {
-                        if (window.sp2d > 0 && parseInt(currencyToNumberFormat(` ${this.value}`)) *
+                        if (window.sp2d > 0 && parseFloat(currencyToNumberFormat(` ${this.value}`)) *
                             parseInt($('#jumlah').val() ?? 1) <= window.sp2d) {
                             $(this).removeClass('is-invalid');
-                            minusNilaiSp2d(parseInt(currencyToNumberFormat(` ${this.value}`)), $(
+                            minusNilaiSp2d(parseFloat(currencyToNumberFormat(` ${this.value}`)), $(
                                 '[name=jumlah]').val() ?? 1)
                         } else {
                             $(this).addClass('is-invalid');
@@ -1381,10 +1383,11 @@
                     });
                 } else {
                     $('#nilaibarangattribusi').keyup(function() {
-                        if (window.sp2d > 0 && parseInt(currencyToNumberFormat(` ${this.value}`)) <= window
+                        if (window.sp2d > 0 && parseFloat(currencyToNumberFormat(` ${this.value}`)) <=
+                            window
                             .sp2d) {
                             $(this).removeClass('is-invalid');
-                            minusNilaiSp2d(parseInt(currencyToNumberFormat(` ${this.value}`)), 1)
+                            minusNilaiSp2d(parseFloat(currencyToNumberFormat(` ${this.value}`)), 1)
                         } else {
                             $(this).addClass('is-invalid');
                         }
@@ -1496,7 +1499,7 @@
                 if ($('#deskripsibarangattr').val() !== '' && $('#nilaibarangattribusi').val() !== '') {
                     let data = {
                         'deskripsibarang': $('#deskripsibarangattr').val(),
-                        'nilaibarang': parseInt(currencyToNumberFormat(` ${$('#nilaibarangattribusi')
+                        'nilaibarang': parseFloat(currencyToNumberFormat(` ${$('#nilaibarangattribusi')
                             .val()}`)),
                     };
                     updateDetailAttribusi(data, $('#idattribusi').val());
@@ -1536,7 +1539,7 @@
                 if ($('#deskripsibarangattr').val() !== '' && $('#nilaibarangattribusi').val() !== '') {
                     let data = {
                         'deskripsibarang': $('#deskripsibarangattr').val(),
-                        'nilaibarang': parseInt(currencyToNumberFormat(` ${$('#nilaibarangattribusi')
+                        'nilaibarang': parseFloat(currencyToNumberFormat(` ${$('#nilaibarangattribusi')
                             .val()}`)),
                     };
                     generateListAttribusi(data);
@@ -1714,6 +1717,22 @@
                     html +=
                         `<a class="list-group-item border-0">${error.message}</a>`;
                 });
+                let nilaikontrak = parseFloat(currencyToNumberFormat(` ${$('#nilaikontrak').val()}`)) ??
+                    0;
+                $('.contract-value').html(numberFormat(nilaikontrak - parseFloat(currencyToNumberFormat(
+                    ` ${$('[name=nilaibarang]').val()}`)) * parseInt($('[name=jumlah]').val() ??
+                    1)));
+                if (nilaikontrak != 0 && nilaikontrak >= window.totalbarang) {
+                    $('#save-ba').removeClass('disabled');
+                } else {
+                    $('.contract-value').removeClass('bg-success').addClass('bg-warning');
+                    errors.push({
+                        message: 'Nilai Barang Lebih Dari Nilai Kontrak',
+                        name: 'Nilai Kontrak'
+                    })
+                    html +=
+                        `<a class="list-group-item border-0">Nilai Barang Lebih Dari Nilai Kontrak</a>`;
+                }
                 if (errors.length !== 0) {
                     $('#modalDetailAsset .modal-body').prepend(`<div class="alert alert-danger alert-da">
                                 <div class="row justify-content-start align-items-center">
@@ -1771,10 +1790,6 @@
                         updateListData(data);
                     }
                     $('.alert-da').remove();
-                    let nilaikontrak = $('#nilaikontrak').val() ?? 0;
-                    if (nilaikontrak != 0 && nilaikontrak <= window.totalbarang) {
-                        $('#save-ba').removeClass('disabled');
-                    }
                     $('#add-detail-asset').removeClass('disabled');
                     window.iddetail = null;
                     window.persentaseSp2d = [];
@@ -1795,6 +1810,9 @@
                     }
                 });
             });
+            $('#nilaikontrak').change(function() {
+                $('.contract-value').html(`Rp. ${this.value}`);
+            })
         });
     </script>
 @endpush
