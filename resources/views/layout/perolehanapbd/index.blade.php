@@ -417,6 +417,7 @@
         window.state = 'add'
         window.sp2d = 0;
         window.persentaseSp2d = [];
+        window.totalbarang = 0;
 
         function resetBa() {
             $('#ba-form').find('input, textarea').removeAttr('disabled');
@@ -460,6 +461,7 @@
                 success: function(response) {
                     $('#container-detail-asset').html('');
                     response.data.dataKib.forEach(kib => {
+                        kib.nilaibarang = parseInt(currencyToNumberFormat(` ${kib.nilaibarang}`)) / 100;
                         window.tempAsset = kib;
                         window.iddetail = kib.iddetail;
                         window.countDetailAsset = kib.iddetail;
@@ -530,7 +532,9 @@
         function updateListData(data) {
             $("#container-detail-asset").find('li').map((index, element) => {
                 if ($(element).data('id') == window.iddetail) {
-                    $(element).find('.badge.bg-primary').html(data.jumlah)
+                    $(element).find('.badge.bg-primary:first').html(data.jumlah)
+                    $(element).find('.badge.bg-primary:last').html(numberFormat(currencyToNumberFormat(
+                        ` ${data.nilaibarang}`)))
                     $(element).data('master', {
                         ...window.tempAsset,
                         ...data,
@@ -562,7 +566,7 @@
                     }
                     $(element).data('master').sp2d.map((sp2d) => {
                         let id = sp2d.id.split('_');
-                        $(document).find('.pilih-sp2d').map((index,
+                        $("#modalDetailAsset").find('.pilih-sp2d').map((index,
                             container_sp2d) => {
                             let datasp2d = $(container_sp2d).parents(
                                 'tr').data('sp2d');
@@ -570,13 +574,6 @@
                                 id[1] == datasp2d.tglsp2d && datasp2d
                                 .keperluan == sp2d.keperluan && datasp2d
                                 .kdper == sp2d.kdper) {
-                                let nilai = parseFloat(
-                                    currencyToNumberFormat(
-                                        $(container_sp2d)
-                                        .parents('tr')
-                                        .find('td:nth-child(3)')
-                                        .html())) / 100;
-                                nilai += parseFloat(sp2d.nilai);
                                 if (window.state != 'update') {
                                     $(container_sp2d).trigger('click');
                                 } else {
@@ -598,6 +595,7 @@
                 }
             });
             renderFormDetailAsset(data, 'edit');
+            window.totalbarang -= parseFloat(currencyToNumberFormat(` ${data.nilaibarang}`));
             setTimeout(() => {
                 dataToValueElement(data);
             }, 500);
@@ -611,12 +609,13 @@
                 </div>
                 <div class='col-4 d-flex justify-content-between align-items-center'>
                     <span class="badge bg-primary icon-name" style='font-size:1rem;'>${parseInt(data.jumlah)}</span>
-                    <span class="badge bg-primary icon-name" style='font-size:1rem;'>${numberFormat(parseFloat(data.nilaibarang))}</span>
+                    <span class="badge bg-primary icon-name" style='font-size:1rem;'>${numberFormat(currencyToNumberFormat(` ${data.nilaibarang}`))}</span>
                     <span class="badge bg-danger" onclick="deleteDetailAsset(${data.iddetail})"><i class='bx bx-trash bx-xs'></i></span>
                     <span class="badge bg-info"><i class='bx bx-show bx-xs'></i></span>
                     <span class="badge bg-success" onclick="editDetailAsset(this)"><i class='bx bx-pencil bx-xs'></i></span>
                 </div>
-            </li>`)
+            </li>`);
+            window.totalbarang += parseFloat(currencyToNumberFormat(` ${data.nilaibarang}`));
         }
 
         function generateListAttribusi(data) {
@@ -1299,9 +1298,10 @@
                 if (window.sp2d == 0) {
                     if (this.checked == true) {
                         window.sp2d = (window.state == 'update' && window.iddetail !== null && $(
-                                '#modalDetailAsset').hasClass('show')) ? parseInt(
-                                currencyToNumberFormat(` ${$('[name=nilaibarang]').val()}`)) : parseFloat(data
-                                .sisa_nilai) < parseFloat(data.nilai) && parseFloat(data.sisa_nilai) == 0.00 ?
+                                '#modalDetailAsset').hasClass('show')) ? parseFloat(data.sisa_nilai == data.nilai ?
+                                data.nilai : data.sisa_nilai) + (parseInt(currencyToNumberFormat(
+                                ` ${$('[name=nilaibarang]').val()}`)) * parseInt($('#jumlah').val())) : parseFloat(
+                                data.sisa_nilai) < parseFloat(data.nilai) && parseFloat(data.sisa_nilai) == 0.00 ?
                             parseFloat(data.nilai) : parseFloat(data.sisa_nilai);
                         if ($('#modalDetailAsset').hasClass('show')) {
                             if ($('[name=nilaibarang]').siblings('.form-text').length == 0) {
@@ -1771,7 +1771,10 @@
                         updateListData(data);
                     }
                     $('.alert-da').remove();
-                    $('#save-ba').removeClass('disabled');
+                    let nilaikontrak = $('#nilaikontrak').val() ?? 0;
+                    if (nilaikontrak != 0 && nilaikontrak <= window.totalbarang) {
+                        $('#save-ba').removeClass('disabled');
+                    }
                     $('#add-detail-asset').removeClass('disabled');
                     window.iddetail = null;
                     window.persentaseSp2d = [];
@@ -1785,6 +1788,12 @@
             $('#modalTambahAttribusi').on('hidden.bs.modal', function(e) {
                 $('#deskripsibarangattr').val('');
                 $('#nilaibarangattribusi').val('');
+                $(document).find('.pilih-sp2d').map((index,
+                    container_sp2d) => {
+                    if (container_sp2d.checked == true) {
+                        $(container_sp2d).prop('checked', false)
+                    }
+                });
             });
         });
     </script>
