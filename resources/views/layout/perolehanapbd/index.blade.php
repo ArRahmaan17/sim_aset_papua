@@ -1719,9 +1719,9 @@
                 });
                 let nilaikontrak = parseFloat(currencyToNumberFormat(` ${$('#nilaikontrak').val()}`)) ??
                     0;
-                $('.contract-value').html(numberFormat(nilaikontrak - parseFloat(currencyToNumberFormat(
-                    ` ${$('[name=nilaibarang]').val()}`)) * parseInt($('[name=jumlah]').val() ??
-                    1)));
+                $('.contract-value').html(numberFormat(nilaikontrak - window.totalbarang - parseFloat(
+                    currencyToNumberFormat(` ${$('[name=nilaibarang]').val()}`)) * parseInt($(
+                    '[name=jumlah]').val()) ?? 1));
                 if (nilaikontrak != 0 && nilaikontrak >= window.totalbarang) {
                     $('#save-ba').removeClass('disabled');
                 } else {
