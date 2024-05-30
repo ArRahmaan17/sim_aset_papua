@@ -171,7 +171,7 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
     Route::put('/perolehan-apbd/update/{ba?}', [PerolehanAPBDController::class, 'update'])->name('perolehan-apbd.update');
     Route::get('/perolehan-apbd/all-kegiatan/{idprogram?}', [PerolehanAPBDController::class, 'getKegiatan'])->name('perolehan-apbd.get-kegiatan');
     Route::get('/perolehan-apbd/bap/detail/{id?}', [PerolehanAPBDController::class, 'getDetailBap'])->name('perolehan-apbd.bap.show');
-    Route::get('/perolehan-apbd/all-rekening/{idkegiatan?}', [PerolehanAPBDController::class, 'getRekening'])->name('perolehan-apbd.get-rekening');
+    Route::get('/perolehan-apbd/all-rekening/{idkegiatan?}/{idprogram?}', [PerolehanAPBDController::class, 'getRekening'])->name('perolehan-apbd.get-rekening');
     Route::get('/perolehan', [PerolehanController::class, 'index'])->name('perolehan')->middleware(['menu-permission']);
     Route::post('/perolehan/store', [PerolehanController::class, 'store'])->name('perolehan.store');
     Route::put('/perolehan/update/{ba?}', [PerolehanController::class, 'update'])->name('perolehan.update');

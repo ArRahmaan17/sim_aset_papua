@@ -455,6 +455,19 @@
                 .html(`<i class='bx bxs-pencil'></i> Gunakan`);
             $(element).addClass('disabled').html(`<i class='bx bx-x'></i> Digunakan`);
             let data = $(element).parents('tr').data('bap');
+            $("#ba-form").find('input,textarea').map((_, element) => {
+                name = $(element).attr('name');
+                if (data.hasOwnProperty(name) && data[name] != null && data[name] != "") {
+                    if ($(element).hasClass('datetime-picker')) {
+                        $(element).datepicker('update', new Date(data[name]))
+                    } else {
+                        $(element).val(data[name]).trigger('change')
+                    }
+                }
+                setTimeout(() => {
+                    $(element).attr('disabled', true)
+                }, 150);
+            });
             $.ajax({
                 type: "get",
                 url: `{{ route('perolehan-apbd.bap.show') }}/${data.idbap}`,
@@ -484,6 +497,9 @@
                         $("#kegiatan").val(response.data.sp2d.kegiatan).trigger('change');
                         $('#program').attr('disabled', true);
                         $('#kegiatan').attr('disabled', true);
+                        let nilaikontrak = parseFloat(currencyToNumberFormat(
+                            ` ${$('#nilaikontrak').val()}`)) ?? 0;
+                        $('.contract-value').html(numberFormat(nilaikontrak - window.totalbarang));
                     }, 500);
 
                     $("#add-attribusi").removeClass('d-none disabled');
@@ -491,19 +507,6 @@
                     $("#cancel-ba").removeClass('disabled d-none');
                     $("#save-ba").addClass('disabled d-none');
                 }
-            });
-            $("#ba-form").find('input,textarea').map((_, element) => {
-                name = $(element).attr('name');
-                if (data.hasOwnProperty(name) && data[name] != null && data[name] != "") {
-                    if ($(element).hasClass('datetime-picker')) {
-                        $(element).datepicker('update', new Date(data[name]))
-                    } else {
-                        $(element).val(data[name]).trigger('change')
-                    }
-                }
-                setTimeout(() => {
-                    $(element).attr('disabled', true)
-                }, 150);
             });
             $("#modalListBap").modal('hide');
         }
@@ -550,7 +553,8 @@
                 let name = $(element).attr('name');
                 if (data.hasOwnProperty(name)) {
                     let value = data[name];
-                    if (typeof(value) == 'string' && value.split('.00').length > 1 && value.split('.00')[1] == '') {
+                    if (typeof(value) == 'string' && value.split('.00').length > 1 && value.split('.00')[1] ==
+                        '') {
                         value = value.split('.00').join('');
                     }
                     $(`[name=${name}]`).val(value).trigger("change")
@@ -617,7 +621,8 @@
                     <span class="badge bg-success" onclick="editDetailAsset(this)"><i class='bx bx-pencil bx-xs'></i></span>
                 </div>
             </li>`);
-            window.totalbarang += parseFloat(currencyToNumberFormat(` ${data.nilaibarang}`)) * parseInt(data.jumlah ?? 1);
+            window.totalbarang += parseFloat(currencyToNumberFormat(` ${data.nilaibarang}`)) * parseInt(data.jumlah ??
+                1);
         }
 
         function generateListAttribusi(data) {
@@ -675,11 +680,14 @@
                                     let id = sp2d.id.split('_');
                                     $(document).find('.pilih-sp2d').map((index,
                                         container_sp2d) => {
-                                        let datasp2d = $(container_sp2d).parents(
-                                            'tr').data('sp2d');
+                                        let datasp2d = $(container_sp2d)
+                                            .parents(
+                                                'tr').data('sp2d');
                                         if (id[0] == datasp2d.nosp2d &&
-                                            id[1] == datasp2d.tglsp2d && datasp2d
-                                            .keperluan == sp2d.keperluan && datasp2d
+                                            id[1] == datasp2d.tglsp2d &&
+                                            datasp2d
+                                            .keperluan == sp2d.keperluan &&
+                                            datasp2d
                                             .kdper == sp2d.kdper) {
                                             let nilai = parseFloat(
                                                 currencyToNumberFormat(
@@ -694,7 +702,8 @@
                                                 .html(numberFormat(nilai));
                                             if ($(container_sp2d).prop(
                                                     'disabled') == true) {
-                                                $(container_sp2d).prop('disabled',
+                                                $(container_sp2d).prop(
+                                                    'disabled',
                                                     false);
                                                 $(container_sp2d)
                                                     .parents('tr').removeClass(
@@ -734,7 +743,8 @@
                 sp2d.sp2d.forEach((rekening) => {
                     let data_rekening = $(element).data('sp2d');
                     if (rekening.id == `${data_rekening.nosp2d}_${data_rekening.tglsp2d}` && rekening
-                        .kdper == data_rekening.kdper && rekening.keperluan == data_rekening.keperluan) {
+                        .kdper == data_rekening.kdper && rekening.keperluan == data_rekening.keperluan
+                    ) {
                         $(element).find('td:nth-child(4) > input').click();
                     }
                 })
@@ -784,11 +794,14 @@
                                     let id = sp2d.id.split('_');
                                     $(document).find('.pilih-sp2d').map((index,
                                         container_sp2d) => {
-                                        let datasp2d = $(container_sp2d).parents(
-                                            'tr').data('sp2d');
+                                        let datasp2d = $(container_sp2d)
+                                            .parents(
+                                                'tr').data('sp2d');
                                         if (id[0] == datasp2d.nosp2d &&
-                                            id[1] == datasp2d.tglsp2d && datasp2d
-                                            .keperluan == sp2d.keperluan && datasp2d
+                                            id[1] == datasp2d.tglsp2d &&
+                                            datasp2d
+                                            .keperluan == sp2d.keperluan &&
+                                            datasp2d
                                             .kdper == sp2d.kdper) {
                                             let nilai = parseFloat(
                                                 currencyToNumberFormat(
@@ -803,7 +816,8 @@
                                                 .html(numberFormat(nilai));
                                             if ($(container_sp2d).prop(
                                                     'disabled') == true) {
-                                                $(container_sp2d).prop('disabled',
+                                                $(container_sp2d).prop(
+                                                    'disabled',
                                                     false);
                                                 $(container_sp2d)
                                                     .parents('tr').removeClass(
@@ -1127,6 +1141,7 @@
                     window.detailAsset = [];
                     window.iddetail = null;
                     window.foto = null;
+                    window.totalbarang = 0;
                     getListbap();
                 }
             });
@@ -1188,6 +1203,7 @@
                     window.detailAsset = [];
                     window.iddetail = null;
                     window.foto = null;
+                    window.totalbarang = 0;
                     getListbap();
                 }
             });
@@ -1300,10 +1316,13 @@
                 if (window.sp2d == 0) {
                     if (this.checked == true) {
                         window.sp2d = (window.state == 'update' && window.iddetail !== null && $(
-                                '#modalDetailAsset').hasClass('show')) ? parseFloat(data.sisa_nilai == data.nilai ?
+                                '#modalDetailAsset').hasClass('show')) ? parseFloat(data.sisa_nilai == data
+                                .nilai ?
                                 data.nilai : data.sisa_nilai) + (parseFloat(currencyToNumberFormat(
-                                ` ${$('[name=nilaibarang]').val()}`)) * parseInt($('#jumlah').val())) : parseFloat(
-                                data.sisa_nilai) < parseFloat(data.nilai) && parseFloat(data.sisa_nilai) == 0.00 ?
+                                ` ${$('[name=nilaibarang]').val()}`)) * parseInt($('#jumlah').val())) :
+                            parseFloat(
+                                data.sisa_nilai) < parseFloat(data.nilai) && parseFloat(data.sisa_nilai) ==
+                            0.00 ?
                             parseFloat(data.nilai) : parseFloat(data.sisa_nilai);
                         if ($('#modalDetailAsset').hasClass('show')) {
                             if ($('[name=nilaibarang]').siblings('.form-text').length == 0) {
@@ -1316,10 +1335,12 @@
                                 $('[name=nilaibarang]')
                                     .siblings('.form-text')
                                     .html(
-                                        `Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
+                                        `Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`
+                                    );
                             }
                         } else {
-                            if ($('#nilaibarangattribusi').parents('.input-group').siblings('.form-text').length ==
+                            if ($('#nilaibarangattribusi').parents('.input-group').siblings('.form-text')
+                                .length ==
                                 0) {
                                 $('#nilaibarangattribusi')
                                     .parents('.col-sm-10')
@@ -1331,7 +1352,8 @@
                                     .parents('.col-sm-10')
                                     .find('.form-text')
                                     .html(
-                                        `Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
+                                        `Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`
+                                    );
                             }
                         }
                     }
@@ -1366,7 +1388,8 @@
                             $('#nilaibarangattribusi')
                                 .parents('.col-sm-10')
                                 .find('.form-text')
-                                .html(`Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
+                                .html(
+                                    `Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
                         }
                     }
                 }
@@ -1443,7 +1466,8 @@
             $('#kegiatan').change(function() {
                 $.ajax({
                     type: "get",
-                    url: "{{ route('perolehan-apbd.get-rekening') }}/" + this.value,
+                    url: "{{ route('perolehan-apbd.get-rekening') }}/" + this.value + "/" + $(
+                        '#program').val(),
                     dataType: "json",
                     success: function(response) {
                         elementRekening(response.data);
@@ -1506,11 +1530,13 @@
                     $('#deskripsibarangattr').val('');
                     $('#idattribusi').val('');
                     $('#nilaibarangattribusi').val('');
-                    window.sp2d = window.sp2d - parseFloat(currencyToNumberFormat(` ${data.nilaibarang}`));
+                    window.sp2d = window.sp2d - parseFloat(currencyToNumberFormat(
+                        ` ${data.nilaibarang}`));
                     $('#nilaibarangattribusi')
                         .parents('.col-sm-10')
                         .find('.form-text')
-                        .html(`Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
+                        .html(
+                            `Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
                     window.persentaseSp2d.map((sp2d) => {
                         $(document).find('.pilih-sp2d').map((index, container_sp2d) => {
                             let datasp2d = $(container_sp2d)
@@ -1522,7 +1548,8 @@
                                 .kdper == sp2d.kdper) {
                                 datasp2d.sisa_nilai = (((datasp2d.hasOwnProperty(
                                             'sisa_nilai')) ? parseFloat(datasp2d
-                                            .sisa_nilai) : parseFloat(datasp2d.nilai)) -
+                                            .sisa_nilai) : parseFloat(datasp2d
+                                            .nilai)) -
                                         parseFloat(sp2d.nilai))
                                     .toString();
                                 $(container_sp2d)
@@ -1545,11 +1572,13 @@
                     generateListAttribusi(data);
                     $('#deskripsibarangattr').val('');
                     $('#nilaibarangattribusi').val('');
-                    window.sp2d = window.sp2d - parseFloat(currencyToNumberFormat(` ${data.nilaibarang}`));
+                    window.sp2d = window.sp2d - parseFloat(currencyToNumberFormat(
+                        ` ${data.nilaibarang}`));
                     $('#nilaibarangattribusi')
                         .parents('.col-sm-10')
                         .find('.form-text')
-                        .html(`Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
+                        .html(
+                            `Batas Input Nilai pada aset ini ${numberFormat(window.sp2d.toString())}`);
                     window.persentaseSp2d.map((sp2d) => {
                         $(document).find('.pilih-sp2d').map((index, container_sp2d) => {
                             let datasp2d = $(container_sp2d)
@@ -1561,7 +1590,8 @@
                                 .kdper == sp2d.kdper) {
                                 datasp2d.sisa_nilai = (((datasp2d.hasOwnProperty(
                                             'sisa_nilai')) ? parseFloat(datasp2d
-                                            .sisa_nilai) : parseFloat(datasp2d.nilai)) -
+                                            .sisa_nilai) : parseFloat(datasp2d
+                                            .nilai)) -
                                         parseFloat(sp2d.nilai))
                                     .toString();
                                 $(container_sp2d)
@@ -1719,9 +1749,9 @@
                 });
                 let nilaikontrak = parseFloat(currencyToNumberFormat(` ${$('#nilaikontrak').val()}`)) ??
                     0;
-                $('.contract-value').html(numberFormat(nilaikontrak - window.totalbarang - parseFloat(
-                    currencyToNumberFormat(` ${$('[name=nilaibarang]').val()}`)) * parseInt($(
-                    '[name=jumlah]').val()) ?? 1));
+                $('.contract-value').html(numberFormat(nilaikontrak - (window.totalbarang + parseFloat(
+                    currencyToNumberFormat(` ${$('[name=nilaibarang]').val()}`)) * (
+                    parseInt($('[name=jumlah]').val() ?? 1)))));
                 if (nilaikontrak != 0 && nilaikontrak >= window.totalbarang) {
                     $('#save-ba').removeClass('disabled');
                 } else {
@@ -1774,7 +1804,8 @@
                                 .kdper == sp2d.kdper) {
                                 datasp2d.sisa_nilai = (((datasp2d.hasOwnProperty(
                                             'sisa_nilai')) ? parseFloat(datasp2d
-                                            .sisa_nilai) : parseFloat(datasp2d.nilai)) -
+                                            .sisa_nilai) : parseFloat(datasp2d
+                                            .nilai)) -
                                         parseFloat(sp2d.nilai))
                                     .toString();
                                 $(container_sp2d)
@@ -1795,7 +1826,8 @@
                     window.persentaseSp2d = [];
                     window.sp2d = 0;
                     resetElementRekening();
-                    $($(".sp2d")[0]).find('tr > td:last-child > input[disabled]').removeAttr('disabled');
+                    $($(".sp2d")[0]).find('tr > td:last-child > input[disabled]').removeAttr(
+                        'disabled');
                 }
                 $('#program').attr('disabled', true);
                 $('#kegiatan').attr('disabled', true);
