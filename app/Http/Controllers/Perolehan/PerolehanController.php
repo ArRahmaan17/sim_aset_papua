@@ -349,4 +349,17 @@ class PerolehanController extends Controller
 
         return response()->json($response, $status);
     }
+    public function getAllOrganizationApbdBaps()
+    {
+        $data = Bap::getAllOrganizationBapsApbd();
+        if (count($data) == 0) {
+            $response = ['message' => 'Data Bap tidak di temukan', 'data' => $data];
+            $status = 404;
+        } else {
+            $response = ['message' => 'Data Bap Di temukan', 'data' => $data];
+            $status = 200;
+        }
+
+        return response()->json($response, $status);
+    }
 }

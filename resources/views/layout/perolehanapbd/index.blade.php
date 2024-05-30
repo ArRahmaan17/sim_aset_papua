@@ -514,7 +514,7 @@
         function getListbap() {
             $.ajax({
                 type: "GET",
-                url: "{{ route('perolehan.bap') }}",
+                url: "{{ route('perolehan.bap.apbd') }}",
                 dataType: "json",
                 success: function(response) {
                     var html = '';
@@ -676,6 +676,19 @@
                                     $(element).data('master').sp2d = JSON.parse($(element).data(
                                         'master').sp2d);
                                 }
+                                if (typeof($(element).data('master').nilaibarang) == 'number') {
+                                    window.totalbarang -= $(element).data(
+                                        'master').nilabarang * parseInt($(element).data(
+                                        'master').jumlah);
+                                } else {
+                                    window.totalbarang -= parseFloat(currencyToNumberFormat(
+                                            ` ${$(element).data('master').nilaibarang}`)) *
+                                        parseInt($(element).data('master').jumlah ?? 1);
+                                }
+                                let nilaikontrak = parseFloat(currencyToNumberFormat(
+                                    ` ${$('#nilaikontrak').val()}`)) ?? 0;
+                                $('.contract-value').html(numberFormat(nilaikontrak - window
+                                    .totalbarang));
                                 $(element).data('master').sp2d.map((sp2d) => {
                                     let id = sp2d.id.split('_');
                                     $(document).find('.pilih-sp2d').map((index,
@@ -685,10 +698,8 @@
                                                 'tr').data('sp2d');
                                         if (id[0] == datasp2d.nosp2d &&
                                             id[1] == datasp2d.tglsp2d &&
-                                            datasp2d
-                                            .keperluan == sp2d.keperluan &&
-                                            datasp2d
-                                            .kdper == sp2d.kdper) {
+                                            datasp2d.keperluan == sp2d.keperluan &&
+                                            datasp2d.kdper == sp2d.kdper) {
                                             let nilai = parseFloat(
                                                 currencyToNumberFormat(
                                                     $(container_sp2d)
@@ -1131,10 +1142,12 @@
                         $('.alert-ba').toggle("fade", 1000);
                     }, 1500);
                     $('.attribusi').find('div > table tbody').html('');
-                    $('#add-attribusi').addClass('d-none')
-                    $("#container-attribusi-asset").html('')
-                    $('#update-ba').addClass('d-none')
-                    $('#cancel-ba').addClass('d-none')
+                    $('#add-attribusi').addClass('d-none');
+                    $('.contract-value').html('Rp. 0');
+                    $('#add-detail-asset').removeClass('disabled');
+                    $("#container-attribusi-asset").html('');
+                    $('#update-ba').addClass('d-none');
+                    $('#cancel-ba').addClass('d-none');
                     window.bastatus = false;
                     window.tempAsset = null;
                     window.countDetailAsset = 0;
@@ -1814,7 +1827,7 @@
                         })
                     });
                     if (window.iddetail == null) {
-                        data.iddetail = window.countDetailAsset;
+                        data.iddetail = window.countDetailAsset += 1;
                         generateListDetailAsset(data);
                     } else {
                         data.iddetail = window.iddetail;

@@ -176,6 +176,7 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
     Route::post('/perolehan/store', [PerolehanController::class, 'store'])->name('perolehan.store');
     Route::put('/perolehan/update/{ba?}', [PerolehanController::class, 'update'])->name('perolehan.update');
     Route::get('/perolehan/all-bap', [PerolehanController::class, 'getAllOrganizationBaps'])->name('perolehan.bap');
+    Route::get('/perolehan/all-bap', [PerolehanController::class, 'getAllOrganizationApbdBaps'])->name('perolehan.bap.apbd');
     Route::get('/perolehan/bap/check/{ba?}/{column?}', [PerolehanController::class, 'bapCheck'])->name('perolehan.bap.check');
     Route::get('/perolehan/bap/detail/{id?}', [PerolehanController::class, 'getDetailBap'])->name('perolehan.bap.show');
     Route::get('/penyusutan', [PenyusutanController::class, 'index'])->name('penyusutan')->middleware(['menu-permission']);
