@@ -7,20 +7,27 @@
         <div class="col-12 order-2 order-md-3 order-lg-2 mb-4">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title col-12">List Data SP2D</div>
+                    <div class="card-title col-12">{{ session('app') == 'aset' ? 'List Data SP2D' : 'List Rekening' }}</div>
                     <div class="row row-bordered g-0 flex-column-reverse flex-sm-row">
                         <div class="table-responsive">
                             <table id="table_penyusutan" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Nomer</th>
-                                        <th>Nomer SP2D</th>
-                                        <th>Tanggal SP2D</th>
-                                        <th>Kode Organisasi</th>
-                                        <th>Organisasi</th>
-                                        <th>Keperluan</th>
-                                        <th>Nilai SP2D</th>
-                                        <th>Tahun</th>
+                                        @if (session('status') == 'aset')
+                                            <th>Nomer</th>
+                                            <th>Nomer SP2D</th>
+                                            <th>Tanggal SP2D</th>
+                                            <th>Kode Organisasi</th>
+                                            <th>Organisasi</th>
+                                            <th>Keperluan</th>
+                                            <th>Nilai SP2D</th>
+                                            <th>Tahun</th>
+                                        @else
+                                            <th>Nomer</th>
+                                            <th>Kode Akun</th>
+                                            <th>Nama Akun</th>
+                                            <th>Aksi</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -38,7 +45,7 @@
     <script>
         $(function() {
             new DataTable("#table_penyusutan", {
-                ajax: "{{ route('sp2d.data-table') }}",
+                ajax: "{{ session('app') == 'aset' ? route('sp2d.data-table') : route('rekening.data-table') }}",
                 processing: true,
                 serverSide: true,
                 order: [

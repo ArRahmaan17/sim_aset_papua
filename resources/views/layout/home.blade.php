@@ -20,52 +20,10 @@
                             </div>
                         </div>
                     @endif
-                    <div class="col-md-8">
+                    <div class="col">
                         <h5 class="card-header m-0 me-2 pb-3">Jumlah BA Organisasi
                             {{ session('organisasi') !== null ? getOrganisasi() : '' }}</h5>
                         <div id="totalRevenueChart" class="px-2"></div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card-body">
-                            <div class="text-center">
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
-                                        id="growthReportId" data-bs-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                        {{ env('TAHUN_APLIKASI') }}
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="growthReportId">
-                                        <a class="dropdown-item" href="javascript:void(0);">{{ env('TAHUN_APLIKASI') }}</a>
-                                        <a class="dropdown-item"
-                                            href="javascript:void(0);">{{ intval(env('TAHUN_APLIKASI')) - 1 }}</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="growthChart"></div>
-                        <div class="text-center fw-semibold pt-3 mb-2">62% Company Growth</div>
-
-                        <div class="d-flex px-xxl-4 px-lg-2 p-4 gap-xxl-3 gap-lg-1 gap-3 justify-content-between">
-                            <div class="d-flex">
-                                <div class="me-2">
-                                    <span class="badge bg-label-primary p-2"><i
-                                            class="bx bx-dollar text-primary"></i></span>
-                                </div>
-                                <div class="d-flex flex-column">
-                                    <small>{{ env('TAHUN_APLIKASI') }}</small>
-                                    <h6 class="mb-0">$32.5k</h6>
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <div class="me-2">
-                                    <span class="badge bg-label-info p-2"><i class="bx bx-wallet text-info"></i></span>
-                                </div>
-                                <div class="d-flex flex-column">
-                                    <small>{{ intval(env('TAHUN_APLIKASI')) - 1 }}</small>
-                                    <h6 class="mb-0">$41.2k</h6>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -135,8 +93,7 @@
                             <div class="mb-3">
                                 <label class="form-label control-label" for="kodesubsubunit">Kode sub sub unit
                                     <i class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
-                                <select class="select2modal" name="kodesubsubunit" id="kodesubsubunit"
-                                    style="width: 100%">
+                                <select class="select2modal" name="kodesubsubunit" id="kodesubsubunit" style="width: 100%">
                                 </select>
                             </div>
                         </div>
