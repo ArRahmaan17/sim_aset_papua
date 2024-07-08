@@ -37,7 +37,8 @@ class HomeController extends Controller
 
             return view('layout.home', compact('organisasi', 'countBaNow', 'countBaPast'));
         } elseif (session('app') == 'ssh') {
-            return view('layout.ssh.home');
+            $kelompok = DB::table('_kelompok_ssh')->selectRaw('kelompok as name, json_build_array(0) as data')->get();
+            return view('layout.ssh.home', compact('kelompok'));
         } else {
             return redirect()->route('select-application');
         }

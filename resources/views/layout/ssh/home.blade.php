@@ -118,15 +118,10 @@
         borderColor = config.colors.borderColor;
         const totalRevenueChartEl = document.querySelector('#totalRevenueChart'),
             totalRevenueChartOptions = {
-                series: [{
-                        name: '{{ env('TAHUN_APLIKASI') }}',
-                        data: [parseInt(`{{ $countBaNow ?? 0 }}`)]
-                    },
-                    {
-                        name: '{{ intval(env('TAHUN_APLIKASI')) - 1 }}',
-                        data: [parseInt(`{{ $countBaPast ?? 0 }}`)]
-                    }
-                ],
+                series: JSON.parse(`{!! json_encode($kelompok) !!}`).map((element) => {
+                    element.data = JSON.parse(element.data);
+                    return element;
+                }),
                 chart: {
                     height: 300,
                     stacked: true,
