@@ -21,8 +21,7 @@
                         </div>
                     @endif
                     <div class="col">
-                        <h5 class="card-header m-0 me-2 pb-3">Jumlah BA Organisasi
-                            {{ session('organisasi') !== null ? getOrganisasi() : '' }}</h5>
+                        <h5 class="card-header m-0 me-2 pb-3">Jumlah Usulan</h5>
                         <div id="totalRevenueChart" class="px-2"></div>
                     </div>
                 </div>
