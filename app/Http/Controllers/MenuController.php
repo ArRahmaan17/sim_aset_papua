@@ -43,12 +43,14 @@ class MenuController extends Controller
         $menuSideBar = DB::table('auth.menu')
             ->select(DB::raw(' idmenu as id, nama as text, parents as parent, letak'))
             ->where('letak', 'sidebar')
+            ->where('app', session('app'))
             ->get()
             ->toArray();
         $treeMenuSideBar = buildTree($menuSideBar);
         $menuProfile = DB::table('auth.menu')
             ->select(DB::raw(' idmenu as id, nama as text, parents as parent, letak'))
             ->where('letak', 'profile')
+            ->where('app', session('app'))
             ->get()->toArray();
         $treeMenuProfile = buildTree($menuProfile);
         if (count($treeMenuSideBar) == 0 && count($treeMenuProfile) == 0) {

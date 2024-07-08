@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>{{ env('APP_NAME') }}</title>
+    <title>{{ (session('app') == 'aset' ? env('APP_NAME') : session('app') == 'ssh') ? env('APP_NAME_2') : '' }}</title>
     <style>
         *::-webkit-scrollbar {
             width: 1px;
@@ -82,7 +82,7 @@
                 <div class="app-brand demo">
                     <a href="{{ route('home') }}" class="app-brand-link">
                         <span
-                            class="app-brand-text demo menu-text fw-bolder ms-2 text-capitalize text-wrap col-12">{{ env('APP_NAME') }}</span>
+                            class="app-brand-text demo menu-text fw-bolder ms-2 text-capitalize text-wrap col-12">{{ (session('app') == 'aset' ? env('APP_NAME') : session('app') == 'ssh') ? env('APP_NAME_2') : '' }}</span>
                     </a>
 
                     <a href="javascript:void(0);"
@@ -94,7 +94,7 @@
                 <div class="menu-inner-shadow"></div>
 
                 <ul class="menu-inner py-1">
-                    {!! buildMenu($menu_sidebar) !!}
+                    {!! buildMenu($menu_sidebar, session('app')) !!}
                 </ul>
             </aside>
             <!-- / Menu -->
@@ -150,7 +150,7 @@
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
-                                    {!! buildMenu($menu_profile, 'profile') !!}
+                                    {!! buildMenu($menu_profile, session('app'), 'profile') !!}
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>

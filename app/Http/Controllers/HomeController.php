@@ -21,7 +21,6 @@ class HomeController extends Controller
                 'kodesubsubunit',
                 'organisasi'
             )->where('kodesuburusan', 0)->get()->toArray();
-            // "date_part('month',
             if (session('organisasi')) {
                 $copied = clone session('organisasi');
                 unset($copied->wajibsusut, $copied->organisasi, $copied->tahunorganisasi);
@@ -38,9 +37,7 @@ class HomeController extends Controller
 
             return view('layout.home', compact('organisasi', 'countBaNow', 'countBaPast'));
         } elseif (session('app') == 'ssh') {
-            session()->forget('app');
-
-            return view('layout.under-maintenance');
+            return view('layout.ssh.home');
         } else {
             return redirect()->route('select-application');
         }

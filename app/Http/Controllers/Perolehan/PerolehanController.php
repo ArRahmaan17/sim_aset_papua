@@ -311,9 +311,9 @@ class PerolehanController extends Controller
     {
         if (DB::table('bap')->where($column, $ba)->count() == 0) {
             $status = 200;
-            $message = ['message' => $column . ' dapat di gunakan'];
+            $message = ['message' => $column.' dapat di gunakan'];
         } else {
-            $message = ['message' => $column . ' telah di gunakan'];
+            $message = ['message' => $column.' telah di gunakan'];
             $status = 409;
         }
 
@@ -349,6 +349,7 @@ class PerolehanController extends Controller
 
         return response()->json($response, $status);
     }
+
     public function getAllOrganizationApbdBaps()
     {
         $data = Bap::getAllOrganizationBapsApbd();

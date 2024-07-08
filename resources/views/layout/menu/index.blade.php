@@ -47,10 +47,7 @@
                                     <select class="form-select select2" name="link" id="link">
                                         <option selected="">Pilih link menu</option>
                                         @foreach ($routes as $route)
-                                            @if (
-                                                $route->methods()[0] == 'GET' &&
-                                                    $route->getAction()['prefix'] == '' &&
-                                                    array_search('authenticated', $route->getAction()['middleware']))
+                                            @if ($route->methods()[0] == 'GET' && array_search('authenticated', $route->getAction()['middleware']))
                                                 <option value="{{ $route->getName() }}">
                                                     {{ url($route->uri) }}
                                                 </option>
@@ -420,7 +417,8 @@
                             data = serializeObject($("#form-menu"));
                             data = {
                                 ...data,
-                                parents: parentId
+                                parents: parentId,
+                                app: `{{ session('app') }}`,
                             };
                             $.ajax({
                                 type: "POST",

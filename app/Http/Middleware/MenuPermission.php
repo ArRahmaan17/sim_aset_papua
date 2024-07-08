@@ -18,11 +18,11 @@ class MenuPermission
     {
         $data = DB::table('auth.menu as m')
             ->join('auth.role_menu as rm', 'rm.idmenu', '=', 'm.idmenu')
-            ->where(['m.link' => $request->route()->getName(), 'rm.idrole' => session('user')->idrole])->count() > 0 ? true : false;
+            ->where(['m.link' => $request->route()->getName(), 'rm.idrole' => session('user')->idrole, 'm.app' => session('app')])->count() > 0 ? true : false;
         if ($data) {
             return $next($request);
         } else {
-            return redirect()->route('home')->with('error', "Kamu Tidak Memiliki Akses ke " . implode(' ', explode('.', $request->route()->getName())));
+            return redirect()->route('home')->with('error', 'Anda Tidak Memiliki Akses ke '.implode(' ', explode('.', $request->route()->getName())));
         }
     }
 }

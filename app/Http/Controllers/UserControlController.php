@@ -29,14 +29,14 @@ class UserControlController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('role ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('role '.$request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('auth.role')->select('*')
-                ->where('role', 'like', '%' . $request['search']['value'] . '%');
+                ->where('role', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('role ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('role '.$request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -46,9 +46,9 @@ class UserControlController extends Controller
 
             $totalFiltered = DB::table('auth.role')
                 ->select('*')
-                ->where('role', 'like', '%' . $request['search']['value'] . '%');
+                ->where('role', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('role ' . $request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('role '.$request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -56,7 +56,7 @@ class UserControlController extends Controller
         foreach ($assets as $index => $item) {
             $row = [];
             $row[] = $request['start'] + ($index + 1);
-            $row[] = '' . $item->role;
+            $row[] = ''.$item->role;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
             $row[] = $item->idrole;
             $dataFiltered[] = $row;
@@ -80,7 +80,7 @@ class UserControlController extends Controller
                 if (is_dir(public_path('assets/profile/')) == false) {
                     mkdir(public_path('assets/profile/'));
                 }
-                $filename = 'assets/profile/' . session('user')->idusers . '.jpg';
+                $filename = 'assets/profile/'.session('user')->idusers.'.jpg';
                 file_put_contents(public_path($filename), file_get_contents($_FILES['foto']['tmp_name']));
                 $data['foto'] = $filename;
             }
@@ -112,7 +112,7 @@ class UserControlController extends Controller
                 DB::table('auth.users')
                     ->where('idusers', $id)
                     ->update(['password' => Hash::make($request->password)]);
-            } else if ($request->newpassword != $request->password) {
+            } elseif ($request->newpassword != $request->password) {
                 throw new Exception('password saat ini dan password baru tidak sama', 422);
             } else {
                 throw new Exception('mohon untuk melakukan konfirmasi perubahan password', 422);
@@ -208,8 +208,10 @@ class UserControlController extends Controller
     {
         $roles = DB::table('auth.role')->where('idrole', '>=', session('user')->idrole)->get();
         $semuaorganisasi = (new OrganisasiController)->useable()->getData()->data;
+
         return view('layout.control.user-create', compact('roles', 'semuaorganisasi'));
     }
+
     public function userStore(Request $request)
     {
         $request->validate([
@@ -222,10 +224,10 @@ class UserControlController extends Controller
         DB::beginTransaction();
         try {
             $data = $request->except('_token');
-            $data['password'] = Hash::make((!$request->exists('password')) ? 'papuabaratdaya' : $request->password);
-            $data['displayname'] = (!$request->exists('displayname')) ? $data['username'] : $request->displayname;
+            $data['password'] = Hash::make((! $request->exists('password')) ? 'papuabaratdaya' : $request->password);
+            $data['displayname'] = (! $request->exists('displayname')) ? $data['username'] : $request->displayname;
             if (intval($request->idrole) > 3) {
-                $user_opd = (array)clone (session('organisasi'));
+                $user_opd = (array) clone (session('organisasi'));
                 unset($user_opd['wajibsusut']);
                 if (isset($data['useropd'])) {
                     unset($user_opd['organisasi']);
@@ -267,6 +269,7 @@ class UserControlController extends Controller
             $status = 422;
             $response = ['message' => 'Tambah user gagal'];
         }
+
         return response()->json($response, $status);
     }
 }

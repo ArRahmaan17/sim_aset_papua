@@ -40,13 +40,13 @@ class AuthController extends Controller
 
             return redirect()
                 ->route('login')
-                ->with('error', "Your provide <i><b>password</b></i> dons't match to our record")
+                ->with('error', "Your provide <i><b>Password</b></i> dons't match to our record")
                 ->withInput();
         }
 
         return redirect()
             ->route('login')
-            ->with('error', "Your provide <i><b>username</b></i> dons't exists in our application")
+            ->with('error', "Your provide <i><b>NIP</b></i> dons't exists in our application")
             ->withInput();
     }
 
@@ -63,13 +63,13 @@ class AuthController extends Controller
         session()->forget('app');
         session()->forget('organisasi');
 
-        return redirect()->route('home');
+        return redirect()->route('select-application');
     }
 
     public function logout_system()
     {
         session()->flush();
 
-        return redirect()->route('home');
+        return redirect()->route('login');
     }
 }

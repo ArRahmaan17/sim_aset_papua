@@ -9,7 +9,7 @@
                 <div class="alert alert-primary d-none my-2" role="alert">
                     Halaman akan di refresh dalam 5 detik
                 </div>
-                <div class="row row-bordered g-0">
+                <div class="row row-bordered g-0 p-1">
                     @if (session('error'))
                         <div class="alert alert-danger">
                             <div class="row justify-content-start align-items-center g-0">
@@ -86,12 +86,12 @@
                                     <i class='tf-icons bx bxs-star bx-tada bx-xs align-top text-danger'></i></label>
                                 <select class="select2modal" name="kodeurusan" id="kodeurusan" style="width: 100%">
                                     <option value="">Mohon Pilih</option>
-                                    @foreach ($organisasi as $org)
+                                    {{-- @foreach ($organisasi as $org)
                                         <option
                                             value="{{ $org->kodeurusan . '.' . $org->kodesuburusan . '.' . $org->kodesubsuburusan . '.' . $org->kodeorganisasi . '.' . $org->kodesuborganisasi . '.' . $org->kodeunit . '.' . $org->kodesubunit . '.' . $org->kodesubsubunit }}">
                                             {{ $org->kodeurusan . '.' . stringPad($org->kodesuburusan) . '.' . $org->kodeorganisasi . '.' . stringPad($org->kodeorganisasi) . '.' . $org->kodesuborganisasi . '.' . stringPad($org->kodeunit) . '.' . stringPad($org->kodesubunit) . '.' . stringPad($org->kodesubsubunit) . '|' . $org->organisasi }}
                                         </option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -160,18 +160,15 @@
         headingColor = config.colors.headingColor;
         axisColor = config.colors.axisColor;
         borderColor = config.colors.borderColor;
-
-        // Total Revenue Report Chart - Bar Chart
-        // --------------------------------------------------------------------
         const totalRevenueChartEl = document.querySelector('#totalRevenueChart'),
             totalRevenueChartOptions = {
                 series: [{
                         name: '{{ env('TAHUN_APLIKASI') }}',
-                        data: [parseInt(`{{ $countBaNow }}`)]
+                        data: [parseInt(`{{ $countBaNow ?? 0 }}`)]
                     },
                     {
                         name: '{{ intval(env('TAHUN_APLIKASI')) - 1 }}',
-                        data: [parseInt(`{{ $countBaPast }}`)]
+                        data: [parseInt(`{{ $countBaPast ?? 0 }}`)]
                     }
                 ],
                 chart: {
@@ -439,12 +436,12 @@
             window.organisasi = value;
         }
         $(function() {
-            if (`{!! json_encode(session('organisasi')) !!}` == "null") {
-                $("#modalTop").modal('show');
-                $('.select2modal').select2({
-                    dropdownParent: $("#modalTop"),
-                });
-            }
+            // if (`{!! json_encode(session('organisasi')) !!}` == "null") {
+            //     $("#modalTop").modal('show');
+            //     $('.select2modal').select2({
+            //         dropdownParent: $("#modalTop"),
+            //     });
+            // }
             $('#pilih-organisasi').click(function() {
                 $.ajax({
                     type: "POST",

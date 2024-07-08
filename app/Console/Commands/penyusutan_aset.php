@@ -87,7 +87,7 @@ class penyusutan_aset extends Command
                     $data['susut'] = $data['nilaiakumulasibarang'] / $data['masamanfaat'];
                     $data['tahun'] = intval(env('TAHUN_APLIKASI'));
                     $data['nilai'] = $data['nilaiakumulasibarang'] / $data['masamanfaat'];
-                    $data['ket'] = 'penyusutan tahun ' . env('TAHUN_APLIKASI');
+                    $data['ket'] = 'penyusutan tahun '.env('TAHUN_APLIKASI');
                     $data['bulan'] = now('Asia/Jakarta')->month;
                     $data['tgl_penyusutan'] = now('Asia/Jakarta');
                     unset($data['nilaiakumulasibarang'], $data['masamanfaat']);

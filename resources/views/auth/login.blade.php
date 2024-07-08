@@ -111,9 +111,7 @@
                                 <div class="row justify-content-start align-items-center">
                                     <div class="col-2">
                                         <i class='bx bxs-error-alt bx-lg'></i>
-                                    </div>
-                                    <div class="col-10 fw-bold">
-                                        <span>Error</span>
+                                        <span class="fw-bold">Error</span>
                                     </div>
                                 </div>
                                 <div class="px-2">
@@ -126,9 +124,9 @@
                             method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label for="email" class="form-label">NIK</label>
-                                <input type="text" class="form-control" id="email" name="username"
-                                    value="{{ old('username') }}" placeholder="Enter your username" autofocus />
+                                <label for="email" class="form-label">NIP</label>
+                                <input type="text" class="form-control" id="username" name="username"
+                                    value="{{ old('username') }}" placeholder="Masukan NIP Anda" autofocus />
                             </div>
                             <div class="mb-3 form-password-toggle">
                                 <label class="form-label" for="password">Password</label>

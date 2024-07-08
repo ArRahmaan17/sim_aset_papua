@@ -15,8 +15,8 @@ class haveOrganisasi
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (session('organisasi') == null && ! $request->routeIs('home')) {
-            return redirect()->route('home');
+        if (session('organisasi') == null && ! $request->routeIs('home') && session('app') == 'aset') {
+            return redirect()->route('home')->with('error', 'Anda belum menatapkan organisasi, silahkan tetapkan organisasi terlebih dahulu untuk mengakses '.implode(' ', explode('.', $request->route()->getName())));
         } else {
             return $next($request);
         }

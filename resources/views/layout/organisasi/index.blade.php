@@ -46,7 +46,7 @@
                     });
                 },
                 success: function(response) {
-                    var toast = document.querySelector('.iziToast'); // Selector of your toast
+                    var toast = document.querySelector('.iziToast');
                     iziToast.hide({}, toast);
                     $("#container-jstree-organisasi").jstree({
                         'core': {

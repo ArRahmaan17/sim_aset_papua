@@ -46,7 +46,7 @@ class PerolehanAPBDController extends Controller
     public function getRekening($idKegiatan, $idProgram)
     {
         $dataRekeningAPBD = DB::table('anggaran.sp2d')->selectRaw(
-            "nosp2d, tglsp2d, kdper, nmper, sp2d.nilai as nilai, (sp2d.nilai - (case when (select count(0) from kib as k join kibsp2d as ks on k.kodekib = ks.kodekib where ks.nosp2d = sp2d.nosp2d and ks.tglsp2d = sp2d.tglsp2d and ks.kdper = sp2d.kdper) > 0 then (select sum(ks.nilai) from kib as k join kibsp2d as ks on k.kodekib = ks.kodekib where ks.nosp2d = sp2d.nosp2d and ks.tglsp2d = sp2d.tglsp2d and ks.kdper = sp2d.kdper) else 0 end)) as sisa_nilai,keperluan"
+            'nosp2d, tglsp2d, kdper, nmper, sp2d.nilai as nilai, (sp2d.nilai - (case when (select count(0) from kib as k join kibsp2d as ks on k.kodekib = ks.kodekib where ks.nosp2d = sp2d.nosp2d and ks.tglsp2d = sp2d.tglsp2d and ks.kdper = sp2d.kdper) > 0 then (select sum(ks.nilai) from kib as k join kibsp2d as ks on k.kodekib = ks.kodekib where ks.nosp2d = sp2d.nosp2d and ks.tglsp2d = sp2d.tglsp2d and ks.kdper = sp2d.kdper) else 0 end)) as sisa_nilai,keperluan'
         )
             ->where('nukegunit', $idKegiatan)
             ->where('nuprgrm', $idProgram)
@@ -146,9 +146,9 @@ class PerolehanAPBDController extends Controller
                                 'kodesubsub' => 1,
                             ]
                         )),
-                        'kodepemilik' => 12
+                        'kodepemilik' => 12,
                     ];
-                    $kodekibAttribusi =  DB::table('kib')->insertGetId(array_merge($data_attribusi, $must), 'kodekib');
+                    $kodekibAttribusi = DB::table('kib')->insertGetId(array_merge($data_attribusi, $must), 'kodekib');
                     $data_attribusi['kodekib'] = $kodekibAttribusi;
                     $data_attribusi['kodebap'] = $kodebap;
                     $data_attribusi['nilaitransaksi'] = $data_attribusi['nilaibarang'];
@@ -393,9 +393,9 @@ class PerolehanAPBDController extends Controller
                                     'kodesubsub' => 1,
                                 ]
                             )),
-                            'kodepemilik' => 12
+                            'kodepemilik' => 12,
                         ];
-                        $kodekibAttribusi =  DB::table('kib')->insertGetId(array_merge($data_attribusi, $must), 'kodekib');
+                        $kodekibAttribusi = DB::table('kib')->insertGetId(array_merge($data_attribusi, $must), 'kodekib');
                         $data_attribusi['kodekib'] = $kodekibAttribusi;
                         $data_attribusi['kodebap'] = $ba;
                         $data_attribusi['nilaitransaksi'] = $data_attribusi['nilaibarang'];
@@ -461,7 +461,7 @@ class PerolehanAPBDController extends Controller
                             $kodekib_tambahan = DB::table('kib')->insertGetId($copied, 'kodekib');
                             array_push($tambahan, $kodekib_tambahan);
                         }
-                    } else if (count($data) < $jumlah) {
+                    } elseif (count($data) < $jumlah) {
                         DB::table('kibsp2d')->where('kodekib', $kodekib[0])->delete();
                         DB::table('kibtransaksi')->where('kodekib', $kodekib[0])->delete();
                         DB::table('kib')->where('kodekib', $kodekib[0])->delete();
