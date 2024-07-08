@@ -21,36 +21,101 @@ class BarangController extends Controller
         $data_barang = DB::table('masterbarang')
             ->select(
                 DB::raw(
-                    "CONCAT(kodegolongan, '.', kodebidang, '.', kodekelompok, '.', kodesub, '.', kodesubsub) as id"
+                    "CONCAT(explode(kodegolongan::text, '', 1), '.', explode(kodegolongan::text, '', 2), '.', explode(kodegolongan::text, '', 3), '.', kodebidang, '.', kodekelompok, '.', kodesub, '.', kodesubsub) as id"
                 ),
-                DB::raw("CONCAT(kodegolongan, '.', kodebidang, '.', kodekelompok, '.', kodesub, '.', kodesubsub, ' ', urai) as text"),
+                DB::raw("CONCAT(explode(kodegolongan::text, '', 1), '.', explode(kodegolongan::text, '', 2), '.', explode(kodegolongan::text, '', 3), '.', kodebidang, '.', kodekelompok, '.', kodesub, '.', kodesubsub, ' ', urai) as text"),
                 DB::raw(
-                    "(case 
-                                            when kodegolongan <> 0
-                                                and kodebidang <> 0
-                                                and kodekelompok = 0
-                                                and kodesub = 0
-                                                and kodesubsub = 0 
-                                        then CONCAT(kodegolongan, '.0', '.0', '.0', '.0')
-                                            when kodegolongan <> 0
-                                                and kodebidang <> 0
-                                                and kodekelompok <> 0
-                                                and kodesub = 0
-                                                and kodesubsub = 0 
-                                        then CONCAT(kodegolongan,'.', kodebidang, '.0', '.0', '.0')
-                                            when kodegolongan <> 0
-                                                and kodebidang <> 0
-                                                and kodekelompok <> 0
-                                                and kodesub <> 0
-                                                and kodesubsub = 0 
-                                        then CONCAT(kodegolongan, '.', kodebidang,'.', kodekelompok, '.0', '.0')
-                                            when kodegolongan <> 0
-                                                and kodebidang <> 0
-                                                and kodekelompok <> 0
-                                                and kodesub <> 0
-                                                and kodesubsub <> 0 
-                                        then CONCAT(kodegolongan,  '.', kodebidang, '.',  kodekelompok, '.',  kodesub, '.0')
-                                    else '0'
+                    "(case
+                                        when kodegolongan <> 0
+                                        and kodebidang <> 0
+                                        and kodekelompok = 0
+                                        and kodesub = 0
+                                        and kodesubsub = 0 
+                                    then CONCAT(explode(kodegolongan::text, '', 1), '.', explode(kodegolongan::text, '', 2), '.', explode(kodegolongan::text, '', 3),
+                                        '.0',
+                                        '.0',
+                                        '.0',
+                                        '.0')
+                                        when kodegolongan <> 0
+                                        and kodebidang <> 0
+                                        and kodekelompok <> 0
+                                        and kodesub = 0
+                                        and kodesubsub = 0 
+                                    then CONCAT(explode(kodegolongan::text, '', 1), '.', explode(kodegolongan::text, '', 2), '.', explode(kodegolongan::text, '', 3),
+                                        '.',
+                                        kodebidang,
+                                        '.0',
+                                        '.0',
+                                        '.0')
+                                        when kodegolongan <> 0
+                                        and kodebidang <> 0
+                                        and kodekelompok <> 0
+                                        and kodesub <> 0
+                                        and kodesubsub = 0 
+                                    then CONCAT(explode(kodegolongan::text, '', 1), '.', explode(kodegolongan::text, '', 2), '.', explode(kodegolongan::text, '', 3),
+                                        '.',
+                                        kodebidang,
+                                        '.',
+                                        kodekelompok,
+                                        '.0',
+                                        '.0')
+                                        when kodegolongan <> 0
+                                        and kodebidang <> 0
+                                        and kodekelompok <> 0
+                                        and kodesub <> 0
+                                        and kodesubsub <> 0 
+                                    then CONCAT(explode(kodegolongan::text, '', 1), '.', explode(kodegolongan::text, '', 2), '.', explode(kodegolongan::text, '', 3),
+                                        '.',
+                                        kodebidang,
+                                        '.',
+                                        kodekelompok,
+                                        '.',
+                                        kodesub,
+                                        '.0')
+                                        when explode(kodegolongan::text,
+                                        '',
+                                        2) <> '0'
+                                        and explode(kodegolongan::text,
+                                        '',
+                                        3) <> '0' then CONCAT(explode(kodegolongan::text,
+                                        '',
+                                        1),
+                                        '.',
+                                        explode(kodegolongan::text,
+                                        '',
+                                        2),
+                                        '.',
+                                        '0',
+                                        '.',
+                                        kodebidang,
+                                        '.',
+                                        kodekelompok,
+                                        '.',
+                                        kodesub,
+                                        '.',
+                                        kodesubsub)
+                                        when explode(kodegolongan::text,
+                                        '',
+                                        2) <> '0'
+                                        and explode(kodegolongan::text,
+                                        '',
+                                        3) = '0'
+                                        then CONCAT(explode(kodegolongan::text,
+                                        '',
+                                        1),
+                                        '.',
+                                        '0',
+                                        '.',
+                                        '0',
+                                        '.',
+                                        kodebidang,
+                                        '.',
+                                        kodekelompok,
+                                        '.',
+                                        kodesub,
+                                        '.',
+                                        kodesubsub)
+                                        else '0'
                                     end) as parent"
                 )
             )
@@ -106,11 +171,11 @@ class BarangController extends Controller
             DB::raw("CONCAT(kodegolongan, '.', kodebidang, '.', kodekelompok, '.', kodesub, '.', kodesubsub) as kodebarang"),
             'urai'
         )->where([
-            'kodegolongan' => $kodebarang[0],
-            'kodebidang' => $kodebarang[1],
-            'kodekelompok' => $kodebarang[2],
-            'kodesub' => $kodebarang[3],
-            'kodesubsub' => $kodebarang[4],
+            'kodegolongan' => $kodebarang[0] . $kodebarang[1] . $kodebarang[2],
+            'kodebidang' => $kodebarang[3],
+            'kodekelompok' => $kodebarang[4],
+            'kodesub' => $kodebarang[5],
+            'kodesubsub' => $kodebarang[6],
         ])->first();
         if ($data) {
             $message = ['message' => 'detail data master barang ditemukan', 'data' => $data];
@@ -132,11 +197,11 @@ class BarangController extends Controller
         try {
             $kodebarang = explode('.', $id);
             DB::table('masterbarang')->where([
-                'kodegolongan' => $kodebarang[0],
-                'kodebidang' => $kodebarang[1],
-                'kodekelompok' => $kodebarang[2],
-                'kodesub' => $kodebarang[3],
-                'kodesubsub' => $kodebarang[4],
+                'kodegolongan' => $kodebarang[0] . $kodebarang[1] . $kodebarang[2],
+                'kodebidang' => $kodebarang[3],
+                'kodekelompok' => $kodebarang[4],
+                'kodesub' => $kodebarang[5],
+                'kodesubsub' => $kodebarang[6],
             ])->update([
                 'urai' => $request->urai,
             ]);

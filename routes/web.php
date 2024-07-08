@@ -102,7 +102,7 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::get('/jenis-aset/{id?}', [JenisAsset::class, 'show'])->name('jenis-aset.show');
         Route::post('/jenis-aset/store', [JenisAsset::class, 'store'])->name('jenis-aset.store');
         Route::put('/jenis-aset/update/{id?}', [JenisAsset::class, 'update'])->name('jenis-aset.update');
-        Route::delete('/jenis-aset/delete/{id?}', [MasterKib::class, 'destroy'])->name('jenis-aset.delete');
+        Route::delete('/jenis-aset/delete/{id?}', [JenisAsset::class, 'destroy'])->name('jenis-aset.delete');
         Route::get('/lokasi', [LokasiController::class, 'index'])->name('lokasi')->middleware(['menu-permission']);
         Route::get('/lokasi/data-table', [LokasiController::class, 'dataTable'])->name('lokasi.data-table');
         Route::get('/lokasi/show/{id?}', [LokasiController::class, 'show'])->name('lokasi.show');

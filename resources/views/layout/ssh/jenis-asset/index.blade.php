@@ -140,6 +140,7 @@
                     $(this).parents('tr').addClass('selected')
                 }
                 var data = window.datatable_jenis_aset.rows('.selected').data()[0];
+                console.log(data)
                 iziToast.question({
                     timeout: 5000,
                     layout: 2,

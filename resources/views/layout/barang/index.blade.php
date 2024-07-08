@@ -297,8 +297,10 @@
                         child[0] = child[0].split('.');
                         child[0][child[0].length - 1] = replacement.toString();
                         child[0] = child[0].join('.');
-                        console.log(child)
-                        $('#kodebarang').val(child[0].padEnd(11, '.0'));
+                        child = child.map((value, index) => {
+                            return value == '' ? '0' : value
+                        });
+                        $('#kodebarang').val(child.join('.'));
                         $('.form-title-barang').html(`Tambah Anak Master Barang`);
                     } else {
                         showBarang(parentId);

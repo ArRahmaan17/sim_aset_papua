@@ -19,15 +19,14 @@ class JenisAsset extends Controller
 
     public function dataTable(Request $request)
     {
-        $totalData = DB::table('jenis')
-            ->join('kib_master as km', 'jenis.id_master', '=', 'km.id')
+        $totalData = DB::table('jenis as j')->select("j.id as id_jenis", "km.kib", "j.jenis")
+            ->join('kib_master as km', 'j.id_master', '=', 'km.id')
             ->orderBy('id', 'asc')
             ->count();
         $totalFiltered = $totalData;
         if (empty($request['search']['value'])) {
-            $assets = DB::table('jenis')
-                ->join('kib_master as km', 'jenis.id_master', '=', 'km.id')
-                ->select('*');
+            $assets = DB::table('jenis as j')->select("j.id as id_jenis", "km.kib", "j.jenis")
+                ->join('kib_master as km', 'j.id_master', '=', 'km.id');
 
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -38,8 +37,8 @@ class JenisAsset extends Controller
             }
             $assets = $assets->get();
         } else {
-            $assets = DB::table('jenis')
-                ->join('kib_master as km', 'jenis.id_master', '=', 'km.id')->select('*')
+            $assets = DB::table('jenis as j')->select("j.id as id_jenis", "km.kib", "j.jenis")
+                ->join('kib_master as km', 'j.id_master', '=', 'km.id')->select('*')
                 ->where('jenis', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
                 $assets->orderByRaw('jenis ' . $request['order'][0]['dir']);
@@ -50,8 +49,8 @@ class JenisAsset extends Controller
             }
             $assets = $assets->get();
 
-            $totalFiltered = DB::table('jenis')
-                ->join('kib_master as km', 'jenis.id_master', '=', 'km.id')->select('*')
+            $totalFiltered = DB::table('jenis as j')->select("j.id as id_jenis", "km.kib", "j.jenis")
+                ->join('kib_master as km', 'j.id_master', '=', 'km.id')->select('*')
                 ->where('jenis', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
                 $totalFiltered->orderByRaw('jenis ' . $request['order'][0]['dir']);
@@ -65,7 +64,7 @@ class JenisAsset extends Controller
             $row[] = $item->jenis;
             $row[] = $item->kib;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
-            $row[] = $item->id;
+            $row[] = $item->id_jenis;
             $dataFiltered[] = $row;
         }
         $response = [
@@ -164,16 +163,13 @@ class JenisAsset extends Controller
     {
         DB::beginTransaction();
         try {
-            $count = DB::table('kib')->where('id', $id)->count();
-            if ($count > 0) {
-                throw new Exception('data sudah di gunakan di tabel lain, mohon hapus terlebih dahulu data tersebut', 422);
-            }
             DB::table('jenis')->where('id', $id)->delete();
             DB::commit();
             $message = ['message' => 'berhasil menghapus data master jenis'];
             $status = 200;
         } catch (Exception $th) {
             DB::rollBack();
+            dd($th);
             $message = ['message' => 'gagal menghapus data master jenis'];
             if ($th->getCode() == 422) {
                 $message = ['message' => $th->getMessage()];
