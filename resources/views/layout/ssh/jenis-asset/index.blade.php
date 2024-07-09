@@ -212,12 +212,19 @@
                 order: [
                     [1, 'desc']
                 ],
-                columnDefer: [{
+                columns: [{
                     targets: 0,
                     searchable: false,
                     orderable: false
                 }, {
                     targets: 1,
+                    searchable: true,
+                    orderable: true,
+                    render: (data, type, row, meta) => {
+                        return `<div class='text-wrap'>${data}</div>`
+                    }
+                }, {
+                    targets: 2,
                     searchable: true,
                     orderable: true,
                     render: (data, type, row, meta) => {

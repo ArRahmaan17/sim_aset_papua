@@ -126,4 +126,13 @@ class MasterController extends Controller
             'html_hak' => dataToOption(DB::table('masterhak')->select(DB::raw('kodehak as id, hak as name'))->orderBy('kodehak')->get()),
         ]);
     }
+    public function masterBarang()
+    {
+        return response()->json([
+            'html_barang' => dataToOption(DB::table('masterbarang')
+                ->select(DB::raw("concat(kodegolongan, '.', kodebidang, '.', kodekelompok, '.', kodesub, '.', kodesubsub) as id, concat(explode(kodegolongan::text, '', 1), '.', explode(kodegolongan::text, '', 2), '.', explode(kodegolongan::text, '', 3) , '.', kodebidang, '.', kodekelompok, '.', kodesub, '.', kodesubsub, ' - ', urai) as name"))
+                ->where('kodesubsub', '<>', 0)
+                ->orderBy('kodemasterbarang')->get()),
+        ]);
+    }
 }

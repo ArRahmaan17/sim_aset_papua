@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
     data-assets-path="../assets/" data-template="vertical-menu-template-free">
 
@@ -7,7 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>{{ (session('app') == 'aset' ? env('APP_NAME') : session('app') == 'ssh') ? env('APP_NAME_2') : '' }}</title>
+    @if (session('app') == 'aset')
+        <title>{{ env('APP_NAME') }}</title>
+    @elseif (session('app') == 'ssh')
+        <title>{{ env('APP_NAME_2') }}</title>
+    @endif
+    {{-- <title>{{ (session('app') == 'aset' ? env('APP_NAME') : session('app') == 'ssh') ? env('APP_NAME_2') : '' }}</title> --}}
     <style>
         *::-webkit-scrollbar {
             width: 1px;
@@ -68,7 +72,7 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
-    <link href="https://cdn.datatables.net/v/bs5/dt-2.0.5/rg-1.5.0/datatables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/v/bs5/dt-2.0.2/fc-5.0.0/fh-4.0.1/datatables.min.css" rel="stylesheet">
     @stack('css')
 </head>
 
@@ -81,8 +85,13 @@
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
                     <a href="{{ route('home') }}" class="app-brand-link">
-                        <span
-                            class="app-brand-text demo menu-text fw-bolder ms-2 text-capitalize text-wrap col-12">{{ (session('app') == 'aset' ? env('APP_NAME') : session('app') == 'ssh') ? env('APP_NAME_2') : '' }}</span>
+                        @if (session('app') == 'aset')
+                            <span
+                                class="app-brand-text demo menu-text fw-bolder ms-2 text-capitalize text-wrap col-12">{{ env('APP_NAME') }}</span>
+                        @elseif (session('app') == 'ssh')
+                            <span
+                                class="app-brand-text demo menu-text fw-bolder ms-2 text-capitalize text-wrap col-12">{{ env('APP_NAME_2') }}</span>
+                        @endif
                     </a>
 
                     <a href="javascript:void(0);"
@@ -228,8 +237,7 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-
-    <script src="https://cdn.datatables.net/v/bs5/dt-2.0.5/rg-1.5.0/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-2.0.2/fc-5.0.0/fh-4.0.1/datatables.min.js"></script>
     @if (env('APP_ENV') === 'production')
         <script>
             document.addEventListener('contextmenu', (e) => {

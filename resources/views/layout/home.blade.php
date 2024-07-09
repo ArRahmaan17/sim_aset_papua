@@ -117,9 +117,6 @@
         headingColor = config.colors.headingColor;
         axisColor = config.colors.axisColor;
         borderColor = config.colors.borderColor;
-
-        // Total Revenue Report Chart - Bar Chart
-        // --------------------------------------------------------------------
         const totalRevenueChartEl = document.querySelector('#totalRevenueChart'),
             totalRevenueChartOptions = {
                 series: [{

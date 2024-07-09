@@ -139,7 +139,7 @@
                         endingShape: 'rounded'
                     }
                 },
-                colors: [config.colors.primary, config.colors.info],
+                colors: [config.colors.primary, config.colors.info, config.colors.warning, config.colors.success],
                 dataLabels: {
                     enabled: false
                 },

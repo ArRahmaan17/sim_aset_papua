@@ -195,7 +195,7 @@
                 order: [
                     [1, 'desc']
                 ],
-                columnDefer: [{
+                columns: [{
                     targets: 0,
                     name: 'nomer',
                     searchable: false,

@@ -23,6 +23,7 @@ use App\Http\Controllers\RehabController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\Sp2dController;
+use App\Http\Controllers\ssh\Main\UsulanController;
 use App\Http\Controllers\ssh\Master\HakTanahController;
 use App\Http\Controllers\ssh\Master\JenisAsset;
 use App\Http\Controllers\ssh\Master\KelompokSshController;
@@ -56,6 +57,7 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::get('/data/golongan-barang', [MasterController::class, 'masterGolonganBarang'])->name('data.golongan-barang');
         Route::get('/data/warna', [MasterController::class, 'masterWarna'])->name('data.warna');
         Route::get('/data/hak', [MasterController::class, 'masterHak'])->name('data.hak');
+        Route::get('/data/barang', [MasterController::class, 'masterBarang'])->name('data.barang');
         Route::get('/menu', [MenuController::class, 'index'])->name('menu')->middleware(['menu-permission']);
         Route::post('/update-parent-menu', [MenuController::class, 'updateParent'])->name('update-parent-menu');
         Route::get('/list-menu', [MenuController::class, 'all'])->name('list-menu');
@@ -188,6 +190,12 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::put('/rehab/update/{id?}', [RehabController::class, 'update'])->name('rehab.update');
         Route::delete('/rehab/delete/{id?}', [RehabController::class, 'destroy'])->name('rehab.delete');
     });
+    Route::get('/usulan', [UsulanController::class, 'index'])->name('usulan')->middleware(['menu-permission']);
+    Route::get('/usulan/data-table', [UsulanController::class, 'dataTable'])->name('usulan.data-table');
+    Route::post('/usulan/store', [UsulanController::class, 'store'])->name('usulan.store');
+    Route::get('/usulan/show/{id?}', [UsulanController::class, 'index'])->name('usulan.show');
+    Route::put('/usulan/update/{id?}', [UsulanController::class, 'update'])->name('usulan.update');
+    Route::delete('/usulan/delete/{id?}', [UsulanController::class, 'destroy'])->name('usulan.delete');
     Route::get('/sp2d', [Sp2dController::class, 'index'])->name('sp2d')->middleware(['menu-permission']);
     Route::get('/sp2d/data-table', [Sp2dController::class, 'dataTable'])->name('sp2d.data-table');
     Route::get('/rekening', [Sp2dController::class, 'index'])->name('rekening')->middleware(['menu-permission']);
