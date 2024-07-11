@@ -18,6 +18,7 @@ class UserControlController extends Controller
     public function dataTable(Request $request)
     {
         $totalData = DB::table('auth.role')
+            ->whereIn('app', [0, (session('app') == 'aset') ? 1 : 2])
             ->orderBy('role', 'asc')
             ->count();
         $totalFiltered = $totalData;
@@ -29,34 +30,34 @@ class UserControlController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('role '.$request['order'][0]['dir']);
+                $assets->orderByRaw('role ' . $request['order'][0]['dir']);
             }
-            $assets = $assets->get();
+            $assets = $assets->whereIn('app', [0, (session('app') == 'aset') ? 1 : 2])->get();
         } else {
             $assets = DB::table('auth.role')->select('*')
-                ->where('role', 'like', '%'.$request['search']['value'].'%');
+                ->where('role', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('role '.$request['order'][0]['dir']);
+                $assets->orderByRaw('role ' . $request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
                     ->offset($request['start']);
             }
-            $assets = $assets->get();
+            $assets = $assets->whereIn('app', [0, (session('app') == 'aset') ? 1 : 2])->get();
 
             $totalFiltered = DB::table('auth.role')
                 ->select('*')
-                ->where('role', 'like', '%'.$request['search']['value'].'%');
+                ->where('role', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('role '.$request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('role ' . $request['order'][0]['dir']);
             }
-            $totalFiltered = $totalFiltered->count();
+            $totalFiltered = $totalFiltered->whereIn('app', [0, (session('app') == 'aset') ? 1 : 2])->count();
         }
         $dataFiltered = [];
         foreach ($assets as $index => $item) {
             $row = [];
             $row[] = $request['start'] + ($index + 1);
-            $row[] = ''.$item->role;
+            $row[] = '' . $item->role;
             $row[] = "<button class='btn btn-warning edit' ><i class='bx bxs-pencil'></i> Edit</button><button class='btn btn-danger delete'><i class='bx bxs-trash-alt' ></i> Hapus</button>";
             $row[] = $item->idrole;
             $dataFiltered[] = $row;
@@ -80,7 +81,7 @@ class UserControlController extends Controller
                 if (is_dir(public_path('assets/profile/')) == false) {
                     mkdir(public_path('assets/profile/'));
                 }
-                $filename = 'assets/profile/'.session('user')->idusers.'.jpg';
+                $filename = 'assets/profile/' . session('user')->idusers . '.jpg';
                 file_put_contents(public_path($filename), file_get_contents($_FILES['foto']['tmp_name']));
                 $data['foto'] = $filename;
             }
@@ -136,7 +137,9 @@ class UserControlController extends Controller
     {
         DB::beginTransaction();
         try {
-            DB::table('auth.role')->insert($request->except('_token'));
+            $data = $request->except('_token');
+            $data['app'] = (session('app') == 'aset') ? 1 : 2;
+            DB::table('auth.role')->insert($data);
             DB::commit();
             $status = 200;
             $message = ['message' => 'Role user berhasil ditambahkan'];
@@ -206,7 +209,7 @@ class UserControlController extends Controller
 
     public function userCreate()
     {
-        $roles = DB::table('auth.role')->where('idrole', '>=', session('user')->idrole)->get();
+        $roles = DB::table('auth.role')->whereIn('app', [0, (session('app') == 'aset') ? 1 : 2])->where('idrole', '>=', session('user')->idrole)->get();
         $semuaorganisasi = (new OrganisasiController)->useable()->getData()->data;
 
         return view('layout.control.user-create', compact('roles', 'semuaorganisasi'));
@@ -224,13 +227,10 @@ class UserControlController extends Controller
         DB::beginTransaction();
         try {
             $data = $request->except('_token');
-            $data['password'] = Hash::make((! $request->exists('password')) ? 'papuabaratdaya' : $request->password);
-            $data['displayname'] = (! $request->exists('displayname')) ? $data['username'] : $request->displayname;
-            if (intval($request->idrole) > 3) {
-                $user_opd = (array) clone (session('organisasi'));
-                unset($user_opd['wajibsusut']);
+            $data['password'] = Hash::make((!$request->exists('password')) ? 'papuabaratdaya' : $request->password);
+            $data['displayname'] = (!$request->exists('displayname')) ? $data['username'] : $request->displayname;
+            if (intval($request->idrole) != 1) {
                 if (isset($data['useropd'])) {
-                    unset($user_opd['organisasi']);
                     [
                         $user_opd['kodeurusan'],
                         $user_opd['kodesuburusan'],
@@ -241,20 +241,26 @@ class UserControlController extends Controller
                         $user_opd['kodesubunit'],
                         $user_opd['kodesubsubunit'],
                     ] = explode('.', $data['useropd']);
+                    $organisasi = DB::table('masterorganisasi')->where($user_opd)->first();
+                    $user_opd['organisasi'] = $organisasi->organisasi;
+                    $user_opd['tahunorganisasi'] = $organisasi->tahunorganisasi;
+                } else {
+                    $user_opd = (array) clone (session('organisasi'));
+                    unset($user_opd['wajibsusut'], $user_opd['organisasi']);
                     $user_opd['organisasi'] = DB::table('masterorganisasi')->where($user_opd)->first()->organisasi;
-                    unset($user_opd['wajibsusut'], $data['useropd']);
                 }
+                unset($data['useropd']);
             }
             $id = DB::table('auth.users')->insertGetId($data, 'idusers');
-            if (intval($request->idrole) > 3) {
+            if (intval($request->idrole) != 1) {
                 $user_opd['idusers'] = $id;
                 $user_opd['created_at'] = now('Asia/Jakarta');
                 $user_opd['updated_at'] = now('Asia/Jakarta');
                 DB::table('auth.users_opd')->insert($user_opd);
-                if (DB::table('auth.users')->where('idrole', $request->idrole)->count() == 0) {
+                if (DB::table('auth.role_menu')->where('idrole', $request->idrole)->count() == 0) {
                     DB::table('auth.role_menu')->insert([
                         'idrole' => $request->idrole,
-                        'idmenu' => 1,
+                        'idmenu' => (session('app') == 'aset') ? DB::table('auth.menu')->where('app', session('app'))->orderBy('idmenu', 'asc')->first()->idmenu : DB::table('auth.menu')->where('app', session('app'))->orderBy('idmenu', 'asc')->first()->idmenu,
                         'created_at' => now('Asia/Jakarta'),
                         'updated_at' => now('Asia/Jakarta'),
                     ]);
