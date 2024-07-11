@@ -171,7 +171,7 @@ class BarangController extends Controller
             DB::raw("CONCAT(kodegolongan, '.', kodebidang, '.', kodekelompok, '.', kodesub, '.', kodesubsub) as kodebarang"),
             'urai'
         )->where([
-            'kodegolongan' => $kodebarang[0] . $kodebarang[1] . $kodebarang[2],
+            'kodegolongan' => $kodebarang[0].$kodebarang[1].$kodebarang[2],
             'kodebidang' => $kodebarang[3],
             'kodekelompok' => $kodebarang[4],
             'kodesub' => $kodebarang[5],
@@ -197,7 +197,7 @@ class BarangController extends Controller
         try {
             $kodebarang = explode('.', $id);
             DB::table('masterbarang')->where([
-                'kodegolongan' => $kodebarang[0] . $kodebarang[1] . $kodebarang[2],
+                'kodegolongan' => $kodebarang[0].$kodebarang[1].$kodebarang[2],
                 'kodebidang' => $kodebarang[3],
                 'kodekelompok' => $kodebarang[4],
                 'kodesub' => $kodebarang[5],

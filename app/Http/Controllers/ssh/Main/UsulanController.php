@@ -17,27 +17,31 @@ class UsulanController extends Controller
     {
         return view('layout.ssh.usulan.index');
     }
+
     public function previewPakta($file_path)
     {
         return response()->file(
-            storage_path('app/public/pakta/' . $file_path)
+            storage_path('app/public/pakta/'.$file_path)
         );
+
         return response()
             ->stream(
                 function () use ($file_path) {
-                    $file = storage_path('app/public/pakta/' . $file_path);
-                    $handle = fopen($file, "r");
+                    $file = storage_path('app/public/pakta/'.$file_path);
+                    $handle = fopen($file, 'r');
                     $filecontent = fread($handle, filesize($file));
                     fclose($handle);
+
                     return $filecontent;
                 },
                 200,
                 [
                     'Content-Type' => 'application/pdf',
-                    'Content-Disposition' => 'inline; filename="' . $file_path . '"'
+                    'Content-Disposition' => 'inline; filename="'.$file_path.'"',
                 ]
             );
     }
+
     public function dataTable(Request $request)
     {
         $totalData = DB::table('usulan_ssh')
@@ -53,14 +57,14 @@ class UsulanController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('tahun ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('tahun '.$request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('usulan_ssh')->select('*')
-                ->where('tahun', 'like', '%' . $request['search']['value'] . '%');
+                ->where('tahun', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('tahun ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('tahun '.$request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -69,9 +73,9 @@ class UsulanController extends Controller
             $assets = $assets->get();
 
             $totalFiltered = DB::table('usulan_ssh')->select('*')
-                ->where('tahun', 'like', '%' . $request['search']['value'] . '%');
+                ->where('tahun', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('tahun ' . $request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('tahun '.$request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -83,19 +87,19 @@ class UsulanController extends Controller
             $row[] = $item->tahun;
             $row[] = $item->induk_perubahan == '1' ? 'Induk' : 'Perubahan';
 
-            $row[] = empty($item->ssd_dokumen) ? "<small class='text-sm'>Pakta Tidak Tersedia</small><br><small class='pb-1'><u>edit</u> untuk menambahkan pakta</small>" : "<a class='btn btn-icon btn-success text-white' href='" . route('usulan.preview', $item->ssd_dokumen) . "' target='_blank'><i class='bx bxs-printer' ></i></a>";
+            $row[] = empty($item->ssd_dokumen) ? "<small class='text-sm'>Pakta Tidak Tersedia</small><br><small class='pb-1'><u>edit</u> untuk menambahkan pakta</small>" : "<a class='btn btn-icon btn-success text-white' href='".route('usulan.preview', $item->ssd_dokumen)."' target='_blank'><i class='bx bxs-printer' ></i></a>";
             if ($item->status == '0') {
                 $row[] = "<button class='btn btn-icon btn-warning mx-1 edit' ><i class='bx bxs-pencil'></i></button><button class='btn btn-icon btn-danger mx-1 delete'><i class='bx bxs-trash-alt' ></i></button><button class='btn btn-icon btn-info mx-1 send'><i class='bx bxs-paper-plane'></i></button>";
-            } else if ($item->status == '1') {
+            } elseif ($item->status == '1') {
                 if (getRole() == 'Developer' || getRole() == 'User Aset') {
-                    $row[] = "Butuh Validasi";
+                    $row[] = 'Butuh Validasi';
                 } else {
-                    $row[] = "Terkirim";
+                    $row[] = 'Terkirim';
                 }
-            } else if ($item->status == '2') {
-                $row[] = "Diterima";
-            } else if ($item->status == '3') {
-                $row[] = "Ditolak";
+            } elseif ($item->status == '2') {
+                $row[] = 'Diterima';
+            } elseif ($item->status == '3') {
+                $row[] = "<button class='btn btn-outline-warning btn-sm edit'>Perbarui Usulan</button><button class='btn btn-outline-danger btn-sm delete'>Hapus Usulan</button><button class='btn btn-outline-info btn-sm send'>Kirim Ulang</button>";
             }
             $row[] = DB::table('_data_ssh as ds')->select('ds.*', 'ms.satuan', 'mb.urai', DB::raw('(select
                         json_agg(json_build_array(nmper)) as rekening
@@ -131,8 +135,8 @@ class UsulanController extends Controller
     {
         DB::beginTransaction();
         try {
-            $ssd_dokumen = 'pakta_' . rand(0, 1000) . '_' . date('y-m-d') . '.pdf';
-            file_put_contents(storage_path('app/public/pakta/' . $ssd_dokumen), base64_decode($request->ssd_dokumen));
+            $ssd_dokumen = 'pakta_'.rand(0, 1000).'_'.date('y-m-d').'.pdf';
+            file_put_contents(storage_path('app/public/pakta/'.$ssd_dokumen), base64_decode($request->ssd_dokumen));
             $id_usulan = DB::table('usulan_ssh')->insertGetId(
                 array_merge($request->except('detail', '_token', 'ssd_dokumen'), ['ssd_dokumen' => $ssd_dokumen, 'status' => '0', 'id_opd' => '0']),
                 'id'
@@ -153,6 +157,7 @@ class UsulanController extends Controller
             $status = 502;
             $response = ['message' => 'usulan gagal ditambahkan'];
         }
+
         return response()->json($response, $status);
     }
 
@@ -183,10 +188,10 @@ class UsulanController extends Controller
                                 select
                                     jsonb_array_elements_text(ds.rekening)
                                 from
-                                    _data_ssh ds where id_usulan = " . $id . "
+                                    _data_ssh ds where id_usulan = ".$id.'
                         ))))
                         from
-                            _data_ssh where id_usulan = " . $id . "group by id_usulan ))) ) as detail"))
+                            _data_ssh where id_usulan = '.$id.'group by id_usulan ))) ) as detail'))
             ->join('_data_ssh as ds', 'ds.id_usulan', '=', 'us.id')
             ->where('us.id', $id)->groupBy('us.id')->first();
         $data->detail = collect(json_decode($data->detail))
@@ -204,6 +209,7 @@ class UsulanController extends Controller
             $status = 404;
             $response = ['message' => 'data usulan tidak di temukan', 'data' => $data];
         }
+
         return response()->json($response, $status);
     }
 
@@ -219,8 +225,8 @@ class UsulanController extends Controller
             $details = $request->except($except);
             $details = $details['detail'];
             if ($request->has('ssd_dokumen')) {
-                $ssd_dokumen = 'pakta_' . rand(0, 1000) . '_' . date('y-m-d') . '.pdf';
-                file_put_contents(storage_path('app/public/pakta/' . $ssd_dokumen), base64_decode($request->ssd_dokumen));
+                $ssd_dokumen = 'pakta_'.rand(0, 1000).'_'.date('y-m-d').'.pdf';
+                file_put_contents(storage_path('app/public/pakta/'.$ssd_dokumen), base64_decode($request->ssd_dokumen));
                 $usulan['ssd_dokumen'] = $ssd_dokumen;
             }
             DB::table('usulan_ssh')->where('id', $id)->update($usulan);
@@ -275,6 +281,7 @@ class UsulanController extends Controller
             $status = 422;
             $response = ['message' => 'data usulan gagal di update'];
         }
+
         return response()->json($response, $status);
     }
 
@@ -302,6 +309,7 @@ class UsulanController extends Controller
             $status = 422;
             $response = ['message' => 'data usulan gagal di terima'];
         }
+
         return response()->json($response, $status);
     }
 
@@ -330,6 +338,7 @@ class UsulanController extends Controller
             $status = 422;
             $response = ['message' => 'data usulan gagal di tolak'];
         }
+
         return response()->json($response, $status);
     }
 
@@ -347,6 +356,7 @@ class UsulanController extends Controller
             $status = 422;
             $response = ['message' => 'data usulan gagal di kirim'];
         }
+
         return response()->json($response, $status);
     }
 
@@ -369,6 +379,7 @@ class UsulanController extends Controller
             $status = 422;
             $response = ['message' => 'data usulan gagal di hapus'];
         }
+
         return response()->json($response, $status);
     }
 }

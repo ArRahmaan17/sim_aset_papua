@@ -19,13 +19,13 @@ class JenisAsset extends Controller
 
     public function dataTable(Request $request)
     {
-        $totalData = DB::table('jenis as j')->select("j.id as id_jenis", "km.kib", "j.jenis")
+        $totalData = DB::table('jenis as j')->select('j.id as id_jenis', 'km.kib', 'j.jenis')
             ->join('kib_master as km', 'j.id_master', '=', 'km.id')
             ->orderBy('id', 'asc')
             ->count();
         $totalFiltered = $totalData;
         if (empty($request['search']['value'])) {
-            $assets = DB::table('jenis as j')->select("j.id as id_jenis", "km.kib", "j.jenis")
+            $assets = DB::table('jenis as j')->select('j.id as id_jenis', 'km.kib', 'j.jenis')
                 ->join('kib_master as km', 'j.id_master', '=', 'km.id');
 
             if ($request['length'] != '-1') {
@@ -33,15 +33,15 @@ class JenisAsset extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('jenis ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('jenis '.$request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
-            $assets = DB::table('jenis as j')->select("j.id as id_jenis", "km.kib", "j.jenis")
+            $assets = DB::table('jenis as j')->select('j.id as id_jenis', 'km.kib', 'j.jenis')
                 ->join('kib_master as km', 'j.id_master', '=', 'km.id')->select('*')
-                ->where('jenis', 'like', '%' . $request['search']['value'] . '%');
+                ->where('jenis', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('jenis ' . $request['order'][0]['dir']);
+                $assets->orderByRaw('jenis '.$request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -49,11 +49,11 @@ class JenisAsset extends Controller
             }
             $assets = $assets->get();
 
-            $totalFiltered = DB::table('jenis as j')->select("j.id as id_jenis", "km.kib", "j.jenis")
+            $totalFiltered = DB::table('jenis as j')->select('j.id as id_jenis', 'km.kib', 'j.jenis')
                 ->join('kib_master as km', 'j.id_master', '=', 'km.id')->select('*')
-                ->where('jenis', 'like', '%' . $request['search']['value'] . '%');
+                ->where('jenis', 'like', '%'.$request['search']['value'].'%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('jenis ' . $request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('jenis '.$request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }

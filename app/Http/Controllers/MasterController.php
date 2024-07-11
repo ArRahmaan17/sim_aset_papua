@@ -21,7 +21,7 @@ class MasterController extends Controller
         ];
         $where = [];
         foreach (explode('.', $request->organisasi) as $index => $kode) {
-            $where[] = ['' . $array[$index], $kode];
+            $where[] = [''.$array[$index], $kode];
         }
         $organisasi = DB::table('masterorganisasi')
             ->where($where)
@@ -46,19 +46,19 @@ class MasterController extends Controller
         $where = [];
         foreach (explode('.', $request->value) as $index => $kode) {
             if ($kode != 0) {
-                $where[] = ['' . $array[$index], $kode];
+                $where[] = [''.$array[$index], $kode];
             } else {
                 if ($index != 2) {
                     if ($counter == 0) {
-                        $where[] = ['' . $array[$index], '<>', $kode];
+                        $where[] = [''.$array[$index], '<>', $kode];
                         $counter++;
                     }
                 } else {
                     if ($counter == 0) {
-                        $where[] = ['' . $array[$index], '<>', $kode];
+                        $where[] = [''.$array[$index], '<>', $kode];
                         $counter++;
                     } elseif ($counter == 1) {
-                        $where[] = ['' . $array[$index],  $kode];
+                        $where[] = [''.$array[$index],  $kode];
                         $counter++;
                     }
                 }
@@ -126,6 +126,7 @@ class MasterController extends Controller
             'html_hak' => dataToOption(DB::table('masterhak')->select(DB::raw('kodehak as id, hak as name'))->orderBy('kodehak')->get()),
         ]);
     }
+
     public function masterBarang()
     {
         return response()->json([
@@ -135,9 +136,11 @@ class MasterController extends Controller
                 ->orderBy('kodemasterbarang')->get()),
         ]);
     }
+
     public function masterBarangShow($id)
     {
         [$kodegolongan, $kodebidang, $kodekelompok, $kodesub, $kodesubsub] = explode('.', $id);
+
         return response()->json([
             'data' => DB::table('masterbarang')
                 ->select('urai')
@@ -151,18 +154,20 @@ class MasterController extends Controller
                 ->orderBy('kodemasterbarang')->first(),
         ]);
     }
+
     public function masterRekening(Request $request)
     {
         $assets = DB::table('anggaran.sp2d as p')
             ->selectRaw("p.kdper as id, concat(p.kdper, '-', p.nmper) as name");
         if ($request->has('rekening')) {
             if (is_string($request->rekening)) {
-                $assets = $assets->where('kdper', '<>', $request["rekening"]);
+                $assets = $assets->where('kdper', '<>', $request['rekening']);
             } else {
-                $assets = $assets->whereNotIn('kdper',  $request["rekening"]);
+                $assets = $assets->whereNotIn('kdper', $request['rekening']);
             }
         }
         $assets = $assets->groupByRaw('p.kdper, p.nmper')->get();
+
         return response()->json([
             'html_rekening' => dataToOption($assets),
         ]);
