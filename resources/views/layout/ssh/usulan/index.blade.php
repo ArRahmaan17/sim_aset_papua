@@ -498,7 +498,7 @@
                     $(this).parents('tr').addClass('selected')
                 }
                 var data = window.datatable_usulan.rows('.selected').data()[0];
-                $('#modalFormMasTolakUsulan').modal('show');
+                $('#modalFormMasterUsulan').modal('show');
                 $('#modalFormMasterUsulan').find('.modal-title').html('Edit Usulan');
                 $.ajax({
                     type: "GET",
