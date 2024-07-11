@@ -58,6 +58,8 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::get('/data/warna', [MasterController::class, 'masterWarna'])->name('data.warna');
         Route::get('/data/hak', [MasterController::class, 'masterHak'])->name('data.hak');
         Route::get('/data/barang', [MasterController::class, 'masterBarang'])->name('data.barang');
+        Route::get('/data/barang/{kode_barang?}', [MasterController::class, 'masterBarangShow'])->name('data.barang.show');
+        Route::get('/data/rekening', [MasterController::class, 'masterRekening'])->name('data.rekening');
         Route::get('/menu', [MenuController::class, 'index'])->name('menu')->middleware(['menu-permission']);
         Route::post('/update-parent-menu', [MenuController::class, 'updateParent'])->name('update-parent-menu');
         Route::get('/list-menu', [MenuController::class, 'all'])->name('list-menu');
@@ -193,9 +195,13 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
     Route::get('/usulan', [UsulanController::class, 'index'])->name('usulan')->middleware(['menu-permission']);
     Route::get('/usulan/data-table', [UsulanController::class, 'dataTable'])->name('usulan.data-table');
     Route::post('/usulan/store', [UsulanController::class, 'store'])->name('usulan.store');
-    Route::get('/usulan/show/{id?}', [UsulanController::class, 'index'])->name('usulan.show');
+    Route::get('/usulan/show/{id?}', [UsulanController::class, 'show'])->name('usulan.show');
+    Route::get('/usulan/preview/{id?}', [UsulanController::class, 'previewPakta'])->name('usulan.preview');
     Route::put('/usulan/update/{id?}', [UsulanController::class, 'update'])->name('usulan.update');
     Route::delete('/usulan/delete/{id?}', [UsulanController::class, 'destroy'])->name('usulan.delete');
+    Route::post('/usulan/send/{id?}', [UsulanController::class, 'send'])->name('usulan.send');
+    Route::post('/usulan/accept/{id?}', [UsulanController::class, 'accept'])->name('usulan.accept');
+    Route::post('/usulan/reject/{id?}', [UsulanController::class, 'reject'])->name('usulan.reject');
     Route::get('/sp2d', [Sp2dController::class, 'index'])->name('sp2d')->middleware(['menu-permission']);
     Route::get('/sp2d/data-table', [Sp2dController::class, 'dataTable'])->name('sp2d.data-table');
     Route::get('/rekening', [Sp2dController::class, 'index'])->name('rekening')->middleware(['menu-permission']);

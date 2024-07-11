@@ -135,4 +135,36 @@ class MasterController extends Controller
                 ->orderBy('kodemasterbarang')->get()),
         ]);
     }
+    public function masterBarangShow($id)
+    {
+        [$kodegolongan, $kodebidang, $kodekelompok, $kodesub, $kodesubsub] = explode('.', $id);
+        return response()->json([
+            'data' => DB::table('masterbarang')
+                ->select('urai')
+                ->where([
+                    'kodegolongan' => $kodegolongan,
+                    'kodebidang' => $kodebidang,
+                    'kodekelompok' => $kodekelompok,
+                    'kodesub' => $kodesub,
+                    'kodesubsub' => $kodesubsub,
+                ])
+                ->orderBy('kodemasterbarang')->first(),
+        ]);
+    }
+    public function masterRekening(Request $request)
+    {
+        $assets = DB::table('anggaran.sp2d as p')
+            ->selectRaw("p.kdper as id, concat(p.kdper, '-', p.nmper) as name");
+        if ($request->has('rekening')) {
+            if (is_string($request->rekening)) {
+                $assets = $assets->where('kdper', '<>', $request["rekening"]);
+            } else {
+                $assets = $assets->whereNotIn('kdper',  $request["rekening"]);
+            }
+        }
+        $assets = $assets->groupByRaw('p.kdper, p.nmper')->get();
+        return response()->json([
+            'html_rekening' => dataToOption($assets),
+        ]);
+    }
 }

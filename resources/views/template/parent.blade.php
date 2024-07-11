@@ -264,6 +264,10 @@
             return o;
         }
 
+        function removeDuplicates(array) {
+            return array.filter((value, index) => array.indexOf(value) === index);
+        }
+
         function buildTree(elements, parentId = 0) {
             var branch = [];
             elements.forEach(element => {

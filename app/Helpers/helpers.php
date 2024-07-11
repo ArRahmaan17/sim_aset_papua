@@ -42,6 +42,26 @@ if (!function_exists('dataToOption')) {
         return $html;
     }
 }
+function removeDuplicate($array)
+{
+    // Initialize an empty array to store unique IDs
+    $uniqueIds = array();
+
+    // Iterate through the input array
+    foreach ($array as $item) {
+        // Check if the ID of the current item exists in $uniqueIds array
+        if (!in_array($item, $uniqueIds)) {
+            // If ID doesn't exist, add it to $uniqueIds and keep the item
+            $uniqueIds[] = $item;
+            $uniqueArray[] = $item;
+        }
+        // If ID already exists, skip adding it to $uniqueArray (thus removing duplicate)
+    }
+
+    // Return the array with unique IDs
+    return $uniqueArray;
+}
+
 if (!function_exists('classificationType')) {
     function classificationType(array $conditions)
     {
@@ -265,9 +285,6 @@ if (!function_exists('buildTreeMenu')) {
                 $children = buildTreeMenu($elements, $element['id']);
                 if ($children) {
                     $element['children'] = $children;
-                    if (session('app') == 'ssh') {
-                        $element['state'] = ['disabled' => true];
-                    }
                 }
                 unset($element['parent']);
                 $branch[] = $element;
