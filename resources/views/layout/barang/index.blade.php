@@ -2,7 +2,6 @@
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/css/iziToast.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/jstree.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}">
 @endpush
 @section('content')
     <div class="row">

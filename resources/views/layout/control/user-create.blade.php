@@ -1,6 +1,5 @@
 @extends('template.parent')
 @push('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/iziToast.min.css') }}">
 @endpush
 @section('content')
