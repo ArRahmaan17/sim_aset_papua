@@ -167,10 +167,10 @@ class MasterKib extends Controller
     {
         DB::beginTransaction();
         try {
-            $count = DB::table('kib')->where('id', $id)->count();
-            if ($count > 0) {
-                throw new Exception('data sudah di gunakan di tabel lain, mohon hapus terlebih dahulu data tersebut', 422);
-            }
+            // $count = DB::table('kib')->where('id', $id)->count();
+            // if ($count > 0) {
+            //     throw new Exception('data sudah di gunakan di tabel lain, mohon hapus terlebih dahulu data tersebut', 422);
+            // }
             DB::table('kib_master')->where('id', $id)->delete();
             DB::commit();
             $message = ['message' => 'berhasil menghapus data master kib'];

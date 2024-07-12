@@ -61,6 +61,17 @@
                             <input type="text" class="form-control" name="kib" placeholder="jenis kib"
                                 aria-describedby="basic-addon11">
                         </div>
+                        <div class="input-group mb-3">
+                            <select name="form" id="">
+                                <option value="">Pilih type form</option>
+                                <option value="kib_a">Kib A</option>
+                                <option value="kib_b">Kib B</option>
+                                <option value="kib_c">Kib C</option>
+                                <option value="kib_d">Kib D</option>
+                                <option value="kib_e">Kib E</option>
+                                <option value="kib_f">Kib F</option>
+                            </select>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -137,6 +148,8 @@
                             .val(response.data.kode);
                         $("#form-master-kib").find('[name=kib]')
                             .val(response.data.kib);
+                        $("#form-master-kib").find('[name=form]')
+                            .val(response.data.form).trigger('change');
                     }
                 });
                 $('.multiple').addClass('d-none');
