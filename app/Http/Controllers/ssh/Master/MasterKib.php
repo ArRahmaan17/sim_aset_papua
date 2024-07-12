@@ -32,16 +32,16 @@ class MasterKib extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('type '.$request['order'][0]['dir']);
+                $assets->orderByRaw('type ' . $request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('kib_master')->select('*')
-                ->where('type', 'like', '%'.$request['search']['value'].'%')
-                ->orWhere('kode', 'like', '%'.$request['search']['value'].'%')
-                ->orWhere('kib', 'like', '%'.$request['search']['value'].'%');
+                ->where('type', 'like', '%' . $request['search']['value'] . '%')
+                ->orWhere('kode', 'like', '%' . $request['search']['value'] . '%')
+                ->orWhere('kib', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('type '.$request['order'][0]['dir']);
+                $assets->orderByRaw('type ' . $request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -50,11 +50,11 @@ class MasterKib extends Controller
             $assets = $assets->get();
 
             $totalFiltered = DB::table('kib_master')->select('*')
-                ->where('type', 'like', '%'.$request['search']['value'].'%')
-                ->orWhere('kode', 'like', '%'.$request['search']['value'].'%')
-                ->orWhere('kib', 'like', '%'.$request['search']['value'].'%');
+                ->where('type', 'like', '%' . $request['search']['value'] . '%')
+                ->orWhere('kode', 'like', '%' . $request['search']['value'] . '%')
+                ->orWhere('kib', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('type '.$request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('type ' . $request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -99,6 +99,7 @@ class MasterKib extends Controller
             $status = 200;
             $message = ['message' => 'Master kib berhasil ditambahkan', 'data' => $data];
         } catch (Exception $th) {
+            dd($th);
             $message = ['message' => 'Master kib gagal ditambahkan'];
             if ($th->getCode() == 422) {
                 $message = ['message' => $th->getMessage()];
@@ -147,6 +148,7 @@ class MasterKib extends Controller
             $status = 200;
             $message = ['message' => 'Master kib berhasil diubah'];
         } catch (Exception $th) {
+            dd($th);
             $message = ['message' => 'Master kib gagal diubah'];
             if ($th->getCode() == 422) {
                 $message = ['message' => $th->getMessage()];
@@ -174,6 +176,7 @@ class MasterKib extends Controller
             $message = ['message' => 'berhasil menghapus data master kib'];
             $status = 200;
         } catch (Exception $th) {
+            dd($th);
             DB::rollBack();
             $message = ['message' => 'gagal menghapus data master kib'];
             if ($th->getCode() == 422) {
