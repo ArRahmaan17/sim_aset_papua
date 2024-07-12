@@ -44,14 +44,9 @@
 @push('js')
     <script>
         $(function() {
-            new DataTable("#table_penyusutan", {
-                ajax: "{{ session('app') == 'aset' ? route('sp2d.data-table') : route('rekening.data-table') }}",
-                processing: true,
-                serverSide: true,
-                order: [
-                    [1, 'desc']
-                ],
-                columns: [{
+let column = null;
+            if(`{{session('app')}}` == 'aset'){
+column = [{
                     targets: 0,
                     searchable: false,
                     orderable: false,
@@ -86,7 +81,37 @@
                     searchable: false,
                     orderable: false,
                     width: '50px',
-                }],
+                }]
+} else{ column = [{
+                    targets: 0,
+                    searchable: false,
+                    orderable: false,
+                    width: '50px'
+                }, {
+                    targets: 1,
+                    searchable: true,
+                    orderable: true,
+                    width: '50px',
+                }, {
+                    targets: 2,
+                    searchable: false,
+                    orderable: false,
+                    width: '50px',
+                }, {
+                    targets: 3,
+                    searchable: false,
+                    orderable: false,
+                    width: '50px',
+                }]
+}
+            new DataTable("#table_penyusutan", {
+                ajax: "{{ session('app') == 'aset' ? route('sp2d.data-table') : route('rekening.data-table') }}",
+                processing: true,
+                serverSide: true,
+                order: [
+                    [1, 'desc']
+                ],
+                columns: column,
             });
         });
     </script>

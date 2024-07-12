@@ -153,6 +153,7 @@ class UsulanController extends Controller
             $status = 200;
             $response = ['message' => 'usulan berhasil ditambahkan'];
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollBack();
             $status = 502;
             $response = ['message' => 'usulan gagal ditambahkan'];
