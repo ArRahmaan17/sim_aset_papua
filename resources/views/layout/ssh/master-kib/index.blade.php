@@ -62,7 +62,7 @@
                                 aria-describedby="basic-addon11">
                         </div>
                         <div class="input-group mb-3">
-                            <select name="form" id="">
+                            <select name="form" class="form-select">
                                 <option value="">Pilih type form</option>
                                 <option value="kib_a">Kib A</option>
                                 <option value="kib_b">Kib B</option>
