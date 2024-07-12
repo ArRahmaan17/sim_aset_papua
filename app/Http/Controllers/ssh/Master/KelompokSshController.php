@@ -32,14 +32,14 @@ class KelompokSshController extends Controller
                     ->offset($request['start']);
             }
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('kelompok '.$request['order'][0]['dir']);
+                $assets->orderByRaw('kelompok ' . $request['order'][0]['dir']);
             }
             $assets = $assets->get();
         } else {
             $assets = DB::table('_kelompok_ssh')->select('*')
-                ->where('kelompok', 'like', '%'.$request['search']['value'].'%');
+                ->where('kelompok', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $assets->orderByRaw('kelompok '.$request['order'][0]['dir']);
+                $assets->orderByRaw('kelompok ' . $request['order'][0]['dir']);
             }
             if ($request['length'] != '-1') {
                 $assets->limit($request['length'])
@@ -48,9 +48,9 @@ class KelompokSshController extends Controller
             $assets = $assets->get();
 
             $totalFiltered = DB::table('_kelompok_ssh')->select('*')
-                ->where('kelompok', 'like', '%'.$request['search']['value'].'%');
+                ->where('kelompok', 'like', '%' . $request['search']['value'] . '%');
             if (isset($request['order'][0]['column'])) {
-                $totalFiltered->orderByRaw('kelompok '.$request['order'][0]['dir']);
+                $totalFiltered->orderByRaw('kelompok ' . $request['order'][0]['dir']);
             }
             $totalFiltered = $totalFiltered->count();
         }
@@ -93,6 +93,7 @@ class KelompokSshController extends Controller
             $status = 200;
             $message = ['message' => 'Master kelompok berhasil ditambahkan', 'data' => $data];
         } catch (Exception $th) {
+            dd($th);
             $message = ['message' => 'Master kelompok gagal ditambahkan'];
             if ($th->getCode() == 422) {
                 $message = ['message' => $th->getMessage()];
@@ -141,6 +142,7 @@ class KelompokSshController extends Controller
             $status = 200;
             $message = ['message' => 'Master kelompok berhasil diubah'];
         } catch (Exception $th) {
+            dd($th);
             $message = ['message' => 'Master kelompok gagal diubah'];
             if ($th->getCode() == 422) {
                 $message = ['message' => $th->getMessage()];
@@ -168,6 +170,7 @@ class KelompokSshController extends Controller
             $message = ['message' => 'berhasil menghapus data master kelompok'];
             $status = 200;
         } catch (Exception $th) {
+            dd($th);
             DB::rollBack();
             $message = ['message' => 'gagal menghapus data master kelompok'];
             if ($th->getCode() == 422) {
