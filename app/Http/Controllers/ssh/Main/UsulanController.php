@@ -135,12 +135,16 @@ class UsulanController extends Controller
     {
         DB::beginTransaction();
         try {
-            $ssd_dokumen = 'pakta_' . rand(0, 1000) . '_' . date('y-m-d') . '.pdf';
-            file_put_contents(storage_path('app/public/pakta/' . $ssd_dokumen), base64_decode($request->ssd_dokumen));
-            $id_usulan = DB::table('usulan_ssh')->insertGetId(
-                array_merge($request->except('detail', '_token', 'ssd_dokumen'), ['ssd_dokumen' => $ssd_dokumen, 'status' => '0', 'id_opd' => '0']),
-                'id'
-            );
+            if ($request->has('ssd_dokumen')) {
+                $ssd_dokumen = 'pakta_' . rand(0, 1000) . '_' . date('y-m-d') . '.pdf';
+                file_put_contents(storage_path('app/public/pakta/' . $ssd_dokumen), base64_decode($request->ssd_dokumen));
+                $id_usulan = DB::table('usulan_ssh')->insertGetId(
+                    array_merge($request->except('detail', '_token', 'ssd_dokumen'), ['ssd_dokumen' => $ssd_dokumen, 'status' => '0', 'id_opd' => '0']),
+                    'id'
+                );
+            } else {
+                $ssd_dokumen = null;
+            }
             $detail = $request->detail;
             foreach ($detail as $key => $value) {
                 $detail[$key]['id_usulan'] = $id_usulan;

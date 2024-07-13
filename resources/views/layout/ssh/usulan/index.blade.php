@@ -488,20 +488,20 @@ if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
                     }
                 });
             });
-}else{
-            $.ajax({
-                    type: "POST",
-                    url: "{{ route('usulan.store') }}",
-                    data: {
-                        _token: `{{ csrf_token() }}`,
-                        ...data
-                    },
-                    dataType: "json",
-                    success: function(response) {
-                        window.datatable_usulan.ajax.reload();
-                    }
-                });
-}
+        }else{
+                $.ajax({
+                        type: "POST",
+                        url: "{{ route('usulan.store') }}",
+                        data: {
+                            _token: `{{ csrf_token() }}`,
+                            ...data
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            window.datatable_usulan.ajax.reload();
+                        }
+                    });
+        }
         }
 
 
