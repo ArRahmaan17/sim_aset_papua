@@ -472,6 +472,7 @@
                 delete data_rekening['rekening[]'];
                 data.detail.push(data_rekening);
             });
+if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
             fileToBase64(document.querySelector('[name=ssd_dokumen]').files[0]).then(result => {
                 data.ssd_dokumen = result;
                 $.ajax({
@@ -487,6 +488,20 @@
                     }
                 });
             });
+}else{
+            $.ajax({
+                    type: "POST",
+                    url: "{{ route('usulan.store') }}",
+                    data: {
+                        _token: `{{ csrf_token() }}`,
+                        ...data
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        window.datatable_usulan.ajax.reload();
+                    }
+                });
+}
         }
 
 
