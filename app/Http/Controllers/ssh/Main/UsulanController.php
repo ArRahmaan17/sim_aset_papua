@@ -271,6 +271,7 @@ class UsulanController extends Controller
             $status = 200;
             $response = ['message' => 'data usulan berhasil di update'];
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollBack();
             $status = 422;
             $response = ['message' => 'data usulan gagal di update'];
