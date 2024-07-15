@@ -720,7 +720,8 @@ if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
                 let html_rekening = '';
                 removeDuplicates(JSON.parse(element.rekening).flat()).forEach(rek => {
                     html_rekening += `<li class='list-group-item border-0 p-0 m-0 px-1'>${rek}</li>`
-                })
+                });
+console.log(element.status);
                 let status = '';
                 if((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') && element.status == '1'){
                     status = `<button class='btn btn-icon btn-info mx-1 accept' data-id_detail='${element.id}'><i class='bx bx-check'></i></button><button class='btn btn-icon btn-danger mx-1 return' data-id_detail='${element.id}'><i class='bx bx-refresh'></i></button>`;
