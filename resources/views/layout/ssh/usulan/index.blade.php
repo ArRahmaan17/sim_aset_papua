@@ -736,7 +736,7 @@ if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
                 }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') == false && element.status == '2'){
                     status = "Divalidasi petugas";
                 }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') == false && element.status == '3'){
-                    status = "<button class='btn btn-icon btn-outline-info'><i class='bx bx-paper-plane'></i></button>";
+                    status = "<button class='btn btn-icon btn-outline-info send-detail'><i class='bx bx-paper-plane'></i></button><button class='btn btn-icon btn-outline-warning edit-detail'><i class='bx bx-pencil'></i></button><button class='btn btn-icon btn-outline-danger delete-detail'><i class='bx bx-trash'></i></button>";
                 }
                 html += `
                 <tr>
