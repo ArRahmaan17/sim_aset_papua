@@ -661,7 +661,7 @@ if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
                             }, toast, 'button');
                             $.ajax({
                                 type: "POST",
-                                url: "{{ route('usulan.accept') }}/" + $(this).data('id_detail'),
+                                url: "{{ route('usulan.accept') }}/" + id,
                                 data: {
                                     _token: `{{ csrf_token() }}`,
                                 },
