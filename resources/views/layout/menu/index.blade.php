@@ -608,6 +608,13 @@
                                             )
                                             .jstree(true)
                                             .get_selected());
+                                    $("#container-tree-menu-profile")
+                                        .jstree(true)
+                                        .delete_node($(
+                                                "#container-tree-menu-profile"
+                                            )
+                                            .jstree(true)
+                                            .get_selected());
                                     $("#container-tree-menu-sidebar")
                                         .switchClass('col-6', 'col-12', 700);
                                     $("#form-container").switchClass('d-block',
