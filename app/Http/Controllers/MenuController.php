@@ -123,6 +123,7 @@ class MenuController extends Controller
             $data = ['message' => 'menu berhasil di buat', 'data' => ['text' => $menu['nama'], 'id' => $idmenu, 'parent' => $request->parents == '0-sidebar' ? '0-sidebar' : ($request->parents == '0-profile' ? '0-profile' : $menu['parents'])]];
             $status = 200;
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollBack();
             $data = ['message' => 'menu gagal di buat', 'data' => []];
             $status = 400;
