@@ -587,7 +587,11 @@
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
                             id = $("#container-tree-menu-sidebar").jstree(true)
-                                .get_selected()[0]
+                                .get_selected()[0];
+                            if(id == undefined){
+                                id = $("#container-tree-menu-profile").jstree(true)
+                                    .get_selected()[0];
+                            }
                             $.ajax({
                                 type: "DELETE",
                                 url: "{{ route('master.menu.delete') }}/" +
