@@ -728,9 +728,9 @@ if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
                     status = "Sudah di Validasi";
                 }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User_aset') && element.status == '3'){
                     status = "Ditolak";
-                }else{
-                    status = "Menunggu Validasi";
-}
+                }else if (!(`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') && element.status == '1'){
+                    status = "Menunggu Dikirim";
+                }
                 html += `
                 <tr>
                     <td class='p-0 m-0 px-1'>${index+1}</td>
