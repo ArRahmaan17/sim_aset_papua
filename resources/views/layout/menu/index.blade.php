@@ -430,13 +430,21 @@
                                 dataType: "json",
                                 success: function(response) {
                                     resetMenuForm();
-                                    $("#container-tree-menu-sidebar")
-                                        .jstree(
-                                            true)
-                                        .create_node(response.data
-                                            .parent, {
-                                                ...response.data
-                                            });
+                                    if($("#container-tree-menu-sidebar").jstree(true).get_node(response.data.parent)){
+                                        $("#container-tree-menu-sidebar")
+                                            .jstree(true)
+                                            .create_node(response.data
+                                                .parent, {
+                                                    ...response.data
+                                                });
+                                    }else{
+                                        $("#container-tree-menu-profile")
+                                            .jstree(true)
+                                            .create_node(response.data
+                                                .parent, {
+                                                    ...response.data
+                                                });
+                                    }
                                     resetJstree()
                                 }
                             });
