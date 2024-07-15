@@ -721,14 +721,14 @@ if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
                 removeDuplicates(JSON.parse(element.rekening).flat()).forEach(rek => {
                     html_rekening += `<li class='list-group-item border-0 p-0 m-0 px-1'>${rek}</li>`
                 })
-                let status = ''
+                let status = '';
                 if((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') && element.status == '1'){
                     status = `<button class='btn btn-icon btn-info mx-1 accept' data-id_detail='${element.id}'><i class='bx bx-check'></i></button><button class='btn btn-icon btn-danger mx-1 return' data-id_detail='${element.id}'><i class='bx bx-refresh'></i></button>`;
                 }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') && element.status == '2'){
                     status = "Sudah di Validasi";
                 }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') && element.status == '3'){
                     status = "Ditolak";
-                }else if ((`{{getRole()}}` != 'Developer' || `{{getRole()}}` != 'User Aset') && element.status == '1'){
+                }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') == false && element.status == '1'){
                     status = "Menunggu Dikirim";
                 }
                 html += `
