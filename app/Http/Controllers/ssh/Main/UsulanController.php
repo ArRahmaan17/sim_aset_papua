@@ -23,25 +23,14 @@ class UsulanController extends Controller
         return response()->file(
             storage_path('app/public/pakta/' . $file_path)
         );
-
-        return response()
-            ->stream(
-                function () use ($file_path) {
-                    $file = storage_path('app/public/pakta/' . $file_path);
-                    $handle = fopen($file, 'r');
-                    $filecontent = fread($handle, filesize($file));
-                    fclose($handle);
-
-                    return $filecontent;
-                },
-                200,
-                [
-                    'Content-Type' => 'application/pdf',
-                    'Content-Disposition' => 'inline; filename="' . $file_path . '"',
-                ]
-            );
     }
 
+    public function downloadPakta()
+    {
+        return response()->download(
+            public_path('ssh/pakta/SURAT-PERNYATAAN-USULAN.docx')
+        );
+    }
     public function dataTable(Request $request)
     {
         $totalData = DB::table('usulan_ssh')

@@ -13,9 +13,8 @@
                         List Usulan
                     </div>
                     <div class="col-12 col-md-5 col-lg-4 text-end">
-                        {{-- <a href="{{ route('usulan.download-pakta') }}" target="_blank" class="btn btn-success"><i
-                                class='bx bxs-download'></i> Download Pakta</a> --}}
-                        <a class="btn btn-success text-white"><i class='bx bxs-download'></i> Download Pakta</a>
+                        <a href="{{ route('usulan.download-pakta') }}" target="_blank" class="btn btn-success"><i
+                                class='bx bxs-download'></i> Download Pakta</a>
                         <button class="btn btn-success add" type="button"><i class='tf-icons bx bx-plus mb-1'></i>
                             Tambah</button>
                     </div>

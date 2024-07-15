@@ -193,6 +193,7 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
         Route::delete('/rehab/delete/{id?}', [RehabController::class, 'destroy'])->name('rehab.delete');
     });
     Route::get('/usulan', [UsulanController::class, 'index'])->name('usulan')->middleware(['menu-permission']);
+    Route::get('/usulan/download-pakta', [UsulanController::class, 'downloadPakta'])->name('usulan.download-pakta');
     Route::get('/usulan/data-table', [UsulanController::class, 'dataTable'])->name('usulan.data-table');
     Route::post('/usulan/store', [UsulanController::class, 'store'])->name('usulan.store');
     Route::get('/usulan/show/{id?}', [UsulanController::class, 'show'])->name('usulan.show');
