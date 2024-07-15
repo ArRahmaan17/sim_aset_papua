@@ -724,11 +724,11 @@ if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
                 let status = ''
                 if((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') && element.status == '1'){
                     status = `<button class='btn btn-icon btn-info mx-1 accept' data-id_detail='${element.id}'><i class='bx bx-check'></i></button><button class='btn btn-icon btn-danger mx-1 return' data-id_detail='${element.id}'><i class='bx bx-refresh'></i></button>`;
-                }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User_aset') && element.status == '2'){
+                }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') && element.status == '2'){
                     status = "Sudah di Validasi";
-                }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User_aset') && element.status == '3'){
+                }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') && element.status == '3'){
                     status = "Ditolak";
-                }else if (!(`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') && element.status == '1'){
+                }else if ((`{{getRole()}}` != 'Developer' || `{{getRole()}}` != 'User Aset') && element.status == '1'){
                     status = "Menunggu Dikirim";
                 }
                 html += `
