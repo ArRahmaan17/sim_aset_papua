@@ -592,9 +592,9 @@ class KontrakController extends Controller
 
     public function hak()
     {
-        $data = DB::table('jns_hak')
+        $data = DB::table('masterhak')
             ->select(
-                'id',
+                'kodehak AS id',
                 'hak AS name'
             )
             ->get();
@@ -611,10 +611,10 @@ class KontrakController extends Controller
 
     public function statusTanah()
     {
-        $data = DB::table('status_tanah')
+        $data = DB::table('masterstatustanah')
             ->select(
-                'id',
-                'status AS name'
+                'kodestatustanah AS id',
+                'statustanah AS name'
             )
             ->get();
         if (count($data) != 0) {
