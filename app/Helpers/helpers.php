@@ -374,3 +374,19 @@ if (!function_exists('limitOffsetToArray')) {
         return $data;
     }
 }
+
+
+if (!function_exists('generateIdKontrak')) {
+
+    function generateNextIdKontrak()
+    {
+        $data = DB::table('kontrak')
+            ->orderByDesc('id')
+            ->first();
+        // dd($data);
+        $next = $data ? $data->id + 1 : 1;
+        // dd($next);
+
+        return $next;
+    }
+}
