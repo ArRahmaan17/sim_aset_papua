@@ -406,8 +406,16 @@ class UsulanController extends Controller
     {
         DB::beginTransaction();
         try {
-            if (DB::table('_data_ssh')->where('id', $id)->whereIn('status', ['1', '2'])->count() !== 1) {
-                DB::table('_data_ssh')->where('id_usulan', $id)->delete();
+            if (DB::table('_data_ssh')->where('id', $id)->whereIn('status', ['1', '3'])->count() === 1) {
+                $data = DB::table('_data_ssh')->whereNot('id', $id)->first();
+                DB::table('_data_ssh')->where('id', $id)->delete();
+                if (
+                    DB::table('_data_ssh')
+                    ->where('id_usulan', $data->id_usulan)
+                    ->groupBy('status')->count() == 1
+                ) {
+                    DB::table('usulan_ssh')->where('id', $data->id_usulan)->update(['status' => $data->status]);
+                }
             }
             $status = 200;
             $response = ['message' => 'data usulan berhasil di hapus'];
