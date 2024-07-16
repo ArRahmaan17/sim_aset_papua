@@ -211,7 +211,9 @@ Route::middleware(['throttle:application', 'authenticated', 'have-organisasi'])-
     Route::get('/usulan/preview/{id?}', [UsulanController::class, 'previewPakta'])->name('usulan.preview');
     Route::put('/usulan/update/{id?}', [UsulanController::class, 'update'])->name('usulan.update');
     Route::delete('/usulan/delete/{id?}', [UsulanController::class, 'destroy'])->name('usulan.delete');
+    Route::delete('/usulan/delete-detail/{id?}', [UsulanController::class, 'destroyDetail'])->name('usulan.delete-detail');
     Route::post('/usulan/send/{id?}', [UsulanController::class, 'send'])->name('usulan.send');
+    Route::post('/usulan/send-detail/{id?}', [UsulanController::class, 'sendDetail'])->name('usulan.send-detail');
     Route::post('/usulan/accept/{id?}', [UsulanController::class, 'accept'])->name('usulan.accept');
     Route::post('/usulan/reject/{id?}', [UsulanController::class, 'reject'])->name('usulan.reject');
     Route::get('/sp2d', [Sp2dController::class, 'index'])->name('sp2d')->middleware(['menu-permission']);

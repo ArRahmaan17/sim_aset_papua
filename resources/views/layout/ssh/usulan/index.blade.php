@@ -94,6 +94,7 @@
                         </div>
                         <div class="row" id="container-rincian">
                             <input type="hidden" name="id_detail">
+                            <input type="hidden" name="status">
                             <div class="col-6">
                                 <div class="divider">
                                     <div class="divider-text">Rincian usulan</div>
@@ -267,6 +268,9 @@
             delete data.tahun;
             delete data.induk_perubahan;
             let rekening = '';
+            if(typeof(data['rekening[]']) == 'string'){
+                data['rekening[]'] = [data['rekening[]']]
+            }
             data['rekening[]'].forEach((datarekening) => {
                 rekening += `<li class='list-group-item border-0 p-0 m-0'>${datarekening}</li>`;
             });
@@ -294,8 +298,16 @@
                         }
                     })
                 }
+                let aksi = '';
+                if(data.status == '3' || data.status == '0'){
+                    aksi = `<button type='button' class='btn btn-icon btn-warning edit-rincian'><i class='bx bxs-pencil'></i></button><button type='button' class='btn btn-icon btn-danger hapus-rincian'><i class='bx bxs-trash'></i></button>`
+                }else if(data.status == '2'){
+                    aksi = 'Sudah tervalidasi';
+                }else if(data.status == '1'){
+                    aksi = 'Menunggu Validasi';
+                }
                 let html =
-                    `<tr data-id='${data.id_detail?? (window.rincian+=1)}' data-rincian='${JSON.stringify(data)}'><td class='py-0 px-1'>${data.id_kode}</td><td class='py-0 px-1'>${nama_barang}</td><td class='py-0 px-1'>${data.uraian}</td><td class='py-0 px-1'>${data.spesifikasi}</td><td class='py-0 px-1'>${data.id_satuan}</td><td class='py-0 px-1'>${data.harga}</td><td class='py-0 px-1'><ol class='list-group list-group-numbered list-group-flush'>${rekening}</ol></td><td class='py-0 px-1'>${data.tkdn}</td><td><button type='button' class='btn btn-icon btn-warning edit-rincian'><i class='bx bxs-pencil'></i></button><button type='button' class='btn btn-icon btn-danger hapus-rincian'><i class='bx bxs-trash'></i></button></td><td class='py-0 px-1'>${data.id_kode}</td></tr>`;
+                    `<tr data-id='${data.id_detail?? (window.rincian+=1)}' data-rincian='${JSON.stringify(data)}'><td class='py-0 px-1'>${data.id_kode}</td><td class='py-0 px-1'>${nama_barang}</td><td class='py-0 px-1'>${data.uraian}</td><td class='py-0 px-1'>${data.spesifikasi}</td><td class='py-0 px-1'>${data.id_satuan}</td><td class='py-0 px-1'>${data.harga}</td><td class='py-0 px-1'><ol class='list-group list-group-numbered list-group-flush'>${rekening}</ol></td><td class='py-0 px-1'>${data.tkdn}</td><td>${aksi}</td><td class='py-0 px-1'>${data.id_kode}</td></tr>`;
                 $('#table_rincian_usulan').append(html);
                 resetFormDetail();
                 $('.hapus-rincian').click(function(e) {
@@ -471,9 +483,23 @@
                 delete data_rekening['rekening[]'];
                 data.detail.push(data_rekening);
             });
-if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
-            fileToBase64(document.querySelector('[name=ssd_dokumen]').files[0]).then(result => {
-                data.ssd_dokumen = result;
+            if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
+                fileToBase64(document.querySelector('[name=ssd_dokumen]').files[0]).then(result => {
+                    data.ssd_dokumen = result;
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('usulan.store') }}",
+                        data: {
+                            _token: `{{ csrf_token() }}`,
+                            ...data
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            window.datatable_usulan.ajax.reload();
+                        }
+                    });
+                });
+            }else{
                 $.ajax({
                     type: "POST",
                     url: "{{ route('usulan.store') }}",
@@ -486,54 +512,46 @@ if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
                         window.datatable_usulan.ajax.reload();
                     }
                 });
-            });
-        }else{
-                $.ajax({
-                        type: "POST",
-                        url: "{{ route('usulan.store') }}",
-                        data: {
-                            _token: `{{ csrf_token() }}`,
-                            ...data
-                        },
-                        dataType: "json",
-                        success: function(response) {
-                            window.datatable_usulan.ajax.reload();
-                        }
-                    });
-        }
+            }
         }
 
+        function editData(button){
+            window.state = 'update';
+            if (window.datatable_usulan.rows('.selected').data().length == 0) {
+                $('#table_usulan tbody').find('tr').removeClass('selected');
+                $(button).parents('tr').addClass('selected')
+            }
+            var data = window.datatable_usulan.rows('.selected').data()[0];
+            $('#modalFormMasterUsulan').modal('show');
+            $('#modalFormMasterUsulan').find('.modal-title').html('Edit Usulan');
+            $.ajax({
+                type: "GET",
+                url: "{{ route('usulan.show') }}/" + data[7],
+                dataType: "json",
+                success: function(response) {
+                    $("#form-usulan").find('[name=id]')
+                        .val(response.data.id);
+                    $("#form-usulan").find('[name=tahun]')
+                        .val(response.data.tahun);
+                    $("#form-usulan").find('[name=induk_perubahan]')
+                        .val(response.data.induk_perubahan);
+                    $("#form-usulan").find('[name=status]')
+                        .val(response.data.status);
+                    response.data.detail.forEach(detail => {
+                        console.log(detail)
+                        detail['rekening[]'] = detail.rekening;
+                        delete detail.rekening;
+                        window.rincian = detail.id_detail;
+                        addRincian(detail);
+                    });
+                }
+            });
+            $('.multiple').addClass('d-none');
+        }
 
         function actionData() {
             $('.edit').click(function() {
-                window.state = 'update';
-                if (window.datatable_usulan.rows('.selected').data().length == 0) {
-                    $('#table_usulan tbody').find('tr').removeClass('selected');
-                    $(this).parents('tr').addClass('selected')
-                }
-                var data = window.datatable_usulan.rows('.selected').data()[0];
-                $('#modalFormMasterUsulan').modal('show');
-                $('#modalFormMasterUsulan').find('.modal-title').html('Edit Usulan');
-                $.ajax({
-                    type: "GET",
-                    url: "{{ route('usulan.show') }}/" + data[7],
-                    dataType: "json",
-                    success: function(response) {
-                        $("#form-usulan").find('[name=id]')
-                            .val(response.data.id);
-                        $("#form-usulan").find('[name=tahun]')
-                            .val(response.data.tahun);
-                        $("#form-usulan").find('[name=induk_perubahan]')
-                            .val(response.data.induk_perubahan);
-                        response.data.detail.forEach(detail => {
-                            detail['rekening[]'] = detail.rekening;
-                            delete detail.rekening;
-                            window.rincian = detail.id_detail;
-                            addRincian(detail);
-                        });
-                    }
-                });
-                $('.multiple').addClass('d-none');
+                editData(this)
             });
             $('.delete').click(function() {
                 if (window.datatable_usulan.rows('.selected').data().length == 0) {
@@ -711,6 +729,124 @@ if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
                     ],
                 });
             });
+            $('.send-detail').click(function() {
+                let id = $(this).data('id_detail');
+                iziToast.question({
+                    timeout: 5000,
+                    layout: 2,
+                    close: false,
+                    overlay: true,
+                    color: 'blue',
+                    displayMode: 'once',
+                    id: 'question',
+                    zindex: 9999,
+                    title: 'Konfirmasi',
+                    message: 'Apakah anda yakin akan mengirim ulang data usulan ini?',
+                    position: 'center',
+                    icon: 'bx bx-question-mark',
+                    buttons: [
+                        ['<button><b>IYA</b></button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                               $.ajax({
+                                    type: "POST",
+                                    url: "{{ route('usulan.send-detail') }}/" + id,
+                                    data: {
+                                        _token: `{{ csrf_token() }}`,
+                                    },
+                                    dataType: "json",
+                                    success: function(response) {
+                                        window.datatable_usulan.ajax.reload()
+                                    }
+                                });
+                        }, true],
+                        ['<button>TIDAK</button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                        }],
+                    ],
+                });
+            });
+            $('.edit-detail').click(function() {
+                let id = $(this).data('id_detail');
+                let button = $(this);
+                iziToast.question({
+                    timeout: 5000,
+                    layout: 2,
+                    close: false,
+                    overlay: true,
+                    color: 'yellow',
+                    displayMode: 'once',
+                    id: 'question',
+                    zindex: 9999,
+                    title: 'Konfirmasi',
+                    message: 'Apakah anda yakin akan edit ulang data usulan ini?',
+                    position: 'center',
+                    icon: 'bx bx-question-mark',
+                    buttons: [
+                        ['<button><b>IYA</b></button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                            editData(button.parents('tr:not(tr.selected)').siblings('tr.dt-hasChild').find('td'));
+                            setTimeout(() => {
+                                $('#table_rincian_usulan tbody').find('tr').map((index, element) => {
+                                    if($(element).data('id') == id){
+                                        $(element).find('.edit-rincian').trigger('click');
+                                    }
+                                });
+                            }, 1500);
+                        }, true],
+                        ['<button>TIDAK</button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                        }],
+                    ],
+                });
+            });
+            $('.delete-detail').click(function() {
+                let id = $(this).data('id_detail');
+                iziToast.question({
+                    timeout: 5000,
+                    layout: 2,
+                    close: false,
+                    overlay: true,
+                    color: 'yellow',
+                    displayMode: 'once',
+                    id: 'question',
+                    zindex: 9999,
+                    title: 'Konfirmasi',
+                    message: 'Apakah anda yakin akan menghapus detail data usulan ini?',
+                    position: 'center',
+                    icon: 'bx bx-question-mark',
+                    buttons: [
+                        ['<button><b>IYA</b></button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                               $.ajax({
+                                    type: "DELETE",
+                                    url: "{{ route('usulan.delete-detail') }}/" + id,
+                                    data: {
+                                        _token: `{{ csrf_token() }}`,
+                                    },
+                                    dataType: "json",
+                                    success: function(response) {
+                                        window.datatable_usulan.ajax.reload()
+                                    }
+                                });
+                        }, true],
+                        ['<button>TIDAK</button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+                        }],
+                    ],
+                });
+            });
         }
 
         function detail_table(d) {
@@ -736,7 +872,7 @@ if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
                 }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') == false && element.status == '2'){
                     status = "Divalidasi petugas";
                 }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') == false && element.status == '3'){
-                    status = "<button class='btn btn-icon btn-outline-info send-detail'><i class='bx bx-paper-plane'></i></button><button class='btn btn-icon btn-outline-warning edit-detail'><i class='bx bx-pencil'></i></button><button class='btn btn-icon btn-outline-danger delete-detail'><i class='bx bx-trash'></i></button>";
+                    status = `<button class='btn btn-icon btn-outline-info send-detail' data-id_detail='${element.id}'><i class='bx bx-paper-plane'></i></button><button class='btn btn-icon btn-outline-warning edit-detail' data-id_detail='${element.id}'><i class='bx bx-pencil'></i></button><button class='btn btn-icon btn-outline-danger delete-detail' data-id_detail='${element.id}'><i class='bx bx-trash'></i></button>`;
                 }
                 html += `
                 <tr>

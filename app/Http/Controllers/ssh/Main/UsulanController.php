@@ -127,13 +127,13 @@ class UsulanController extends Controller
             if ($request->has('ssd_dokumen')) {
                 $ssd_dokumen = 'pakta_' . rand(0, 1000) . '_' . date('y-m-d') . '.pdf';
                 file_put_contents(storage_path('app/public/pakta/' . $ssd_dokumen), base64_decode($request->ssd_dokumen));
-                $id_usulan = DB::table('usulan_ssh')->insertGetId(
-                    array_merge($request->except('detail', '_token', 'ssd_dokumen'), ['ssd_dokumen' => $ssd_dokumen, 'status' => '0', 'id_opd' => '0']),
-                    'id'
-                );
             } else {
                 $ssd_dokumen = null;
             }
+            $id_usulan = DB::table('usulan_ssh')->insertGetId(
+                array_merge($request->except('detail', '_token', 'ssd_dokumen'), ['ssd_dokumen' => $ssd_dokumen, 'status' => '0', 'id_opd' => '0']),
+                'id'
+            );
             $detail = $request->detail;
             foreach ($detail as $key => $value) {
                 $detail[$key]['id_usulan'] = $id_usulan;
@@ -162,30 +162,37 @@ class UsulanController extends Controller
     {
         $data = DB::table('usulan_ssh as us')
             ->select('us.*', DB::raw("(jsonb_agg(json_build_array((
-                        select
-                            jsonb_agg(jsonb_build_object('id_detail',id,'spesifikasi',
-                            spesifikasi,
-                            'id_satuan',
-                            id_satuan,
-                            'id_kode',
-                            id_kode,
-                            'harga',
-                            harga,
-                            'uraian',
-                            uraian, 'tkdn', tkdn, 'rekening', 		(
-                            select
-                                json_agg(json_build_array(kdper))
-                            from
-                                anggaran.sp2d sd
-                            where
-                                sd.kdper in (
-                                select
-                                    jsonb_array_elements_text(ds.rekening)
-                                from
-                                    _data_ssh ds where id_usulan = " . $id . '
-                        ))))
-                        from
-                            _data_ssh where id_usulan = ' . $id . 'group by id_usulan ))) ) as detail'))
+	select
+		jsonb_agg(jsonb_build_object('id_detail',
+		id,
+		'spesifikasi',
+		spesifikasi,
+		'id_satuan',
+		id_satuan,
+		'status',
+		status,
+		'id_kode',
+		id_kode,
+		'harga',
+		harga,
+		'uraian',
+		uraian,
+		'tkdn',
+		tkdn,
+		'rekening',
+		(
+		select
+			json_agg(json_build_array(kdper))
+		from
+			anggaran.sp2d sd
+		where
+			sd.kdper in (
+			select
+				jsonb_array_elements_text(ds.rekening)
+			from
+				_data_ssh ds where ds.id= ds2.id))))
+	from
+		_data_ssh ds2 where ds2.id = ds.id group by ds2.id )))) as detail"))
             ->join('_data_ssh as ds', 'ds.id_usulan', '=', 'us.id')
             ->where('us.id', $id)->groupBy('us.id')->first();
         $data->detail = collect(json_decode($data->detail))
@@ -271,6 +278,7 @@ class UsulanController extends Controller
             $status = 200;
             $response = ['message' => 'data usulan berhasil di update'];
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollBack();
             $status = 422;
             $response = ['message' => 'data usulan gagal di update'];
@@ -353,6 +361,22 @@ class UsulanController extends Controller
 
         return response()->json($response, $status);
     }
+    public function sendDetail(string $id)
+    {
+        DB::beginTransaction();
+        try {
+            DB::table('_data_ssh')->where('id', $id)->update(['status' => '1']);
+            DB::commit();
+            $status = 200;
+            $response = ['message' => 'data detail usulan berhasil di kirim'];
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $status = 422;
+            $response = ['message' => 'data detail usulan gagal di kirim'];
+        }
+
+        return response()->json($response, $status);
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -361,8 +385,28 @@ class UsulanController extends Controller
     {
         DB::beginTransaction();
         try {
-            if (DB::table('usulan_ssh')->where('id', $id)->where('status', '0')->count() == 1) {
-                DB::table('usulan_ssh')->where('id', $id)->where('status', '0')->delete();
+            if (DB::table('usulan_ssh')->where('id', $id)->whereIn('status', ['1', '2'])->count() !== 1) {
+                DB::table('usulan_ssh')->where('id', $id)->delete();
+                DB::table('_data_ssh')->where('id_usulan', $id)->delete();
+            }
+            $status = 200;
+            $response = ['message' => 'data usulan berhasil di hapus'];
+            DB::commit();
+        } catch (\Throwable $th) {
+            dd($th);
+            DB::rollBack();
+            $status = 422;
+            $response = ['message' => 'data usulan gagal di hapus'];
+        }
+
+        return response()->json($response, $status);
+    }
+
+    public function destroyDetail(string $id)
+    {
+        DB::beginTransaction();
+        try {
+            if (DB::table('_data_ssh')->where('id', $id)->whereIn('status', ['1', '2'])->count() !== 1) {
                 DB::table('_data_ssh')->where('id_usulan', $id)->delete();
             }
             $status = 200;
