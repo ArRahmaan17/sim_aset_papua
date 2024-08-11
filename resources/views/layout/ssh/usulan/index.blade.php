@@ -108,7 +108,8 @@
                                     <input type="text" class="form-control" name="uraian" placeholder="Uraian">
                                 </div>
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" name="spesifikasi" placeholder="Spesifikasi">
+                                    <input type="text" class="form-control" name="spesifikasi"
+                                        placeholder="Spesifikasi">
                                 </div>
                                 <div class="mb-3">
                                     <select name="id_satuan" id="id_satuan" class="select2 form-select">
@@ -199,7 +200,7 @@
             </div>
         </div>
     </div>
- <div class="modal fade" id="modalFormTolakUsulan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <div class="modal fade" id="modalFormTolakUsulan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
             <div class="modal-content">
@@ -250,7 +251,8 @@
                 }
             });
         }
-        function resetFormDetail(){
+
+        function resetFormDetail() {
             $('#container-rincian').find('input, select').map((index, element) => {
                 $(element).val('').trigger('change');
                 if ($(element).attr('name') == 'rekening[]' && $(element).attr('id') !==
@@ -261,14 +263,16 @@
                 }
             });
         }
-        function resetListData(){
+
+        function resetListData() {
             $('#table_rincian_usulan tbody').html('');
         }
+
         function addRincian(data = serializeObject($('#form-usulan'))) {
             delete data.tahun;
             delete data.induk_perubahan;
             let rekening = '';
-            if(typeof(data['rekening[]']) == 'string'){
+            if (typeof(data['rekening[]']) == 'string') {
                 data['rekening[]'] = [data['rekening[]']]
             }
             data['rekening[]'].forEach((datarekening) => {
@@ -290,20 +294,21 @@
                 })
             };
             cari_nama_barang().then((nama_barang) => {
-                if(data.id_detail != undefined){
-                    $('#table_rincian_usulan tbody').find('tr').map((index, element)=>{
-                        if($(element).data('id') == data.id_detail){
+                if (data.id_detail != undefined) {
+                    $('#table_rincian_usulan tbody').find('tr').map((index, element) => {
+                        if ($(element).data('id') == data.id_detail) {
                             $(element).remove();
                             window.state_rincian = 'add';
                         }
                     })
                 }
                 let aksi = '';
-                if(data.status == '3' || data.status == '0'){
-                    aksi = `<button type='button' class='btn btn-icon btn-warning edit-rincian'><i class='bx bxs-pencil'></i></button><button type='button' class='btn btn-icon btn-danger hapus-rincian'><i class='bx bxs-trash'></i></button>`
-                }else if(data.status == '2'){
+                if (data.status == '3' || data.status == '0') {
+                    aksi =
+                        `<button type='button' class='btn btn-icon btn-warning edit-rincian'><i class='bx bxs-pencil'></i></button><button type='button' class='btn btn-icon btn-danger hapus-rincian'><i class='bx bxs-trash'></i></button>`
+                } else if (data.status == '2') {
                     aksi = 'Sudah tervalidasi';
-                }else if(data.status == '1'){
+                } else if (data.status == '1') {
                     aksi = 'Menunggu Validasi';
                 }
                 let html =
@@ -387,11 +392,20 @@
                                     if ($(element).attr('name') == 'rekening[]') {
                                         let id = $(element).attr('id');
                                         if (data_detail['rekening[]'][
-                                                parseInt(id.split('rekening_').join('')) - 1
+                                                parseInt(id.split('rekening_').join(
+                                                    '')) - 1
                                             ] !== undefined) {
                                             setTimeout(() => {
-                                                $(element).val(data_detail['rekening[]'][parseInt(id.split('rekening_').join('')) -1]).trigger('change');
-                                            }, 500 * parseInt(id.split('rekening_').join('')))
+                                                $(element).val(data_detail[
+                                                    'rekening[]'][
+                                                    parseInt(id
+                                                        .split(
+                                                            'rekening_'
+                                                            ).join(
+                                                            '')) - 1
+                                                ]).trigger('change');
+                                            }, 500 * parseInt(id.split(
+                                                'rekening_').join('')))
                                         }
                                     }
                                 });
@@ -418,7 +432,7 @@
                 delete data_rekening['rekening[]'];
                 data.detail.push(data_rekening);
             });
-            if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined ){
+            if (document.querySelector('[name=ssd_dokumen]').files[0] != undefined) {
                 fileToBase64(document.querySelector('[name=ssd_dokumen]').files[0]).then(result => {
                     data.ssd_dokumen = result;
                     $.ajax({
@@ -434,7 +448,7 @@
                         }
                     });
                 });
-            }else{
+            } else {
                 $.ajax({
                     type: "PUT",
                     url: "{{ route('usulan.update') }}/" + data.id,
@@ -483,7 +497,7 @@
                 delete data_rekening['rekening[]'];
                 data.detail.push(data_rekening);
             });
-            if(document.querySelector('[name=ssd_dokumen]').files[0] != undefined){
+            if (document.querySelector('[name=ssd_dokumen]').files[0] != undefined) {
                 fileToBase64(document.querySelector('[name=ssd_dokumen]').files[0]).then(result => {
                     data.ssd_dokumen = result;
                     $.ajax({
@@ -499,7 +513,7 @@
                         }
                     });
                 });
-            }else{
+            } else {
                 $.ajax({
                     type: "POST",
                     url: "{{ route('usulan.store') }}",
@@ -515,7 +529,7 @@
             }
         }
 
-        function editData(button){
+        function editData(button) {
             window.state = 'update';
             if (window.datatable_usulan.rows('.selected').data().length == 0) {
                 $('#table_usulan tbody').find('tr').removeClass('selected');
@@ -642,21 +656,25 @@
                 });
             });
         }
-        function formReject(){
-            $('.reject').click(function(){
+
+        function formReject() {
+            $('.reject').click(function() {
                 let data = serializeObject($('#form-reject'));
                 $.ajax({
                     type: "POST",
-                    url: `{{route('usulan.reject')}}/${data.id_detail}`,
-                    data: {...data},
+                    url: `{{ route('usulan.reject') }}/${data.id_detail}`,
+                    data: {
+                        ...data
+                    },
                     dataType: "json",
-                    success: function (response) {
+                    success: function(response) {
                         window.datatable_usulan.ajax.reload();
                     }
                 });
             })
         }
-        function actionDetail(){
+
+        function actionDetail() {
             $('.accept').click(function() {
                 let id = $(this).data('id_detail');
                 iziToast.question({
@@ -717,9 +735,9 @@
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
-                                $('#form-reject > input[name=id_detail]').val(id);
-                                $('#modalFormTolakUsulan').modal('show');
-                                formReject();
+                            $('#form-reject > input[name=id_detail]').val(id);
+                            $('#modalFormTolakUsulan').modal('show');
+                            formReject();
                         }, true],
                         ['<button>TIDAK</button>', function(instance, toast) {
                             instance.hide({
@@ -749,17 +767,17 @@
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
-                               $.ajax({
-                                    type: "POST",
-                                    url: "{{ route('usulan.send-detail') }}/" + id,
-                                    data: {
-                                        _token: `{{ csrf_token() }}`,
-                                    },
-                                    dataType: "json",
-                                    success: function(response) {
-                                        window.datatable_usulan.ajax.reload()
-                                    }
-                                });
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ route('usulan.send-detail') }}/" + id,
+                                data: {
+                                    _token: `{{ csrf_token() }}`,
+                                },
+                                dataType: "json",
+                                success: function(response) {
+                                    window.datatable_usulan.ajax.reload()
+                                }
+                            });
                         }, true],
                         ['<button>TIDAK</button>', function(instance, toast) {
                             instance.hide({
@@ -790,11 +808,14 @@
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
-                            editData(button.parents('tr:not(tr.selected)').siblings('tr.dt-hasChild').find('td'));
+                            editData(button.parents('tr:not(tr.selected)').siblings(
+                                'tr.dt-hasChild').find('td'));
                             setTimeout(() => {
-                                $('#table_rincian_usulan tbody').find('tr').map((index, element) => {
-                                    if($(element).data('id') == id){
-                                        $(element).find('.edit-rincian').trigger('click');
+                                $('#table_rincian_usulan tbody').find('tr').map((index,
+                                    element) => {
+                                    if ($(element).data('id') == id) {
+                                        $(element).find('.edit-rincian').trigger(
+                                            'click');
                                     }
                                 });
                             }, 1500);
@@ -827,17 +848,17 @@
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
-                               $.ajax({
-                                    type: "DELETE",
-                                    url: "{{ route('usulan.delete-detail') }}/" + id,
-                                    data: {
-                                        _token: `{{ csrf_token() }}`,
-                                    },
-                                    dataType: "json",
-                                    success: function(response) {
-                                        window.datatable_usulan.ajax.reload()
-                                    }
-                                });
+                            $.ajax({
+                                type: "DELETE",
+                                url: "{{ route('usulan.delete-detail') }}/" + id,
+                                data: {
+                                    _token: `{{ csrf_token() }}`,
+                                },
+                                dataType: "json",
+                                success: function(response) {
+                                    window.datatable_usulan.ajax.reload()
+                                }
+                            });
                         }, true],
                         ['<button>TIDAK</button>', function(instance, toast) {
                             instance.hide({
@@ -857,22 +878,32 @@
                     html_rekening += `<li class='list-group-item border-0 p-0 m-0 px-1'>${rek}</li>`
                 });
                 let status = '';
-                if((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') && element.status == '0'){
+                if ((`{{ getRole() }}` == 'Developer' || `{{ getRole() }}` ==
+                        'User Kabupaten / User Aset') && element.status == '0') {
                     status = `Menunggu Dikirim`;
-                }else if((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') && element.status == '1'){
-                    status = `<button class='btn btn-icon btn-info mx-1 accept' data-id_detail='${element.id}'><i class='bx bx-check'></i></button><button class='btn btn-icon btn-danger mx-1 return' data-id_detail='${element.id}'><i class='bx bx-refresh'></i></button>`;
-                }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') && element.status == '2'){
+                } else if ((`{{ getRole() }}` == 'Developer' || `{{ getRole() }}` ==
+                        'User Kabupaten / User Aset') && element.status == '1') {
+                    status =
+                        `<button class='btn btn-icon btn-info mx-1 accept' data-id_detail='${element.id}'><i class='bx bx-check'></i></button><button class='btn btn-icon btn-danger mx-1 return' data-id_detail='${element.id}'><i class='bx bx-refresh'></i></button>`;
+                } else if ((`{{ getRole() }}` == 'Developer' || `{{ getRole() }}` ==
+                        'User Kabupaten / User Aset') && element.status == '2') {
                     status = "Sudah anda validasi";
-                }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') && element.status == '3'){
+                } else if ((`{{ getRole() }}` == 'Developer' || `{{ getRole() }}` ==
+                        'User Kabupaten / User Aset') && element.status == '3') {
                     status = "Sudah anda tolak";
-                }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') == false && element.status == '0'){
+                } else if ((`{{ getRole() }}` == 'Developer' || `{{ getRole() }}` ==
+                        'User Kabupaten / User Aset') == false && element.status == '0') {
                     status = "Menunggu Dikirim";
-                }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') == false && element.status == '1'){
+                } else if ((`{{ getRole() }}` == 'Developer' || `{{ getRole() }}` ==
+                        'User Kabupaten / User Aset') == false && element.status == '1') {
                     status = "Menunggu Validasi";
-                }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') == false && element.status == '2'){
+                } else if ((`{{ getRole() }}` == 'Developer' || `{{ getRole() }}` ==
+                        'User Kabupaten / User Aset') == false && element.status == '2') {
                     status = "Divalidasi petugas";
-                }else if ((`{{getRole()}}` == 'Developer' || `{{getRole()}}` == 'User Aset') == false && element.status == '3'){
-                    status = `<button class='btn btn-icon btn-outline-info send-detail' data-id_detail='${element.id}'><i class='bx bx-paper-plane'></i></button><button class='btn btn-icon btn-outline-warning edit-detail' data-id_detail='${element.id}'><i class='bx bx-pencil'></i></button><button class='btn btn-icon btn-outline-danger delete-detail' data-id_detail='${element.id}'><i class='bx bx-trash'></i></button>`;
+                } else if ((`{{ getRole() }}` == 'Developer' || `{{ getRole() }}` ==
+                        'User Kabupaten / User Aset') == false && element.status == '3') {
+                    status =
+                        `<button class='btn btn-icon btn-outline-info send-detail' data-id_detail='${element.id}'><i class='bx bx-paper-plane'></i></button><button class='btn btn-icon btn-outline-warning edit-detail' data-id_detail='${element.id}'><i class='bx bx-pencil'></i></button><button class='btn btn-icon btn-outline-danger delete-detail' data-id_detail='${element.id}'><i class='bx bx-trash'></i></button>`;
                 }
                 html += `
                 <tr>

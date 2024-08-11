@@ -80,7 +80,7 @@ class UsulanController extends Controller
             if ($item->status == '0') {
                 $row[] = "<button class='btn btn-icon btn-warning mx-1 edit' ><i class='bx bxs-pencil'></i></button><button class='btn btn-icon btn-danger mx-1 delete'><i class='bx bxs-trash-alt' ></i></button><button class='btn btn-icon btn-info mx-1 send'><i class='bx bxs-paper-plane'></i></button>";
             } elseif ($item->status == '1') {
-                if (getRole() == 'Developer' || getRole() == 'User Aset') {
+                if (getRole() == 'Developer' || getRole() == 'User Kabupaten / User Aset') {
                     $row[] = 'Butuh Validasi';
                 } else {
                     $row[] = 'Terkirim';
