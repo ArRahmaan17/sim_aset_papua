@@ -18,7 +18,7 @@ class UserControlController extends Controller
     public function dataTable(Request $request)
     {
         $totalData = DB::table('auth.role')
-            ->whereIn('app', [0, (session('app') == 'aset') ? 1 : 2])
+
             ->orderBy('role', 'asc')
             ->count();
         $totalFiltered = $totalData;
@@ -32,7 +32,7 @@ class UserControlController extends Controller
             if (isset($request['order'][0]['column'])) {
                 $assets->orderByRaw('role ' . $request['order'][0]['dir']);
             }
-            $assets = $assets->whereIn('app', [0, (session('app') == 'aset') ? 1 : 2])->get();
+            $assets = $assets->get();
         } else {
             $assets = DB::table('auth.role')->select('*')
                 ->where('role', 'like', '%' . $request['search']['value'] . '%');
@@ -43,7 +43,7 @@ class UserControlController extends Controller
                 $assets->limit($request['length'])
                     ->offset($request['start']);
             }
-            $assets = $assets->whereIn('app', [0, (session('app') == 'aset') ? 1 : 2])->get();
+            $assets = $assets->get();
 
             $totalFiltered = DB::table('auth.role')
                 ->select('*')
@@ -51,7 +51,7 @@ class UserControlController extends Controller
             if (isset($request['order'][0]['column'])) {
                 $totalFiltered->orderByRaw('role ' . $request['order'][0]['dir']);
             }
-            $totalFiltered = $totalFiltered->whereIn('app', [0, (session('app') == 'aset') ? 1 : 2])->count();
+            $totalFiltered = $totalFiltered->count();
         }
         $dataFiltered = [];
         foreach ($assets as $index => $item) {
