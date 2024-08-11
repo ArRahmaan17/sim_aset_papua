@@ -210,7 +210,6 @@ class UserControlController extends Controller
     public function userCreate()
     {
         $roles = DB::table('auth.role')
-            ->whereIn('app', [0, (session('app') == 'aset') ? 1 : 2])
             ->where('idrole', '>=', session('user')->idrole)->get();
         $semuaorganisasi = (new OrganisasiController)->useable()->getData()->data;
 

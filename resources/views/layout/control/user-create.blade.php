@@ -97,6 +97,12 @@
                     $('.d-none').removeClass('d-none');
                     $('.select2').prop('disabled', false);
                     $('.select2').select2();
+                } else {
+                    $('.container-organisasi').addClass('d-none');
+                    $('.select2').prop('disabled', true);
+                    $('.select2').select2({
+                        destroy: true
+                    });
                 }
             });
             $("#formCreateUser").submit(function(e) {

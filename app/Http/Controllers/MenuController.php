@@ -17,7 +17,6 @@ class MenuController extends Controller
         $routes = Route::getRoutes();
         $roles = DB::table('auth.role')
             ->where('idrole', '<>', 1)
-            ->where('app', session('app') == 'aset' ? 1 : 2)
             ->get();
 
         return view('layout.menu.index', compact('roles', 'routes'));
